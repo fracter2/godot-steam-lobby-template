@@ -121,21 +121,26 @@ func _on_lobby_created(conn, id) -> void:
 		
 
 func _on_lobby_joined(lobby: int, _permissions: int, _locked: bool, response: int) -> void:			# TODO Consider RAII Wrapper struct with contructor / destructor
-	if response == 1:															# TODO Denest
-		var id = Steam.getLobbyOwner(lobby)
-		if id != Steam.getSteamID():											# TODO Clarify what it is checking... that we aren't the host?
-			lobby_id = lobby
-			players[1] = {"name": Steam.getFriendPersonaName(id), "id": id}		# TODO Make player info struct
-			var multiplayer_peer = SteamMultiplayerPeer.new()
-			var error = multiplayer_peer.create_client(id, 0)
-			if error != OK:
-				multiplayer_peer.close()										# TODO Wrap this cleanup in RAII if possible (dedicated join-node with destructor)
-				Steam.leaveLobby(lobby_id)
-				display_error.emit("ERROR CREATING CLIENT\nCODE: " + str(error))
-				return
-			multiplayer.set_multiplayer_peer(multiplayer_peer)
-	else:
-		display_error.emit(_get_fail_response_description(response))
+	if response != 1:
+		critical_error.emit(_get_fail_response_description(response))
+		return
+		
+	lobby_owner_id = Steam.getLobbyOwner(lobby)
+	if lobby_owner_id == Steam.getSteamID():
+		critical_error.emit("joined lobby and became the owner right away... Dunno how to handle this so just break")
+		return
+	
+	lobby_id = lobby
+	players[1] = {"name": Steam.getFriendPersonaName(lobby_owner_id), "id": lobby_owner_id}				# TODO Make player info struct	# TODO Why index 1?
+	var multiplayer_peer = SteamMultiplayerPeer.new()
+	var error = multiplayer_peer.create_client(lobby_owner_id, 0)
+	if error != OK:
+		multiplayer_peer.close()												# TODO Wrap this cleanup in RAII if possible (dedicated join-node with destructor)
+		Steam.leaveLobby(lobby_id)
+		critical_error.emit("ERROR CREATING CLIENT\nCODE: " + str(error))
+		return
+	multiplayer.set_multiplayer_peer(multiplayer_peer)
+		
 
 func _on_lobby_join_requested(this_lobby_id: int, _friend_id: int) -> void:
 	lan = false
