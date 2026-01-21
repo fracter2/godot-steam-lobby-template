@@ -44,6 +44,7 @@ func leave_lobby() -> void:														# TODO Law of demeter... also uses Stea
 	if !lan:																	# TODO This check is both redundant and dangerous (to gkeep track of). This should be handled by RAII class wrappers for each state.
 		Steam.leaveLobby(lobby_id)
 	multiplayer.multiplayer_peer.close()
+	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()					# TODO Is this needed?
 	players.clear()
 
 @rpc("any_peer")	# TODO This should be reliable
@@ -100,6 +101,7 @@ func _on_critical_error(_message: String):
 func _on_lobby_created(conn, id) -> void:
 	if conn != 1:
 		critical_error.emit('ERROR CREATING STEAM LOBBY\nCODE: '+str(conn))
+		return
 	
 	lobby_id = id
 	
