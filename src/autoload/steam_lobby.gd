@@ -12,7 +12,7 @@ var lobby_id: int = 0
 var players : Dictionary = {}
 
 signal players_changed
-signal display_error(message:String)
+signal critical_error(message:String)											# TODO Add callbacks that quit the lobby when this is emit
 
 func is_active() -> bool: return false		# TODO Return true if online+hosting/joined
 
@@ -20,6 +20,7 @@ func is_active() -> bool: return false		# TODO Return true if online+hosting/joi
 # ---- MAIN CALLBACKS ----
 #
 func _ready():
+	critical_error.connect(_on_critical_error)
 	OS.set_environment("SteamAppID", str(480))									# TODO Clarify 480. Is it "Space Wars" ?
 	OS.set_environment("SteamGameID", str(480))									# TODO Clarify difference between AppID and GameID
 	Steam.steamInit(false, 480)													# TODO Isn't the arg order reversed? TRY
@@ -92,9 +93,12 @@ func _check_command_line() -> void:												# TODO This could be a class on i
 #	
 # ---- SIGNAL CALLBACKS ----
 #
+func _on_critical_error(_message: String):
+	leave_lobby()
+
 func _on_lobby_created(conn, id) -> void:
 	if conn != 1:
-		display_error.emit('ERROR CREATING STEAM LOBBY\nCODE: '+str(conn))
+		critical_error.emit('ERROR CREATING STEAM LOBBY\nCODE: '+str(conn))
 	
 	lobby_id = id
 	var my_name : String = Steam.getPersonaName()
@@ -107,7 +111,7 @@ func _on_lobby_created(conn, id) -> void:
 	if error != OK:
 		multiplayer_peer.close()
 		Steam.leaveLobby(lobby_id)
-		display_error.emit("ERROR CREATING HOST CLIENT\nCODE: " + str(error))
+		critical_error.emit("ERROR CREATING HOST CLIENT\nCODE: " + str(error))
 		return
 		
 	multiplayer.set_multiplayer_peer(multiplayer_peer)
@@ -157,7 +161,7 @@ func _on_peer_disconnected(id: int) -> void:
 
 func _on_connection_failed() -> void:
 	multiplayer.multiplayer_peer.close()
-	display_error.emit('FAILED TO CONNECT...')
+	critical_error.emit('FAILED TO CONNECT...')
 
 func host_steam() -> void:
 	lan = false
