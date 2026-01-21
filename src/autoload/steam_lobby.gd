@@ -9,6 +9,7 @@ class_name SteamLobby extends Node
 # Plus basic player info
 var lan: bool = false
 var lobby_id: int = 0
+var lobby_owner_id: int = 0
 var players : Dictionary = {}
 
 signal players_changed
