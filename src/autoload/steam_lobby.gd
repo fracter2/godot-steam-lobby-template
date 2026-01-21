@@ -38,7 +38,7 @@ func _process(_d:float) -> void:
 #
 # ---- API ----
 #
-func leave_lobby() -> void:													# TODO Law of demeter... also uses Steam.leaveLobby()... that really should be wrapped private
+func leave_lobby() -> void:														# TODO Law of demeter... also uses Steam.leaveLobby()... that really should be wrapped private
 	# TODO GO TO MAIN MENU
 	if !lan:																	# TODO This check is both redundant and dangerous (to gkeep track of). This should be handled by RAII class wrappers for each state.
 		Steam.leaveLobby(lobby_id)
@@ -101,11 +101,13 @@ func _on_lobby_created(conn, id) -> void:
 		critical_error.emit('ERROR CREATING STEAM LOBBY\nCODE: '+str(conn))
 	
 	lobby_id = id
+	
 	var my_name : String = Steam.getPersonaName()
-	if len(my_name) > 17:
+	if len(my_name) > 17:														# TODO Clarify max name length const
 		my_name = my_name.substr(0,17) + '...'
 	Steam.setLobbyData(lobby_id, "name", (my_name+"'s Lobby"))
 	Steam.setLobbyJoinable(lobby_id, true)
+	
 	var multiplayer_peer = SteamMultiplayerPeer.new()
 	var error = multiplayer_peer.create_host(0) # this is virtual port not player limit do not change
 	if error != OK:
@@ -115,7 +117,7 @@ func _on_lobby_created(conn, id) -> void:
 		return
 		
 	multiplayer.set_multiplayer_peer(multiplayer_peer)
-	players[1] = {"name": my_name, "id": Steam.getSteamID()}
+	players[1] = {"name": my_name, "id": Steam.getSteamID()}					# TODO Why index 1?
 	Steam.allowP2PPacketRelay(true)
 	#_transition_to_lobby() TODO consider callback
 		
@@ -170,7 +172,7 @@ func _on_connection_failed() -> void:
 
 func host_steam() -> void:
 	lan = false
-	Steam.createLobby(Steam.LOBBY_TYPE_FRIENDS_ONLY, 4) # 4 player lobby
+	Steam.createLobby(Steam.LOBBY_TYPE_FRIENDS_ONLY, 4) # 4 player lobby		# TODO Clarify player limit to a var
 	
 
 
