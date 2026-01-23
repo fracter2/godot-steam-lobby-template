@@ -20,6 +20,10 @@ signal disconnected(message:String)
 # ---- MAIN CALLBACKS ----
 #
 func _init():
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	process_priority = -1														# TODO Consider global constants CONST autoload
+	process_physics_priority = -1
+	
 	critical_error.connect(_on_critical_error)
 	OS.set_environment("SteamAppID", str(app_id))
 	OS.set_environment("SteamGameID", str(app_id))								# TODO Clarify difference between AppID and GameID
