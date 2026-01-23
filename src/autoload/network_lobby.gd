@@ -2,6 +2,8 @@ class_name NetworkLobby extends Node
 
 # NOTE DEPENDS ON GODOTSTEAM and 
 
+const default_app_id: int = 480 												# NOTE This is SpaceWars.
+const app_id: int = default_app_id										# NOTE Replace this when you get your app id!
 
 # TODO This node shall manage the connection to hosts/clients, including how to host / join and what
 # to do when it fails, and what to do when it quits or recieved a disconnect... and so on.
@@ -20,9 +22,9 @@ func is_active() -> bool: return false		# TODO Return true if online+hosting/joi
 #
 func _ready():																	#
 	critical_error.connect(_on_critical_error)
-	OS.set_environment("SteamAppID", str(480))									# TODO Clarify 480. Is it "Space Wars" ?
-	OS.set_environment("SteamGameID", str(480))									# TODO Clarify difference between AppID and GameID
-	Steam.steamInit(false, 480)													# TODO Isn't the arg order reversed? TRY
+	OS.set_environment("SteamAppID", str(app_id))
+	OS.set_environment("SteamGameID", str(app_id))								# TODO Clarify difference between AppID and GameID
+	Steam.steamInit(app_id, false)
 	Steam.lobby_created.connect(_on_lobby_created)
 	Steam.lobby_joined.connect(_on_lobby_joined)
 	Steam.join_requested.connect(_on_lobby_join_requested)
