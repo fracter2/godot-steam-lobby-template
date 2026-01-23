@@ -11,7 +11,8 @@ var lan: bool = false
 var lobby_instance: NetworkLobbyHandler = null
 
 signal players_changed
-signal critical_error(message:String)											# TODO Add callbacks that quit the lobby when this is emit # TODO Include normal quitting
+signal critical_error(message:String)
+signal disconnected(message:String)
 
 func is_active() -> bool: return false		# TODO Return true if online+hosting/joined
 
@@ -52,10 +53,11 @@ func join_enet_lobby() -> bool:
 	
 	return false
 
-func leave_lobby() -> void:														# TODO Law of demeter... also uses Steam.leaveLobby()... that really should be wrapped private
-	# TODO GO TO MAIN MENU
+func leave_lobby() -> void:
 	lobby_instance.free()														# NOTE This will handle all the cleanup internally
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()					# TODO This prob not needed. Reconsider
+	disconnected.emit("Left network lobby normally")
+	# TODO GO TO MAIN MENU
 
 
 @rpc("any_peer", "reliable")
