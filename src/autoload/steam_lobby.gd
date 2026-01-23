@@ -54,8 +54,8 @@ func leave_lobby() -> void:														# TODO Law of demeter... also uses Stea
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()					# TODO This prob not needed. Reconsider
 
 
-@rpc("any_peer")	# TODO This should be reliable
-func sync_info(name_: String, id: int) -> void:
+@rpc("any_peer", "reliable")
+func sync_info(name_: String, id: int) -> void:														# TODO NOTE This is meant to JUST send the info of all players TO THE REMOTE_SENDER. consider renaming
 	var peer_id = multiplayer.get_remote_sender_id()
 	if lobby_instance.players.has(peer_id):
 		push_warning("attemped to sync_info() already existing peer")
@@ -73,7 +73,7 @@ func sync_info(name_: String, id: int) -> void:
 #
 # ---- LOCAL UTIL ----
 #
-@rpc			# TODO This should be reliable
+@rpc("reliable")
 func _receive_player_data(data : Dictionary, _id:int) -> void:
 	lobby_instance.players = data
 	players_changed.emit()
