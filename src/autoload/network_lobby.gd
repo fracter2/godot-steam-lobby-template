@@ -19,7 +19,7 @@ signal disconnected(message:String)
 #
 # ---- MAIN CALLBACKS ----
 #
-func _ready():																	#
+func _init():
 	critical_error.connect(_on_critical_error)
 	OS.set_environment("SteamAppID", str(app_id))
 	OS.set_environment("SteamGameID", str(app_id))								# TODO Clarify difference between AppID and GameID
