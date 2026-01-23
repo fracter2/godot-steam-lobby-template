@@ -7,7 +7,6 @@ class_name NetworkLobby extends Node
 # to do when it fails, and what to do when it quits or recieved a disconnect... and so on.
 # 
 # Plus basic player info
-var lan: bool = false
 var lobby_instance: NetworkLobbyHandler = null
 
 signal players_changed
@@ -144,7 +143,6 @@ func _on_lobby_joined(lobby_id: int, _permissions: int, _locked: bool, response:
 
 
 func _on_lobby_join_requested(this_lobby_id: int, _friend_id: int) -> void:
-	lan = false
 	Steam.joinLobby(int(this_lobby_id))
 
 
@@ -171,7 +169,6 @@ func _on_connection_failed() -> void:
 
 
 func host_steam() -> void:
-	lan = false
 	Steam.createLobby(Steam.LOBBY_TYPE_FRIENDS_ONLY, 4) # 4 player lobby		# TODO Clarify player limit to a var
 	
 
