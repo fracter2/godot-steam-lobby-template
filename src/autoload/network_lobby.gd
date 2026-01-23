@@ -5,10 +5,6 @@ class_name NetworkLobby extends Node
 const default_app_id: int = 480 												# NOTE This is SpaceWars.
 const app_id: int = default_app_id										# NOTE Replace this when you get your app id!
 
-# TODO This node shall manage the connection to hosts/clients, including how to host / join and what
-# to do when it fails, and what to do when it quits or recieved a disconnect... and so on.
-# 
-# Plus basic player info
 var lobby_instance: NetworkLobbyHandler = null
 
 signal players_changed
@@ -32,9 +28,9 @@ func _init():
 	Steam.lobby_joined.connect(_on_lobby_joined)
 	Steam.join_requested.connect(_on_lobby_join_requested)
 	
-	multiplayer.connected_to_server.connect(_on_connected_to_server)
+	multiplayer.connected_to_server.connect(_on_connected_to_server)			# NOTE So this only calls locally once.
 	multiplayer.connection_failed.connect(_on_connection_failed)
-	#multiplayer.peer_connected
+	#multiplayer.peer_connected													# TODO CLARIFY does this emit for EACH when joining late? or only when already connected?
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 	
 	_check_command_line()
@@ -73,7 +69,7 @@ func sync_info(name_: String, id: int) -> void:														# TODO NOTE This is
 		
 	lobby_instance.players[peer_id] = {"name": name_, "id": id}
 	
-	# Send only the minimum data...
+	# TODO Send user data to 
 	var minimum_data = {}
 	for p in lobby_instance.players:
 		minimum_data[p] = {"name": lobby_instance.players[p]["name"], "id": lobby_instance.players[p]["id"]}						# TODO Why is this here?? should it not just send the player dict?
@@ -226,6 +222,7 @@ class SteamNetworkLobbyHandler extends NetworkLobbyHandler:
 		multiplayer_peer = peer
 		players[1] = {"name": Steam.getFriendPersonaName(owner_id), "id": owner_id}				# TODO Make player info struct
 		return ""
+
 
 	# NOTE Returns "" on success
 	func on_create_lobby(conn: int, lobby_id: int) -> String:								# TODO DOESN'T QUIT PREVIOUS LOBBY... does it prevent mutliple lobbies? prob not...
