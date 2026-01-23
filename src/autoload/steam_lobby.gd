@@ -37,6 +37,17 @@ func _process(_d:float) -> void:
 #
 # ---- API ----
 #
+
+func join_steam_lobby() -> bool:
+	if lobby_instance != null: return false
+	
+	return false
+	
+func join_enet_lobby() -> bool:
+	if lobby_instance != null: return false
+	
+	return false
+
 func leave_lobby() -> void:														# TODO Law of demeter... also uses Steam.leaveLobby()... that really should be wrapped private
 	# TODO GO TO MAIN MENU
 	lobby_instance.free()														# NOTE This will handle all the cleanup internally
