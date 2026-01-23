@@ -15,7 +15,6 @@ signal players_changed
 signal critical_error(message:String)
 signal disconnected(message:String)
 
-func is_active() -> bool: return false		# TODO Return true if online+hosting/joined
 
 #
 # ---- MAIN CALLBACKS ----
