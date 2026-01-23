@@ -1,4 +1,4 @@
-class_name SteamLobby extends Node
+class_name NetworkLobby extends Node
 
 # NOTE DEPENDS ON GODOTSTEAM and 
 
