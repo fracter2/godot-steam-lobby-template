@@ -149,13 +149,12 @@ func _on_lobby_join_requested(this_lobby_id: int, _friend_id: int) -> void:
 
 
 func _on_connected_to_server() -> void:
-	var id = multiplayer.get_unique_id()
-	if lan:
-		sync_info.rpc("", id)
-	else:
-		var my_name : String = _limit_string_to_size(Steam.getPersonaName(), 20)
-		lobby_instance.players[id] = {"name": my_name, "id": Steam.getSteamID()}
-		sync_info.rpc(lobby_instance.players[id]["name"], lobby_instance.players[id]["id"])
+	var peer_id: int = multiplayer.get_unique_id()
+	var my_name : String = _limit_string_to_size(lobby_instance.get_user_name(), 20)
+	var my_user_id: int = lobby_instance.get_user_id()
+	
+	lobby_instance.players[peer_id] = {"name": my_name, "id": my_user_id}		# TODO Optimize sync_ifo logic to only send new data. Bandwidth aint free...
+	sync_info.rpc(my_name, my_user_id)
 
 
 func _on_peer_disconnected(id: int) -> void:
@@ -186,21 +185,30 @@ class NetworkLobbyHandler extends RefCounted:
 	var owner_id: int = 0
 	var players : Dictionary = {}
 	var multiplayer_peer: MultiplayerPeer
-	@abstract func is_active() -> bool
+	#@abstract func is_active() -> bool
+	@abstract func get_user_name() -> String
+	@abstract func get_user_id() -> int
 
 
 class EnetNetworkLobbyHandler extends NetworkLobbyHandler:
-	func is_active() -> bool: return id != 0
+	var username: String = "DefaultName"
 	
+	func is_active() -> bool: return id != 0
+	func get_user_name() -> String: return username								# NOTE if there is a non-steam account system, this would be the account name
+	func get_user_id() -> int: return multiplayer_peer.get_unique_id()			# NOTE if there is a non-steam account system, this would be the account id
+
 
 
 class SteamNetworkLobbyHandler extends NetworkLobbyHandler:
 	func is_active() -> bool: return id != 0
-
+	func get_user_name() -> String: return Steam.getPersonaName()
+	func get_user_id() -> int: return Steam.getSteamID()
+	
+	
 	# NOTE Returns "" on success
 	func on_join_lobby(lobby_id: int, _permissions: int, _locked: bool, response: int) -> String:
 		if is_active(): return "LOBBY IS ALREADY SET UP!" 
-		if response != 1: return SteamLobby._get_fail_response_description(response)
+		if response != 1: return NetworkLobby._get_fail_response_description(response)
 			
 		# TODO IF SteamMultiplayerPeer DOESN'T NEED THIS, MOVE THIS BELOW
 		id = lobby_id
@@ -225,7 +233,7 @@ class SteamNetworkLobbyHandler extends NetworkLobbyHandler:
 		# TODO IF SteamMultiplayerPeer DOESN'T NEED THIS, MOVE THIS BELOW
 		id = lobby_id
 		owner_id = Steam.getSteamID()
-		var my_name: String = SteamLobby._limit_string_to_size(Steam.getPersonaName(), 20)
+		var my_name: String = NetworkLobby._limit_string_to_size(Steam.getPersonaName(), 20)
 		Steam.setLobbyData(id, "name", (my_name+"'s Lobby"))
 		Steam.setLobbyJoinable(id, true)
 		
