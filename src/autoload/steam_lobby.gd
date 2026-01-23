@@ -11,14 +11,14 @@ var lan: bool = false
 var lobby_instance: NetworkLobbyHandler = null
 
 signal players_changed
-signal critical_error(message:String)											# TODO Add callbacks that quit the lobby when this is emit
+signal critical_error(message:String)											# TODO Add callbacks that quit the lobby when this is emit # TODO Include normal quitting
 
 func is_active() -> bool: return false		# TODO Return true if online+hosting/joined
 
 #
 # ---- MAIN CALLBACKS ----
 #
-func _ready():
+func _ready():																	#
 	critical_error.connect(_on_critical_error)
 	OS.set_environment("SteamAppID", str(480))									# TODO Clarify 480. Is it "Space Wars" ?
 	OS.set_environment("SteamGameID", str(480))									# TODO Clarify difference between AppID and GameID
@@ -26,10 +26,14 @@ func _ready():
 	Steam.lobby_created.connect(_on_lobby_created)
 	Steam.lobby_joined.connect(_on_lobby_joined)
 	Steam.join_requested.connect(_on_lobby_join_requested)
+	
 	multiplayer.connected_to_server.connect(_on_connected_to_server)
-	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 	multiplayer.connection_failed.connect(_on_connection_failed)
+	#multiplayer.peer_connected
+	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
+	
 	_check_command_line()
+	
 
 func _process(_d:float) -> void:
 	Steam.run_callbacks()
