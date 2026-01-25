@@ -1,7 +1,7 @@
 class_name NetworkLobby extends Node
 																				# TODO Remove class name, this shouldn't really be it's own class thing, just autoload
 
-# NOTE DEPENDS ON GODOTSTEAM and
+# NOTE DEPENDS ON GODOTSTEAM plugin and launchcmd_parser.gd
 
 
 var lobby_instance: NetworkLobbyHandler = null
@@ -41,7 +41,7 @@ func _ready():
 	#multiplayer.peer_connected													# TODO CLARIFY does this emit for EACH when joining late? or only when already connected?	# TODO Ideally use this to get most player info locally
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 
-	_check_command_line()
+	_check_launch_commands()
 
 
 #
@@ -55,6 +55,7 @@ func join_steam_lobby(lobby_id: int) -> bool:
 	Steam.joinLobby(lobby_id)
 
 	return true
+
 
 func join_enet_lobby(ip: String, port: int) -> bool:
 	if lobby_instance != null: return false
@@ -107,7 +108,6 @@ func sync_info(name_: String, id: int) -> void:														# TODO NOTE This is
 # ---- LOCAL UTIL ----
 #
 
-
 @rpc("reliable")
 func _receive_player_data(data : Dictionary, _id:int) -> void:
 	lobby_instance.players = data
@@ -129,20 +129,24 @@ static func _get_fail_response_description(response: int) -> String:
 
 	return "Uknown responde id: " + str(response)
 
+
 static func _limit_string_to_size(txt: String, size: int) -> String:			# TODO Move to some utility file
 	assert(size > 3)
 	if txt.length() > size:														# TODO Clarify max name length const
 		txt = txt.substr(0, size-3) + '...'
 	return txt
 
-# TODO Rename
-func _check_command_line() -> void:												# TODO This could be a class on it's own, with configurable "if this..." funcs/callables
-	var these_arguments: Array = OS.get_cmdline_args()							# ... perhaps as an autoload
-	if these_arguments.size() > 0:
-		if these_arguments[0] == "+connect_lobby":								# ... since it would be nice to have this rawdogging stopped
-			if int(these_arguments[1]) > 0:
-				print("Attempting to join lobby right on start. Lobby id: " + str(these_arguments[1]))
-				if !join_steam_lobby(int(these_arguments[1])): print(" Attempt to join lobby got aborted (already in lobby?)")
+
+func _check_launch_commands() -> void:
+	if LaunchArgs.has_command("+connect_lobby"):
+		var lobby_id_str: String = LaunchArgs.get_values("+connect_lobby")[0]	# Should only have one value anyway
+		if not lobby_id_str.is_valid_int():
+			push_error("Attempted to join lobby via launch argument '+connect_lobby with' with invalid lobby id: " + lobby_id_str)
+			return
+
+		print("Attempting to join lobby right on start. Lobby id: " + lobby_id_str)
+		if not join_steam_lobby(int(lobby_id_str)):
+			print("Attempt to join lobby got cancelled (figure out why yourself)")
 
 #
 # ---- SIGNAL CALLBACKS ----
