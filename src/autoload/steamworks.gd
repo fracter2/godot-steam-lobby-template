@@ -14,8 +14,6 @@ func _init():
 func _ready():
 	OS.set_environment("SteamAppID", str(app_id))
 	OS.set_environment("SteamGameID", str(app_id))								# TODO Clarify difference between AppID and GameID
-
-	_print_commandline_args()
 	_initialize_steam()
 
 
@@ -26,19 +24,6 @@ func _process(_d:float) -> void:
 #
 # ---- internal logic ----
 #
-
-func _print_commandline_args() -> void:
-	print("---- command line args ----")
-	var cmd_args: Array = OS.get_cmdline_args()
-	for argument in cmd_args:
-		print(argument)
-	print("----\n")
-	print("---- command line user args ----")
-	var cmd_user_args: Array = OS.get_cmdline_user_args()
-	for argument in cmd_user_args:
-		print(argument)
-	print("----\n")
-
 
 func _initialize_steam() -> void:
 	var initialize_response: Dictionary = Steam.steamInitEx(app_id, false)
