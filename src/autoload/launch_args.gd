@@ -68,11 +68,11 @@ func _init() -> void:
 
 	print("---- parsed cmd args ----")
 	for key: String in main_commands.keys():
-		print("\t%s: %s" % [key, main_commands[key]])
+		print("\t--%s: %s" % [key, main_commands[key]])
 	print("----")
 	print("---- parsed user cmd args ----")
 	for key: String in user_commands.keys():
-		print("\t%s: %s" % [key, user_commands[key]])
+		print("\t--%s: %s" % [key, user_commands[key]])
 	print("----")
 
 #
