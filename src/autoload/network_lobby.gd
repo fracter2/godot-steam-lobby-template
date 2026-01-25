@@ -8,6 +8,11 @@ var lobby_instance: NetworkLobbyHandler = null
 
 signal players_changed
 signal critical_error(message:String)
+
+## Successfully hosted or joined as client
+signal connected
+
+## Disconnect as host / client, or failed connected attempt
 signal disconnected(message:String)
 
 
@@ -22,8 +27,6 @@ func _init():
 func _ready():
 	critical_error.connect(_on_critical_error)
 
-	Steam.lobby_created.connect(_on_lobby_created)
-	Steam.lobby_joined.connect(_on_lobby_joined)
 	Steam.join_requested.connect(_on_lobby_join_requested)
 
 	#Steam.lobby_invite 		# NOTE Allows automatic acceptance of invites. lol
@@ -43,41 +46,17 @@ func _ready():
 
 	_check_launch_commands()
 
-
 #
 # ---- API ----
 #
 
-func join_steam_lobby(lobby_id: int) -> bool:
-	if lobby_instance != null: return false
-	if !Steamworks.steam_enabled: return false
-
-	Steam.joinLobby(lobby_id)
-
-	return true
-
-
-func join_enet_lobby(ip: String, port: int) -> bool:
-	if lobby_instance != null: return false
-
-	# TODO Validate port and ip
-
-	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
-	var error: Error = peer.create_client(ip, port)
-	if error != Error.OK:
-		critical_error.emit(str(error))
+## Returns the result of the initiation [b]attempt[/b]. [signal connected] and [signal disconnected]
+## emit when the result is granted (imagine it like waiting for the host / setup to respond)
+func initiate_lobby(lobby: NetworkLobbyHandler) -> bool:
+	if lobby_instance != null:
 		return false
-
-
-	# TODO Create enet multiplayer peer host
-	# TODO How do we set name, port, and such?
-
-	return true
-
-
-func host_steam() -> void:
-	if !Steamworks.steam_enabled: return
-	Steam.createLobby(Steam.LOBBY_TYPE_FRIENDS_ONLY, 4) # 4 player lobby		# TODO Clarify player limit to a var
+	var result: bool = lobby.initiate_connection()
+	return result
 
 
 func leave_lobby(message: String) -> void:
@@ -113,6 +92,7 @@ func _receive_player_data(data : Dictionary, _id:int) -> void:
 	lobby_instance.players = data
 	players_changed.emit()
 
+# TODO Move to dedicated util file or where it is used
 static func _get_fail_response_description(response: int) -> String:
 	match response:
 		1:  return "OK."														# TODO Make use of the corresponding Steam. enum
@@ -145,7 +125,8 @@ func _check_launch_commands() -> void:
 			return
 
 		print("Attempting to join lobby right on start. Lobby id: " + lobby_id_str)
-		if not join_steam_lobby(int(lobby_id_str)):
+		var lobby: SteamNetworkLobbyHandler = SteamNetworkLobbyHandler.new(int(lobby_id_str), false)
+		if not initiate_lobby(lobby):
 			print("Attempt to join lobby got cancelled (figure out why yourself)")
 
 #
@@ -156,32 +137,11 @@ func _on_critical_error(message: String):
 	leave_lobby(message)
 
 
-func _on_lobby_created(conn: int, id: int) -> void:								# TODO DOESN'T QUIT PREVIOUS LOBBY... does it prevent mutliple lobbies? prob not...
-	var steam_lobby: SteamNetworkLobbyHandler = SteamNetworkLobbyHandler.new()
-	var err: String = steam_lobby.on_create_lobby(conn, id)
-	if err:
-		critical_error.emit(err)
-		return
-
-	lobby_instance = steam_lobby
-	multiplayer.multiplayer_peer = lobby_instance.multiplayer_peer
-
-
-func _on_lobby_joined(lobby_id: int, _permissions: int, _locked: bool, response: int) -> void:			# TODO Consider RAII Wrapper struct with contructor / destructor
-	var steam_lobby: SteamNetworkLobbyHandler = SteamNetworkLobbyHandler.new()
-	var err: String = steam_lobby.on_join_lobby(lobby_id, _permissions, _locked, response)
-	if err:
-		critical_error.emit(err)
-		return
-
-	lobby_instance = steam_lobby
-	multiplayer.multiplayer_peer = lobby_instance.multiplayer_peer
-
-
 func _on_lobby_join_requested(this_lobby_id: int, _friend_id: int) -> void:
 	Steam.joinLobby(int(this_lobby_id))
 
 
+# TODO Connect to connected signal, or similar.
 func _on_connected_to_server() -> void:
 	var peer_id: int = multiplayer.get_unique_id()
 	var my_name : String = _limit_string_to_size(lobby_instance.get_user_name(), 20)
@@ -191,6 +151,7 @@ func _on_connected_to_server() -> void:
 	sync_info.rpc(my_name, my_user_id)
 
 
+# TODO Connect to disconnected signal, or similar.
 func _on_peer_disconnected(id: int) -> void:
 	if id == 1:																	# TODO Clarify that this is the server(?)
 		leave_lobby("Host left lobby")											# TODO Make a lobby getter that checks if it should quit on host quit?
@@ -199,6 +160,7 @@ func _on_peer_disconnected(id: int) -> void:
 		players_changed.emit()
 
 
+# TODO Connect to disconnected signal, or similar.
 func _on_connection_failed() -> void:
 	multiplayer.multiplayer_peer.close()
 	critical_error.emit('FAILED TO CONNECT...')
@@ -232,24 +194,100 @@ class NetworkLobbyHandler extends RefCounted:									# TODO Move to dedicated f
 	# multiplayer.get_unique_id() or multiplayer.get_peers()
 	@abstract func get_user_id() -> int
 
+	@abstract func initiate_connection() -> bool
+
+	## Successfully hosted or joined as client
+	signal connected_as_client
+	signal connected_as_host
+
+	## Disconnect as host / client, or failed connected attempt
+	signal disconnected(message:String)
+
 
 class EnetNetworkLobbyHandler extends NetworkLobbyHandler:						# TODO Rename EnetMultiplayerLobby
 	var username: String = "DefaultName"
+	var init_as_host:bool
+	var init_ip: String
+	var init_port: int
+
+	func _init(is_host: bool = false, ip: String = "127.0.0.1", port: int = 8080, username_: String = "DefaultName") -> void:
+		init_as_host = is_host
+		username = username_
+		init_ip = ip
+		init_port = port
 
 	func is_active() -> bool: return id != 0
-	func get_user_name() -> String: return username								# NOTE if there is a non-steam account system, this would be the account name
-	func get_user_id() -> int: return multiplayer_peer.get_unique_id()			# NOTE if there is a non-steam account system, this would be the account id
+	func get_user_name() -> String: return username								# NOTE if there is a (non-steam) account system, this would be the account name
+	func get_user_id() -> int: return multiplayer_peer.get_unique_id()			# NOTE if there is a (non-steam) account system, this would be the account id
 
+	func initiate_connection() -> bool:
+		var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
+		if init_as_host:
+			return false
+		else:
+			# TODO Validate port and ip
+			var error: Error = peer.create_client(init_ip, init_port)
+			if error != Error.OK:
+				push_warning("error while trying to EnetMultiplayerPeer.create_client(), error: " + str(error))
+				return false
+			else:
+				_delegate_join_lobby.call_deferred()
+				connected_as_client.emit()
+				return true
+
+	func _delegate_join_lobby() -> void:
+		connected_as_client.emit()
+
+	func _delegate_host_lobby() -> void:
+		connected_as_host.emit()
+
+	func _delegate_on_disconnected(message: String) -> void:
+		disconnected.emit(message)
 
 
 class SteamNetworkLobbyHandler extends NetworkLobbyHandler:						# TODO Rename SteamMultiplayerLobby
+	var init_as_host: bool
+	var lobby_id: int = 0
+
 	func is_active() -> bool: return id != 0
 	func get_user_name() -> String: return Steam.getPersonaName()
 	func get_user_id() -> int: return Steam.getSteamID()
 
+	func _init(lobby_id_: int, as_host: bool) -> void:
+		lobby_id = lobby_id_
+		init_as_host = as_host
+		if not Steamworks.steam_enabled: return
+		Steam.lobby_created.connect(_on_lobby_created_wrapper)
+		Steam.lobby_joined.connect(_on_lobby_joined_wrapper)
+
+
+	func initiate_connection() -> bool:
+		if !Steamworks.steam_enabled:
+			push_warning("cannot join / host since Steam is not started or is disabled!")
+			return false
+
+		if not Steam.isLobby(lobby_id):
+			push_warning("lobby_id %s could not be found or is not a lobby!" % lobby_id)
+			return false
+
+		if init_as_host:
+			print("Attempting to host a lobby on steam! lobby type: %i, max player count: %i" % [Steam.LOBBY_TYPE_FRIENDS_ONLY, 4])
+			Steam.createLobby(Steam.LOBBY_TYPE_FRIENDS_ONLY, 4) # 4 player lobby					# TODO Clarify player limit and lobby type to a var
+		else:
+			print("Attempting to join a lobby on steam! lobby id: %i" % lobby_id)
+			Steam.joinLobby(lobby_id)
+
+		return true
+
+
+	func _on_lobby_joined_wrapper(lobby_id: int, _permissions: int, _locked: bool, response: int) -> void:
+		var err: String = _on_lobby_joined(lobby_id, _permissions, _locked, response)
+		if err: disconnected.emit(err)
+		else: connected_as_client.emit()
+
 
 	# NOTE Returns "" on success
-	func on_join_lobby(lobby_id: int, _permissions: int, _locked: bool, response: int) -> String:
+	func _on_lobby_joined(lobby_id: int, _permissions: int, _locked: bool, response: int) -> String:	# TODO User Error as return type
 		if is_active(): return "LOBBY IS ALREADY SET UP!"
 		if response != 1: return NetworkLobby._get_fail_response_description(response)
 
@@ -265,12 +303,18 @@ class SteamNetworkLobbyHandler extends NetworkLobbyHandler:						# TODO Rename S
 			return "ERROR CREATING CLIENT\nCODE: " + str(error)
 
 		multiplayer_peer = peer
-		players[1] = {"name": Steam.getFriendPersonaName(owner_id), "id": owner_id}				# TODO Make player info struct
+		players[1] = {"name": Steam.getFriendPersonaName(owner_id), "id": owner_id}					# TODO Make player info struct
 		return ""
 
 
+	func _on_lobby_created_wrapper(conn: int, lobby_id: int) -> void:
+		var err: String = _on_lobby_created(conn, lobby_id)
+		if err: disconnected.emit(err)
+		else: connected_as_host.emit()
+
+
 	# NOTE Returns "" on success
-	func on_create_lobby(conn: int, lobby_id: int) -> String:								# TODO DOESN'T QUIT PREVIOUS LOBBY... does it prevent mutliple lobbies? prob not...
+	func _on_lobby_created(conn: int, lobby_id: int) -> String:										# TODO DOESN'T QUIT PREVIOUS LOBBY... does it prevent mutliple lobbies? prob not... 	# TODO User Error as return type
 		if is_active(): return "LOBBY IS ALREADY SET UP!"
 		if conn != 1: return 'ERROR CREATING STEAM LOBBY\nCODE: '+str(conn)
 
@@ -292,6 +336,7 @@ class SteamNetworkLobbyHandler extends NetworkLobbyHandler:						# TODO Rename S
 		return ""
 
 
+	# Cleanup
 	func _notification(what: int) -> void:
 		match what:
 			NOTIFICATION_PREDELETE:
