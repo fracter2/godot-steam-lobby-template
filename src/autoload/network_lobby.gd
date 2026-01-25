@@ -3,10 +3,7 @@ class_name NetworkLobby extends Node
 
 # NOTE DEPENDS ON GODOTSTEAM and
 
-const default_app_id: int = 480 												# NOTE This is SpaceWars.
-const app_id: int = default_app_id												# NOTE Replace this when you get your app id!
 
-var steam_enabled: bool = false
 var lobby_instance: NetworkLobbyHandler = null
 
 signal players_changed
@@ -24,10 +21,6 @@ func _init():
 
 func _ready():
 	critical_error.connect(_on_critical_error)
-	OS.set_environment("SteamAppID", str(app_id))								# TODO Move Steam-related init to steamworks.gd
-	OS.set_environment("SteamGameID", str(app_id))								# TODO Clarify difference between AppID and GameID
-
-	_initialize_steam()															# TODO Move Steam-related init to steamworks.gd
 
 	Steam.lobby_created.connect(_on_lobby_created)
 	Steam.lobby_joined.connect(_on_lobby_joined)
@@ -51,16 +44,13 @@ func _ready():
 	_check_command_line()
 
 
-func _process(_d:float) -> void:												# TODO Move Steam-related init to steamworks.gd
-	Steam.run_callbacks()
-
 #
 # ---- API ----
 #
 
 func join_steam_lobby(lobby_id: int) -> bool:
 	if lobby_instance != null: return false
-	if !steam_enabled: return false
+	if !Steamworks.steam_enabled: return false
 
 	Steam.joinLobby(lobby_id)
 
@@ -110,15 +100,7 @@ func sync_info(name_: String, id: int) -> void:														# TODO NOTE This is
 #
 # ---- LOCAL UTIL ----
 #
-func _initialize_steam() -> void:
-	var initialize_response: Dictionary = Steam.steamInitEx(app_id, false)
-	print("Did Steam initialize?: %s" % initialize_response)
 
-	if initialize_response['status'] > Steam.STEAM_API_INIT_RESULT_OK:
-		critical_error.emit("Failed to initialize Steam, shutting down: %s" % initialize_response)
-		steam_enabled = false
-	else:
-		steam_enabled = true
 
 @rpc("reliable")
 func _receive_player_data(data : Dictionary, _id:int) -> void:
