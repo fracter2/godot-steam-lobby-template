@@ -140,7 +140,8 @@ func _check_command_line() -> void:												# TODO This could be a class on i
 	if these_arguments.size() > 0:
 		if these_arguments[0] == "+connect_lobby":								# ... since it would be nice to have this rawdogging stopped
 			if int(these_arguments[1]) > 0:
-				Steam.joinLobby(int(these_arguments[1]))
+				print("Attempting to join lobby right on start. Lobby id: " + str(these_arguments[1]))
+				if !join_steam_lobby(int(these_arguments[1])): print(" Attempt to join lobby got aborted (already in lobby?)")
 
 #	
 # ---- SIGNAL CALLBACKS ----
