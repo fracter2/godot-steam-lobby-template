@@ -1,8 +1,13 @@
 extends Node
 
+# This is a standalone utility script (meant as an autoload) to make it easier to
+# parse commandline args. "has_command()" and "get_values()" are the primary intended uses.
+#
+# This script removes prefixes (usually -- but can also be any combination of - or +) and
+# parses values with what i call "space" style values and '=' style values.
+
 var main_commands: Dictionary[String, PackedStringArray] = {}
 var user_commands: Dictionary[String, PackedStringArray] = {}
-
 
 #
 # ---- API ----
