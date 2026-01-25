@@ -38,7 +38,7 @@ func _ready():
 
 	multiplayer.connected_to_server.connect(_on_connected_to_server)			# NOTE So this only calls locally once.
 	multiplayer.connection_failed.connect(_on_connection_failed)
-	#multiplayer.peer_connected													# TODO CLARIFY does this emit for EACH when joining late? or only when already connected?
+	#multiplayer.peer_connected													# TODO CLARIFY does this emit for EACH when joining late? or only when already connected?	# TODO Ideally use this to get most player info locally
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 
 	_check_command_line()
@@ -183,7 +183,7 @@ func _on_connected_to_server() -> void:
 
 func _on_peer_disconnected(id: int) -> void:
 	if id == 1:																	# TODO Clarify that this is the server(?)
-		leave_lobby("Host left lobby")
+		leave_lobby("Host left lobby")											# TODO Make a lobby getter that checks if it should quit on host quit?
 	else:
 		lobby_instance.players.erase(id)
 		players_changed.emit()
@@ -198,22 +198,35 @@ func host_steam() -> void:
 	Steam.createLobby(Steam.LOBBY_TYPE_FRIENDS_ONLY, 4) # 4 player lobby		# TODO Clarify player limit to a var
 
 
-
 #
 # ----
 #
 @abstract
-class NetworkLobbyHandler extends RefCounted:
-	var id: int = 0
-	var owner_id: int = 0
+class NetworkLobbyHandler extends RefCounted:									# TODO Move to dedicated file. TODO Rename MultiplayerLobbyAPI
+	# Lobby id. May be the same as Owner ID, like with EnetMultiplayerLobby
+	var id: int = 0	# TODO Rename to lobby_id for extra clarity
+
+	# Owner user id. This is not nessessarily the peer_id from multiplayer.get_unique_id().
+	# With steam it is the account id.
+	var owner_id: int = 0														# TODO Consider removing this...? since Steam.getLobbyOwner() and peer_id 1 is always the owner / host
+																				# Could be a getter func instead, since a third party account system might have their own account id's
+	# Player info dictionary.
 	var players : Dictionary = {}
+
+	# The mutliplayer peer used in the connection. This can be used as the multiplayer_peer for
+	# any scene, like the actual game scene.
+	# This is the same as Lobby.multiplayer.multiplayer_peer, set by the various join funcs.
 	var multiplayer_peer: MultiplayerPeer
-	#@abstract func is_active() -> bool
+
+	# API to get the local users name. With SteamMultiplayerLobby it is the account name.
 	@abstract func get_user_name() -> String
+
+	# Gets the local users user_id. This may be different from the peer_id, wich you get from
+	# multiplayer.get_unique_id() or multiplayer.get_peers()
 	@abstract func get_user_id() -> int
 
 
-class EnetNetworkLobbyHandler extends NetworkLobbyHandler:
+class EnetNetworkLobbyHandler extends NetworkLobbyHandler:						# TODO Rename EnetMultiplayerLobby
 	var username: String = "DefaultName"
 
 	func is_active() -> bool: return id != 0
@@ -222,7 +235,7 @@ class EnetNetworkLobbyHandler extends NetworkLobbyHandler:
 
 
 
-class SteamNetworkLobbyHandler extends NetworkLobbyHandler:
+class SteamNetworkLobbyHandler extends NetworkLobbyHandler:						# TODO Rename SteamMultiplayerLobby
 	func is_active() -> bool: return id != 0
 	func get_user_name() -> String: return Steam.getPersonaName()
 	func get_user_id() -> int: return Steam.getSteamID()
