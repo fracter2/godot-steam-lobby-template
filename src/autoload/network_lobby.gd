@@ -73,6 +73,12 @@ func join_enet_lobby(ip: String, port: int) -> bool:
 
 	return true
 
+
+func host_steam() -> void:
+	if !Steamworks.steam_enabled: return
+	Steam.createLobby(Steam.LOBBY_TYPE_FRIENDS_ONLY, 4) # 4 player lobby		# TODO Clarify player limit to a var
+
+
 func leave_lobby(message: String) -> void:
 	if lobby_instance != null:
 		lobby_instance.free()														# NOTE This will handle all the cleanup internally
@@ -193,9 +199,6 @@ func _on_connection_failed() -> void:
 	multiplayer.multiplayer_peer.close()
 	critical_error.emit('FAILED TO CONNECT...')
 
-
-func host_steam() -> void:
-	Steam.createLobby(Steam.LOBBY_TYPE_FRIENDS_ONLY, 4) # 4 player lobby		# TODO Clarify player limit to a var
 
 
 #
