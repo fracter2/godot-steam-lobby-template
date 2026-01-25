@@ -69,8 +69,12 @@ func join_enet_lobby(ip: String, port: int) -> bool:
 	# TODO How do we set name, port, and such?
 
 	return true
+
+func leave_lobby(message: String) -> void:
+	if lobby_instance != null:
+		lobby_instance.free()														# NOTE This will handle all the cleanup internally
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()					# TODO This prob not needed. Reconsider
-	disconnected.emit("Left network lobby normally")
+	disconnected.emit(message)
 	# TODO GO TO MAIN MENU
 
 
@@ -141,8 +145,9 @@ func _check_command_line() -> void:												# TODO This could be a class on i
 #	
 # ---- SIGNAL CALLBACKS ----
 #
-func _on_critical_error(_message: String):
-	leave_lobby()
+func _on_critical_error(message: String):
+	push_error("LEAVING LOBBY - CRITICAL NETWORK_LOBBY ERROR: " + message)
+	leave_lobby(message)
 
 
 func _on_lobby_created(conn: int, id: int) -> void:								# TODO DOESN'T QUIT PREVIOUS LOBBY... does it prevent mutliple lobbies? prob not...
@@ -182,7 +187,7 @@ func _on_connected_to_server() -> void:
 
 func _on_peer_disconnected(id: int) -> void:
 	if id == 1:																	# TODO Clarify that this is the server(?)
-		leave_lobby()
+		leave_lobby("Host left lobby")
 	else:
 		lobby_instance.players.erase(id)
 		players_changed.emit()
