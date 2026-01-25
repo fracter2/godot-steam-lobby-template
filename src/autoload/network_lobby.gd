@@ -23,7 +23,9 @@ func _init():
 	critical_error.connect(_on_critical_error)
 	OS.set_environment("SteamAppID", str(app_id))
 	OS.set_environment("SteamGameID", str(app_id))								# TODO Clarify difference between AppID and GameID
-	Steam.steamInit(app_id, false)
+
+	_initialize_steam()															# TODO Move Steam-related init to steamworks.gd
+
 	Steam.lobby_created.connect(_on_lobby_created)
 	Steam.lobby_joined.connect(_on_lobby_joined)
 	Steam.join_requested.connect(_on_lobby_join_requested)
@@ -79,6 +81,16 @@ func sync_info(name_: String, id: int) -> void:														# TODO NOTE This is
 #
 # ---- LOCAL UTIL ----
 #
+func _initialize_steam() -> void:
+	var initialize_response: Dictionary = Steam.steamInitEx(app_id, false)
+	print("Did Steam initialize?: %s" % initialize_response)
+
+	if initialize_response['status'] > Steam.STEAM_API_INIT_RESULT_OK:
+		critical_error.emit("Failed to initialize Steam, shutting down: %s" % initialize_response)
+		steam_enabled = false
+	else:
+		steam_enabled = true
+
 @rpc("reliable")
 func _receive_player_data(data : Dictionary, _id:int) -> void:
 	lobby_instance.players = data
