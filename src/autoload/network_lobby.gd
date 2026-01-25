@@ -45,18 +45,30 @@ func _process(_d:float) -> void:
 # ---- API ----
 #
 
-func join_steam_lobby() -> bool:
+func join_steam_lobby(lobby_id: int) -> bool:
 	if lobby_instance != null: return false
-	
-	return false
-	
-func join_enet_lobby() -> bool:
-	if lobby_instance != null: return false
-	
-	return false
+	if !steam_enabled: return false
 
-func leave_lobby() -> void:
-	lobby_instance.free()														# NOTE This will handle all the cleanup internally
+	Steam.joinLobby(lobby_id)
+
+	return true
+
+func join_enet_lobby(ip: String, port: int) -> bool:
+	if lobby_instance != null: return false
+
+	# TODO Validate port and ip
+
+	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
+	var error: Error = peer.create_client(ip, port)
+	if error != Error.OK:
+		critical_error.emit(str(error))
+		return false
+
+
+	# TODO Create enet multiplayer peer host
+	# TODO How do we set name, port, and such?
+
+	return true
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()					# TODO This prob not needed. Reconsider
 	disconnected.emit("Left network lobby normally")
 	# TODO GO TO MAIN MENU
