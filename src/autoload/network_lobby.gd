@@ -4,7 +4,7 @@ class_name NetworkLobby extends Node
 # NOTE DEPENDS ON GODOTSTEAM plugin and launchcmd_parser.gd
 
 
-var lobby_instance: NetworkLobbyHandler = null
+var lobby_instance: MultiplayerLobbyAPI = null
 
 signal players_changed
 signal critical_error(message:String)
@@ -52,7 +52,7 @@ func _ready():
 
 ## Returns the result of the initiation [b]attempt[/b]. [signal connected] and [signal disconnected]
 ## emit when the result is granted (imagine it like waiting for the host / setup to respond)
-func initiate_lobby(lobby: NetworkLobbyHandler) -> bool:
+func initiate_lobby(lobby: MultiplayerLobbyAPI) -> bool:
 	if lobby_instance != null:
 		return false
 	var result: bool = lobby.initiate_connection()
@@ -125,7 +125,7 @@ func _check_launch_commands() -> void:
 			return
 
 		print("Attempting to join lobby right on start. Lobby id: " + lobby_id_str)
-		var lobby: SteamNetworkLobbyHandler = SteamNetworkLobbyHandler.new(int(lobby_id_str), false)
+		var lobby: SteamMultiplayerLobby = SteamMultiplayerLobby.new(int(lobby_id_str), false)
 		if not initiate_lobby(lobby):
 			print("Attempt to join lobby got cancelled (figure out why yourself)")
 
@@ -171,7 +171,7 @@ func _on_connection_failed() -> void:
 # ----
 #
 @abstract
-class NetworkLobbyHandler extends RefCounted:									# TODO Move to dedicated file. TODO Rename MultiplayerLobbyAPI
+class MultiplayerLobbyAPI extends RefCounted:									# TODO Move to dedicated file. TODO Rename MultiplayerLobbyAPI
 	# Lobby id. May be the same as Owner ID, like with EnetMultiplayerLobby
 	var id: int = 0	# TODO Rename to lobby_id for extra clarity
 
@@ -204,7 +204,7 @@ class NetworkLobbyHandler extends RefCounted:									# TODO Move to dedicated f
 	signal disconnected(message:String)
 
 
-class EnetNetworkLobbyHandler extends NetworkLobbyHandler:						# TODO Rename EnetMultiplayerLobby
+class EnetMultiplayerLobby extends MultiplayerLobbyAPI:
 	var username: String = "DefaultName"
 	var init_as_host:bool
 	var init_ip: String
@@ -245,7 +245,7 @@ class EnetNetworkLobbyHandler extends NetworkLobbyHandler:						# TODO Rename En
 		disconnected.emit(message)
 
 
-class SteamNetworkLobbyHandler extends NetworkLobbyHandler:						# TODO Rename SteamMultiplayerLobby
+class SteamMultiplayerLobby extends MultiplayerLobbyAPI:
 	var init_as_host: bool
 	var lobby_id: int = 0
 
