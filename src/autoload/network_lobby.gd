@@ -6,6 +6,14 @@ class_name NetworkLobby extends Node
 
 var lobby_instance: MultiplayerLobbyAPI = null
 
+enum PLAYERINFO_CHANGE {
+	PROPERTY_ADDED,
+	PROPERTY_CHANGED,
+	PROPERTY_REMOVED,
+	PLAYER_ADDED,
+	PLAYER_REMOVED
+}
+
 signal players_changed
 signal critical_error(message:String)
 
@@ -15,6 +23,7 @@ signal connected
 ## Disconnect as host / client, or failed connected attempt
 signal disconnected(message:String)
 
+signal playerinfo_updated(peer_id: int, update_type: PLAYERINFO_CHANGE, param: String)
 
 #
 # ---- MAIN CALLBACKS ----
@@ -67,7 +76,7 @@ func leave_lobby(message: String) -> void:
 	# TODO GO TO MAIN MENU
 
 
-@rpc("any_peer", "reliable")													# TODO RECONSIDER, consider delegating to multiplayer lobby instance
+@rpc("any_peer", "reliable")													# TODO Delegatate to multiplayer lobby instance
 func sync_info(name_: String, id: int) -> void:									# TODO NOTE This is meant to JUST send the info of all players TO THE REMOTE_SENDER. consider renaming
 	var peer_id = multiplayer.get_remote_sender_id()
 	if lobby_instance.players.has(peer_id):
@@ -88,7 +97,7 @@ func sync_info(name_: String, id: int) -> void:									# TODO NOTE This is mean
 #
 
 @rpc("reliable")
-func _receive_player_data(data : Dictionary, _id:int) -> void:					# TODO RECONSIDER, consider delegating to multiplayer lobby instance
+func _receive_player_data(data : Dictionary, _id:int) -> void:					# TODO Delegatate to multiplayer lobby instance
 	lobby_instance.players = data
 	players_changed.emit()
 
@@ -125,7 +134,7 @@ func _on_lobby_join_requested(this_lobby_id: int, _friend_id: int) -> void:
 
 
 # TODO Connect to connected signal, or similar.
-func _on_connected_to_server() -> void:
+func _on_connected_to_server() -> void:											# TODO Delegatate to multiplayer lobby instance
 	var peer_id: int = multiplayer.get_unique_id()
 	var my_name : String = _limit_string_to_size(lobby_instance.get_user_name(), 20)
 	var my_user_id: int = lobby_instance.get_user_id()
@@ -135,16 +144,16 @@ func _on_connected_to_server() -> void:
 
 
 # TODO Connect to disconnected signal, or similar.
-func _on_peer_disconnected(id: int) -> void:
-	if id == 1:																	# TODO Clarify that this is the server(?)
-		leave_lobby("Host left lobby")											# TODO Make a lobby getter that checks if it should quit on host quit?
+func _on_peer_disconnected(id: int) -> void:									# TODO Delegatate to multiplayer lobby instance
+	if id == 1:
+		leave_lobby("Host left lobby")			# TODO This should be handled by the lobby!!
 	else:
 		lobby_instance.players.erase(id)
 		players_changed.emit()
 
 
 # TODO Connect to disconnected signal, or similar.
-func _on_connection_failed() -> void:
+func _on_connection_failed() -> void:											# TODO Delegatate to multiplayer lobby instance
 	multiplayer.multiplayer_peer.close()
 	critical_error.emit('FAILED TO CONNECT...')
 
