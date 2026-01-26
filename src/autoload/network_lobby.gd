@@ -15,7 +15,6 @@ enum PLAYER_INFO_UPDATE {
 }
 
 
-signal players_changed
 signal critical_error(message:String)
 
 ## Successfully hosted or joined as client
@@ -91,7 +90,7 @@ func sync_info(name_: String, id: int) -> void:									# TODO NOTE This is mean
 	for p in lobby_instance.players:
 		minimum_data[p] = {"name": lobby_instance.players[p]["name"], "id": lobby_instance.players[p]["id"]}		# TODO Why is this here?? should it not just send the player dict?
 	_receive_player_data.rpc(minimum_data, peer_id)
-	players_changed.emit()
+	#player_info_updated.emit()
 
 #
 # ---- LOCAL UTIL ----
@@ -100,7 +99,7 @@ func sync_info(name_: String, id: int) -> void:									# TODO NOTE This is mean
 @rpc("reliable")
 func _receive_player_data(data : Dictionary, _id:int) -> void:					# TODO Delegatate to multiplayer lobby instance
 	lobby_instance.players = data
-	players_changed.emit()
+	#players_changed.emit()
 
 
 static func _limit_string_to_size(txt: String, size: int) -> String:			# TODO Move to some utility file
@@ -150,7 +149,7 @@ func _on_peer_disconnected(id: int) -> void:									# TODO Delegatate to multip
 		leave_lobby("Host left lobby")			# TODO This should be handled by the lobby!!
 	else:
 		lobby_instance.players.erase(id)
-		players_changed.emit()
+		player_info_updated.emit(id, PLAYER_INFO_UPDATE.PLAYER_REMOVED, "")
 
 
 # TODO Connect to disconnected signal, or similar.
