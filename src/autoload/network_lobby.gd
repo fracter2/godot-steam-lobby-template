@@ -14,6 +14,13 @@ enum PLAYERINFO_CHANGE {
 	PLAYER_REMOVED
 }
 
+## Common states the lobby can be in.
+enum LOBBY_STATE {
+	PUBLIC,
+	FRIENDS_ONLY,
+	PRIVATE
+}
+
 signal players_changed
 signal critical_error(message:String)
 
@@ -24,6 +31,7 @@ signal connected
 signal disconnected(message:String)
 
 signal playerinfo_updated(peer_id: int, update_type: PLAYERINFO_CHANGE, param: String)
+signal lobby_state_changed(lobby_state: LOBBY_STATE)
 
 #
 # ---- MAIN CALLBACKS ----
