@@ -6,7 +6,7 @@ class_name NetworkLobby extends Node
 
 var lobby_instance: MultiplayerLobbyAPI = null
 
-enum PLAYERINFO_CHANGE {
+enum PLAYER_INFO_UPDATE {
 	PROPERTY_ADDED,
 	PROPERTY_CHANGED,
 	PROPERTY_REMOVED,
@@ -30,7 +30,8 @@ signal connected
 ## Disconnect as host / client, or failed connected attempt
 signal disconnected(message:String)
 
-signal playerinfo_updated(peer_id: int, update_type: PLAYERINFO_CHANGE, param: String)
+signal player_info_updated(peer_id: int, update_type: PLAYER_INFO_UPDATE, param: String)
+
 signal lobby_state_changed(lobby_state: LOBBY_STATE)
 
 #
@@ -142,12 +143,12 @@ func _on_lobby_join_requested(this_lobby_id: int, _friend_id: int) -> void:
 
 
 # TODO Connect to connected signal, or similar.
-func _on_connected_to_server() -> void:											# TODO Delegatate to multiplayer lobby instance
+func _on_connected_to_server() -> void:
 	var peer_id: int = multiplayer.get_unique_id()
 	var my_name : String = _limit_string_to_size(lobby_instance.get_user_name(), 20)
 	var my_user_id: int = lobby_instance.get_user_id()
 
-	lobby_instance.players[peer_id] = {"name": my_name, "id": my_user_id}		# TODO Optimize sync_ifo logic to only send new data. Bandwidth aint free...
+	lobby_instance.players[peer_id] = {"name": my_name, "id": my_user_id}		# TODO Optimize sync_ifo logic to only send new data. Bandwidth aint free... # TODO Delegatate to multiplayer lobby instance
 	sync_info.rpc(my_name, my_user_id)
 
 
