@@ -1,5 +1,5 @@
 @abstract
-class_name MultiplayerLobbyAPI
+class_name MultiplayerLobbyAPI	# TODO Consider renaming to just MultiplayerLobby
 extends RefCounted
 
 ## Lobby id. May be the same as Owner ID, like with EnetMultiplayerLobby
@@ -35,3 +35,18 @@ signal connected_as_host
 
 ## Disconnect as host / client, or failed connected attempt
 signal disconnected(message:String)
+
+##
+signal player_info_changed(peer_id: int, update_type: PLAYER_INFO_UPDATE, param: String)
+
+# TODO Chat messages, recieve and send signals...?
+# TODO Chat send func
+# TODO Chat history...?
+
+enum PLAYER_INFO_UPDATE {
+	PROPERTY_ADDED,
+	PROPERTY_CHANGED,
+	PROPERTY_REMOVED,
+	PLAYER_ADDED,
+	PLAYER_REMOVED
+}

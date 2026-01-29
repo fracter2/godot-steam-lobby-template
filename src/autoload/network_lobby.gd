@@ -6,15 +6,6 @@ class_name NetworkLobby extends Node
 
 var lobby_instance: MultiplayerLobbyAPI = null
 
-enum PLAYER_INFO_UPDATE {
-	PROPERTY_ADDED,
-	PROPERTY_CHANGED,
-	PROPERTY_REMOVED,
-	PLAYER_ADDED,
-	PLAYER_REMOVED
-}
-
-
 signal critical_error(message:String)
 
 ## Successfully hosted or joined as client
@@ -23,7 +14,7 @@ signal connected
 ## Disconnect as host / client, or failed connected attempt
 signal disconnected(message:String)
 
-signal player_info_updated(peer_id: int, update_type: PLAYER_INFO_UPDATE, param: String)
+signal player_info_updated(peer_id: int, update_type: MultiplayerLobbyAPI.PLAYER_INFO_UPDATE, param: String)
 
 #
 # ---- MAIN CALLBACKS ----
@@ -149,7 +140,7 @@ func _on_peer_disconnected(id: int) -> void:									# TODO Delegatate to multip
 		leave_lobby("Host left lobby")			# TODO This should be handled by the lobby!!
 	else:
 		lobby_instance.players.erase(id)
-		player_info_updated.emit(id, PLAYER_INFO_UPDATE.PLAYER_REMOVED, "")
+		player_info_updated.emit(id, MultiplayerLobbyAPI.PLAYER_INFO_UPDATE.PLAYER_REMOVED, "")
 
 
 # TODO Connect to disconnected signal, or similar.
