@@ -30,14 +30,7 @@ func _ready():
 	Steam.join_requested.connect(_on_lobby_join_requested)
 
 	#Steam.lobby_invite 		# NOTE Allows automatic acceptance of invites. lol
-	#Steam.lobby_kicked
-	#Steam.lobby_chat_update
-	#Steam.lobby_match_list
-	#Steam.lobby_data_update
-	#Steam.lobby_message														# TODO Setup messaging support... consider sepparate "Chat" autoload? connect to handler?
 
-	#Steam.joinParty()
-	#Steam.createBeacon() 	# Wasdis about??
 
 	multiplayer.connected_to_server.connect(_on_connected_to_server)			# NOTE So this only calls locally once.
 	multiplayer.connection_failed.connect(_on_connection_failed)

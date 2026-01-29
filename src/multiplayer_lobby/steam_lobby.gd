@@ -17,6 +17,14 @@ func _init(lobby_id_: int, as_host: bool) -> void:
 	Steam.lobby_created.connect(_on_lobby_created_wrapper)
 	Steam.lobby_joined.connect(_on_lobby_joined_wrapper)
 	Steam.lobby_kicked.connect(_on_kicked)
+	#Steam.lobby_chat_update
+	#Steam.lobby_match_list
+	#Steam.lobby_data_update
+	#Steam.lobby_message														# TODO Setup messaging support... consider sepparate "Chat" autoload? connect to handler?
+
+	#Steam.joinParty()
+	#Steam.createBeacon() 	# Wasdis about??
+
 
 
 # Cleanup
@@ -58,9 +66,8 @@ func initiate_connection() -> bool:
 
 	return true
 
-
 #
-# ---- Internal logic
+# ---- Signals ----
 #
 
 func _on_lobby_joined_wrapper(lobby_id: int, _permissions: int, _locked: bool, response: int) -> void:
@@ -121,6 +128,11 @@ func _on_lobby_created(conn: int, lobby_id: int) -> String:										# TODO DOES
 
 func _on_kicked() -> void:
 	disconnected.emit("Got kicked")
+
+#
+# ---- Internal logic ----
+#
+
 func _get_fail_response_description(response: int) -> String:
 	match response:
 		1:  return "OK."														# TODO Make use of the corresponding Steam. enum
