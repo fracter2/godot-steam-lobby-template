@@ -16,6 +16,7 @@ func _init(lobby_id_: int, as_host: bool) -> void:
 	if not Steamworks.steam_enabled: return
 	Steam.lobby_created.connect(_on_lobby_created_wrapper)
 	Steam.lobby_joined.connect(_on_lobby_joined_wrapper)
+	Steam.lobby_kicked.connect(_on_kicked)
 
 
 # Cleanup
@@ -118,6 +119,8 @@ func _on_lobby_created(conn: int, lobby_id: int) -> String:										# TODO DOES
 	return ""
 
 
+func _on_kicked() -> void:
+	disconnected.emit("Got kicked")
 func _get_fail_response_description(response: int) -> String:
 	match response:
 		1:  return "OK."														# TODO Make use of the corresponding Steam. enum
