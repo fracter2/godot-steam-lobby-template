@@ -12,6 +12,10 @@ func _ready() -> void:
 
 
 func _on_button_down() -> void:
+	if not Steamworks.is_online():
+		print_debug("Cannot host steam game if not online!")
+		return
+
 	if Lobby.initiate_lobby(SteamMultiplayerLobby.new(0, true)):
 		print("Successfully initiated SteamMultiplayerLobby")
 	else:
