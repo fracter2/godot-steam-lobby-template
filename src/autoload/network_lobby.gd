@@ -52,15 +52,20 @@ func initiate_lobby(lobby: MultiplayerLobbyAPI) -> bool:
 	if is_in_lobby():
 		return false
 
+	lobby.connected_as_client.connect(_on_connected_as_client)
+	lobby.connected_as_host.connect(_on_connected_as_host)
+	lobby.disconnected.connect(_on_disconnected)
+	lobby.player_info_changed.connect(_on_player_info_changed)
+
 	if lobby.initiate_connection():
 		lobby_instance = lobby
-		lobby.connected_as_client.connect(_on_connected_as_client)
-		lobby.connected_as_host.connect(_on_connected_as_host)
-		lobby.disconnected.connect(_on_disconnected)
-		lobby.player_info_changed.connect(_on_player_info_changed)
 		return true
 
 	else:
+		lobby.connected_as_client.disconnect(_on_connected_as_client)
+		lobby.connected_as_host.disconnect(_on_connected_as_host)
+		lobby.disconnected.disconnect(_on_disconnected)
+		lobby.player_info_changed.disconnect(_on_player_info_changed)
 		return false
 
 
