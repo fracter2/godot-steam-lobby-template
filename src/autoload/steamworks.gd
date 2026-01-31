@@ -1,6 +1,8 @@
 extends Node
 
 var steam_enabled: bool = false
+var steam_id: int = 0															## Local user steam_id
+var persona_name: String = "default_name"
 
 const default_app_id: int = 480 												# NOTE This is SpaceWars.
 const app_id: int = default_app_id												# NOTE Replace this when you get your app id!
@@ -29,6 +31,9 @@ func _ready() -> void:
 	OS.set_environment("SteamAppID", str(app_id))
 	OS.set_environment("SteamGameID", str(app_id))								# TODO Clarify difference between AppID and GameID
 	_initialize_steam()
+	if steam_enabled:
+		steam_id = Steam.getSteamID()
+		persona_name = Steam.getPersonaName()
 
 
 func _process(_d:float) -> void:
