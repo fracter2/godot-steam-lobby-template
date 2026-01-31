@@ -5,12 +5,14 @@ extends Button
 func _ready() -> void:
 	button_down.connect(_on_button_down)
 
+	if not Steamworks.is_online():
+		disabled = true
+		tooltip_text = "Cannot host when steam is disabled or inactive!"
 
-
-
-func _process(delta: float) -> void:
-	pass
 
 
 func _on_button_down() -> void:
-	Lobby.initiate_lobby(SteamMultiplayerLobby.new(0, true))
+	if Lobby.initiate_lobby(SteamMultiplayerLobby.new(0, true)):
+		print("Successfully initiated SteamMultiplayerLobby")
+	else:
+		print("Failed to initiate SteamMultiplayerLobby")
