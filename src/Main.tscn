@@ -85,9 +85,3 @@ offset_right = 40.0
 offset_bottom = 23.0
 text = "SteamStatus"
 metadata/_edit_use_anchors_ = true
-
-[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=237458294]
-_spawnable_scenes = PackedStringArray("uid://ctac7w7mgcdq8")
-spawn_path = NodePath("../NetworkedEntities")
-
-[node name="NetworkedEntities" type="Node2D" parent="." unique_id=1838135968]
