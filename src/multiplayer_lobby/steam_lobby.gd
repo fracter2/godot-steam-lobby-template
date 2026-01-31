@@ -98,8 +98,8 @@ func _on_lobby_joined(joined_lobby_id: int, _permissions: int, _locked: bool, re
 	return ""
 
 
-func _on_lobby_created_wrapper(conn: int, lobby_id: int) -> void:
-	var err: String = _on_lobby_created(conn, lobby_id)
+func _on_lobby_created_wrapper(conn: int, created_lobby_id: int) -> void:
+	var err: String = _on_lobby_created(conn, created_lobby_id)
 	if err: disconnected.emit(err)
 	else: connected_as_host.emit()
 
