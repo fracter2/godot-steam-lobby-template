@@ -46,6 +46,9 @@ func _ready() -> void:
 func is_in_lobby() -> bool:
 	return lobby_instance != null
 
+func is_lobby_owner() -> bool:
+	return lobby_instance.owner_id == lobby_instance.get_user_id()
+
 ## Returns the result of the initiation [b]attempt[/b]. [signal connected] and [signal disconnected]
 ## emit when the result is granted (imagine it like waiting for the host / setup to respond)
 func initiate_lobby(lobby: MultiplayerLobbyAPI) -> bool:
@@ -138,7 +141,7 @@ func _on_lobby_join_requested(this_lobby_id: int, _friend_id: int) -> void:
 
 
 # TODO Connect to connected signal, or similar.
-func _on_connected_to_server() -> void:
+func _on_connected_to_server() -> void:											# TODO Delegate to lobby instance
 	var peer_id: int = multiplayer.get_unique_id()
 	var my_name : String = _limit_string_to_size(lobby_instance.get_user_name(), 20)
 	var my_user_id: int = lobby_instance.get_user_id()
