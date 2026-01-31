@@ -23,7 +23,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
 	if not is_multiplayer_authority(): return
 
-	var input_dir: Vector2 = Vector2(Input.get_axis(&"ui_left", &"ui_right"),  Input.get_axis(&"ui_up", &"ui_down"))
+	var input_dir: Vector2 = Vector2(Input.get_axis(&"move_left", &"move_right"),  Input.get_axis(&"move_up", &"move_down"))
 	position += input_dir * speed * delta
 
 
