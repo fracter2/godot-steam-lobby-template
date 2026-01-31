@@ -87,19 +87,18 @@ func _on_lobby_joined(joined_lobby_id: int, _permissions: int, _locked: bool, re
 	if is_active(): return "LOBBY IS ALREADY SET UP!"
 	if response != 1: return _get_fail_response_description(response)
 
-	# TODO IF SteamMultiplayerPeer DOESN'T NEED THIS, MOVE THIS BELOW
 	lobby_id = joined_lobby_id
 	owner_id = Steam.getLobbyOwner(lobby_id)
-	if owner_id == Steam.getSteamID():
+	if owner_id == Steamworks.steam_id:
 		return "joined lobby and became the owner right away... Dunno how to handle this so just break"
 
-	var peer: SteamMultiplayerPeer = SteamMultiplayerPeer.new()
-	var error: Error = peer.create_client(owner_id, 0)
+	_create_multiplayer_peer()
+	var error: Error = (multiplayer_peer as SteamMultiplayerPeer).create_client(owner_id, 0)
 	if error != OK:
 		return "ERROR CREATING CLIENT\nCODE: " + str(error)
 
-	multiplayer_peer = peer
-	players[1] = {"name": Steam.getFriendPersonaName(owner_id), "id": owner_id}					# TODO Make player info struct
+	players[1] = {"name": Steam.getFriendPersonaName(owner_id), "id": owner_id}						# TODO Make player info struct
+	players[multiplayer_peer.get_unique_id()] = {"name": Steamworks.persona_name, "id": Steamworks.steam_id}
 	return ""
 
 
@@ -114,30 +113,53 @@ func _on_lobby_created(conn: int, created_lobby_id: int) -> String:										# T
 	if is_active(): return "LOBBY IS ALREADY SET UP!"
 	if conn != 1: return 'ERROR CREATING STEAM LOBBY\nCODE: '+str(conn)
 
-	# TODO IF SteamMultiplayerPeer DOESN'T NEED THIS, MOVE THIS BELOW
 	lobby_id = created_lobby_id
 	owner_id = Steam.getSteamID()
-	var my_name: String = NetworkLobby._limit_string_to_size(Steam.getPersonaName(), 20)
-	Steam.setLobbyData(lobby_id, "name", (my_name+"'s Lobby"))
-	Steam.setLobbyJoinable(lobby_id, true)
 
-	var peer: SteamMultiplayerPeer = SteamMultiplayerPeer.new()
-	var error: Error = peer.create_host(0) # this is virtual port not player limit do not change
+	_create_multiplayer_peer()
+	var error: Error = (multiplayer_peer as SteamMultiplayerPeer).create_host(0) # this is virtual port not player limit do not change
 	if error != OK:
 		return "ERROR CREATING HOST CLIENT\nCODE: " + str(error)
 
-	multiplayer_peer = peer
+	var my_name: String = NetworkLobby._limit_string_to_size(Steam.getPersonaName(), 20)
+	Steam.setLobbyData(lobby_id, "name", (my_name+"'s Lobby"))					# TODO Allow setting a lobby name
+	Steam.setLobbyJoinable(lobby_id, true)
+
+
+
 	players[1] = {"name": my_name, "id": Steam.getSteamID()}
-	Steam.allowP2PPacketRelay(true)											# TODO Remove, this should be redundant
+	Steam.allowP2PPacketRelay(true)												# TODO Remove, this should be redundant
 	return ""
 
 
 func _on_kicked() -> void:
 	disconnected.emit("Got kicked")
 
+
+func _on_peer_connected(peer_id: int) -> void:
+	if players.has(peer_id):
+		print_debug("in SteamMultiplayerLobby._on_peer_connected(%d), somehow already have the peer_id in the players[] dict" % peer_id)
+		return
+	var steam_id: int = (multiplayer_peer as SteamMultiplayerPeer).get_steam_id_for_peer_id(peer_id)
+	players[peer_id] = {"name": Steam.getFriendPersonaName(steam_id), "id": steam_id}
+
+
+func _on_peer_disconnected(peer_id: int) -> void:
+	if not players.has(peer_id):
+		print_debug("in SteamMultiplayerLobby._on_peer_disconnected(%d), somehow dont have the peer_id in the players[] dict" % peer_id)
+		return
+	players.erase(peer_id)
+
 #
 # ---- Internal logic ----
 #
+
+func _create_multiplayer_peer() -> void:
+	var peer: SteamMultiplayerPeer = SteamMultiplayerPeer.new()
+	peer.peer_connected.connect(_on_peer_connected)
+	peer.peer_disconnected.connect(_on_peer_disconnected)
+	multiplayer_peer = peer
+
 
 func _get_fail_response_description(response: int) -> String:
 	match response:
