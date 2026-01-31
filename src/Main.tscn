@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://bqr5r210mrghq" path="res://src/ui/host_steam_btn.gd" id="1_4gxt3"]
 [ext_resource type="Script" uid="uid://2x8i2f4boblq" path="res://src/main.gd" id="1_hk4rc"]
+[ext_resource type="Script" uid="uid://cribs4tpca7u7" path="res://src/ui/btn_join_steam.gd" id="3_8ec3e"]
 [ext_resource type="Script" uid="uid://betn2wl3eiyv" path="res://src/ui/btn_host_enet.gd" id="3_chrbn"]
 [ext_resource type="Script" uid="uid://vv32jnu32d2q" path="res://src/ui/steam_info_labels.gd" id="4_5qjmp"]
 [ext_resource type="PackedScene" uid="uid://dgjg26vena25e" path="res://src/ui/ip_input_panel.tscn" id="5_vjwby"]
@@ -11,21 +12,59 @@ script = ExtResource("1_hk4rc")
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1923950707]
 
-[node name="BtnHostSteam" type="Button" parent="UI" unique_id=1551743476]
-offset_left = 51.0
-offset_top = 240.0
-offset_right = 104.0
-offset_bottom = 271.0
+[node name="ConnectMenu" type="Control" parent="UI" unique_id=537319989]
+layout_mode = 3
+anchors_preset = 0
+offset_top = 30.0
+offset_bottom = 30.0
+metadata/_edit_use_anchors_ = true
+
+[node name="BtnHostSteam" type="Button" parent="UI/ConnectMenu" unique_id=1551743476]
+layout_mode = 0
+offset_left = 137.0
+offset_top = 190.0
+offset_right = 254.0
+offset_bottom = 221.0
 text = "HOST (STEAM)"
 script = ExtResource("1_4gxt3")
+metadata/_edit_use_anchors_ = true
 
-[node name="BtnHostEnet" type="Button" parent="UI" unique_id=163812267]
-offset_left = 51.0
-offset_top = 179.0
-offset_right = 156.0
-offset_bottom = 210.0
+[node name="BtnJoinSteam" type="Button" parent="UI/ConnectMenu" unique_id=6367654]
+layout_mode = 0
+offset_left = 22.0
+offset_top = 191.0
+offset_right = 129.0
+offset_bottom = 222.0
+text = "JOIN (Steam)"
+script = ExtResource("3_8ec3e")
+metadata/_edit_use_anchors_ = true
+
+[node name="BtnHostEnet" type="Button" parent="UI/ConnectMenu" unique_id=163812267]
+layout_mode = 0
+offset_left = 133.0
+offset_top = 138.0
+offset_right = 320.0
+offset_bottom = 169.0
 text = "HOST (ENET, port 8080)"
 script = ExtResource("3_chrbn")
+
+[node name="BtnJoinEnet" type="Button" parent="UI/ConnectMenu" unique_id=1709458108]
+layout_mode = 0
+offset_left = 23.0
+offset_top = 137.0
+offset_right = 120.0
+offset_bottom = 168.0
+size_flags_horizontal = 0
+text = "JOIN (ENET)"
+metadata/_edit_use_anchors_ = true
+
+[node name="IPPanel" parent="UI/ConnectMenu" unique_id=194192369 instance=ExtResource("5_vjwby")]
+layout_mode = 0
+offset_left = 19.0
+offset_top = 38.0
+offset_right = 265.0
+offset_bottom = 120.0
+metadata/_edit_use_anchors_ = true
 
 [node name="SteamInfoLabels" type="Control" parent="UI" unique_id=1390363155 node_paths=PackedStringArray("steam_status")]
 layout_mode = 3
@@ -34,26 +73,18 @@ offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("4_5qjmp")
 steam_status = NodePath("SteamStatus")
+metadata/_edit_use_anchors_ = true
 
 [node name="SteamStatus" type="Label" parent="UI/SteamInfoLabels" unique_id=959646336]
-layout_mode = 0
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.425
+anchor_right = 1.45
+anchor_bottom = 0.425
 offset_right = 40.0
 offset_bottom = 23.0
 text = "SteamStatus"
-
-[node name="BtnJoinEnet" type="Button" parent="UI" unique_id=1709458108]
-offset_left = 53.0
-offset_top = 131.0
-offset_right = 150.0
-offset_bottom = 162.0
-size_flags_horizontal = 0
-text = "JOIN (ENET)"
-
-[node name="IPPanel" parent="UI" unique_id=194192369 instance=ExtResource("5_vjwby")]
-offset_left = 300.0
-offset_top = 83.0
-offset_right = 546.0
-offset_bottom = 165.0
+metadata/_edit_use_anchors_ = true
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=237458294]
 _spawnable_scenes = PackedStringArray("uid://ctac7w7mgcdq8")
