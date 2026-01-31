@@ -58,16 +58,17 @@ func initiate_connection() -> bool:
 		push_warning("cannot join / host since Steam is not started or is disabled!")
 		return false
 
-	if not Steam.isLobby(lobby_id):
-		push_warning("lobby_id %s could not be found or is not a lobby!" % lobby_id)
-		return false
 
 	if init_as_host:
 		print("Attempting to host a lobby on steam! lobby type: %i, max player count: %i" % [Steam.LOBBY_TYPE_FRIENDS_ONLY, 4])
 		Steam.createLobby(Steam.LOBBY_TYPE_FRIENDS_ONLY, 4) # 4 player lobby					# TODO Clarify player limit and lobby type to a var
-	else:
+
+	elif Steam.isLobby(lobby_id):
 		print("Attempting to join a lobby on steam! lobby id: %i" % lobby_id)
 		Steam.joinLobby(lobby_id)
+	else:
+		push_warning("lobby_id %s could not be found or is not a lobby!" % lobby_id)
+		return false
 
 	return true
 
