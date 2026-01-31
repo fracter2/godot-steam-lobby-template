@@ -9,12 +9,12 @@ var lobby_instance: MultiplayerLobbyAPI = null
 signal critical_error(message:String)
 
 ## Successfully hosted or joined as client
-signal connected
+signal connected																# TODO Consider renaming to "lobby_entered" or similar
 
 ## Disconnect as host / client, or failed connected attempt
-signal disconnected(message:String)
+signal disconnected(message:String)												# TODO Consider renaming to "lobby_exited" or similar
 
-signal player_info_updated(peer_id: int, update_type: MultiplayerLobbyAPI.PLAYER_INFO_UPDATE, param: String)
+signal player_info_updated(peer_id: int, update_type: MultiplayerLobbyAPI.PLAYER_INFO_UPDATE, param: String, value: Variant)		# TODO ADD A WRAPPER HERE that calls this and changes the corresponding element
 
 #
 # ---- MAIN CALLBACKS ----
@@ -48,13 +48,23 @@ func _ready():
 func initiate_lobby(lobby: MultiplayerLobbyAPI) -> bool:
 	if lobby_instance != null:
 		return false
-	var result: bool = lobby.initiate_connection()
-	return result
+
+	if lobby.initiate_connection():
+		lobby_instance = lobby
+		lobby.connected_as_client.connect(_on_connected_as_client)
+		lobby.connected_as_host.connect(_on_connected_as_host)
+		lobby.disconnected.connect(_on_disconnected)
+		lobby.player_info_changed.connect(_on_player_info_changed)
+		return true
+
+	else:
+		return false
 
 
 func leave_lobby(message: String) -> void:
 	if lobby_instance != null:
 		lobby_instance.free()													# NOTE This will handle all the cleanup internally
+		lobby_instance = null
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()					# TODO This prob not needed. Reconsider
 	disconnected.emit(message)
 	# TODO GO TO MAIN MENU
@@ -141,6 +151,19 @@ func _on_connection_failed() -> void:											# TODO Delegatate to multiplayer
 	multiplayer.multiplayer_peer.close()
 	critical_error.emit('FAILED TO CONNECT...')
 
+
+func _on_connected_as_client() -> void:
+	connected.emit()
+
+
+func _on_connected_as_host() -> void:
+	connected.emit()
+
+func _on_disconnected() -> void:
+	disconnected.emit()
+
+func _on_player_info_changed(peer_id: int, update_type: PLAYER_INFO_UPDATE, param: String, value: Variant) -> void:
+	player_info_updated.emit(peer_id, update_type, param)
 
 
 #

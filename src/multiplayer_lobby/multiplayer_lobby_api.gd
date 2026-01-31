@@ -37,7 +37,7 @@ signal connected_as_host
 signal disconnected(message:String)
 
 ##
-signal player_info_changed(peer_id: int, update_type: PLAYER_INFO_UPDATE, param: String)
+signal player_info_changed(peer_id: int, update_type: PLAYER_INFO_UPDATE, param: String, value: Variant)		# TODO Sepparate into multiple signals for property change / remove / player added / removed
 
 # TODO Chat messages, recieve and send signals...?
 # TODO Chat send func
