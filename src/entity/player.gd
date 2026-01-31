@@ -6,6 +6,7 @@ extends Node2D
 	set(id):
 		peer_id = id
 		set_multiplayer_authority(id)
+		_check_if_local_authority()
 	get():
 		return peer_id
 
@@ -16,6 +17,7 @@ extends Node2D
 
 func _ready() -> void:
 	Lobby.player_info_updated.connect(_check_if_name_changed)
+
 
 
 func _physics_process(delta: float) -> void:
@@ -30,3 +32,11 @@ func _check_if_name_changed(peer_id_: int, update_type: MultiplayerLobbyAPI.PLAY
 	and update_type == MultiplayerLobbyAPI.PLAYER_INFO_UPDATE.PROPERTY_CHANGED
 	and param == "name"):
 		name_label.text = value
+
+
+func _check_if_local_authority() -> void:
+	if peer_id == multiplayer.get_unique_id():
+		var cam_node: Camera2D = Camera2D.new()
+		cam_node.name = "Local Camera"
+		cam_node.enabled = true
+		add_child(cam_node, true)
