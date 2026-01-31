@@ -19,12 +19,12 @@ signal player_info_updated(peer_id: int, update_type: MultiplayerLobbyAPI.PLAYER
 #
 # ---- MAIN CALLBACKS ----
 #
-func _init():
+func _init() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	process_priority = -1														# TODO Consider global constants CONST autoload
 	process_physics_priority = -1
 
-func _ready():
+func _ready() -> void:
 	critical_error.connect(_on_critical_error)
 
 	Steam.join_requested.connect(_on_lobby_join_requested)
@@ -82,7 +82,7 @@ func leave_lobby(message: String) -> void:
 
 @rpc("any_peer", "reliable")													# TODO Delegatate to multiplayer lobby instance
 func sync_info(name_: String, id: int) -> void:									# TODO NOTE This is meant to JUST send the info of all players TO THE REMOTE_SENDER. consider renaming
-	var peer_id = multiplayer.get_remote_sender_id()
+	var peer_id: int = multiplayer.get_remote_sender_id()
 	if lobby_instance.players.has(peer_id):
 		push_warning("attemped to sync_info() already existing peer")
 		return
@@ -90,8 +90,8 @@ func sync_info(name_: String, id: int) -> void:									# TODO NOTE This is mean
 	lobby_instance.players[peer_id] = {"name": name_, "id": id}
 
 	# TODO Send user data to
-	var minimum_data = {}
-	for p in lobby_instance.players:
+	var minimum_data: Dictionary = {}
+	for p: Dictionary in lobby_instance.players:
 		minimum_data[p] = {"name": lobby_instance.players[p]["name"], "id": lobby_instance.players[p]["id"]}		# TODO Why is this here?? should it not just send the player dict?
 	_receive_player_data.rpc(minimum_data, peer_id)
 	#player_info_updated.emit()
@@ -128,7 +128,7 @@ func _check_launch_commands() -> void:
 #
 # ---- SIGNAL CALLBACKS ----
 #
-func _on_critical_error(message: String):
+func _on_critical_error(message: String) -> void:
 	push_error("LEAVING LOBBY - CRITICAL NETWORK_LOBBY ERROR: " + message)
 	leave_lobby(message)
 
