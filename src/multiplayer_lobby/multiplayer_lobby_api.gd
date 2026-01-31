@@ -7,10 +7,10 @@ var id: int = 0	# TODO Rename to lobby_id for extra clarity
 
 ## Owner user id. This is not nessessarily the peer_id from multiplayer.get_unique_id().
 ## With steam it is the account id.
-var owner_id: int = 0														# TODO Consider removing this...? since Steam.getLobbyOwner() and peer_id 1 is always the owner / host
-																			# Could be a getter func instead, since a third party account system might have their own account id's
+var owner_id: int = 0															# TODO Consider removing this...? since Steam.getLobbyOwner() and peer_id 1 is always the owner / host
+																				# Could be a getter func instead, since a third party account system might have their own account id's
 ## Player info [Dictionary].
-var players : Dictionary = {}
+var players : Dictionary = {}													# TODO Consider a dedicated info class... even as a simple Dictionary wrapper with embedded peer_id + user_id + name...
 
 ## The [MultiplayerPeer] used in the connection. This can be used as the multiplayer_peer for
 ## any scene, like the actual game scene. [br]
@@ -45,7 +45,7 @@ signal player_info_changed(peer_id: int, update_type: PLAYER_INFO_UPDATE, param:
 
 enum PLAYER_INFO_UPDATE {
 	PROPERTY_CHANGED,
-	PROPERTY_REMOVED,
+	PROPERTY_REMOVED,															# TODO Consider having this just be a changed to Variant null
 	PLAYER_ADDED,
 	PLAYER_REMOVED
 }
