@@ -83,6 +83,24 @@ func leave_lobby(message: String) -> void:
 	disconnected.emit(message)
 
 
+## Just a thin wrapper to make it simple
+func has_player_info(peer_id: int, key: String) -> bool:
+	if lobby_instance.players.has(peer_id):
+		@warning_ignore("unsafe_method_access")									# NOTE We know it will always be a dict of dicts
+		return lobby_instance.players[peer_id].has(key)
+	else:
+		return false
+
+
+## Just a thin wrapper to make it simple
+func get_player_info(peer_id: int, key: String, default: Variant = null) -> Variant:
+	if lobby_instance.players.has(peer_id):
+		@warning_ignore("unsafe_method_access")									# NOTE We know it will always be a dict of dicts
+		return lobby_instance.players[peer_id].get(key, default)
+	else:
+		return default
+
+
 @rpc("any_peer", "reliable")													# TODO Delegatate to multiplayer lobby instance
 func sync_info(name_: String, id: int) -> void:									# TODO NOTE This is meant to JUST send the info of all players TO THE REMOTE_SENDER. consider renaming
 	var peer_id: int = multiplayer.get_remote_sender_id()
