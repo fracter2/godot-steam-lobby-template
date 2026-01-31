@@ -58,3 +58,49 @@ _spawnable_scenes = PackedStringArray("uid://ctac7w7mgcdq8")
 spawn_path = NodePath("../NetworkedEntities")
 
 [node name="NetworkedEntities" type="Node2D" parent="." unique_id=1300342717]
+
+[node name="StaticMap" type="Node2D" parent="." unique_id=1296001154]
+
+[node name="Polygon2D" type="Polygon2D" parent="StaticMap" unique_id=231710110]
+color = Color(0.2231029, 0.2231029, 0.22310287, 1)
+polygon = PackedVector2Array(-63, -52, 62, -56, 65, 60, -65, 62)
+
+[node name="Polygon2D2" type="Polygon2D" parent="StaticMap" unique_id=1661090515]
+position = Vector2(1065, 66)
+color = Color(0.2231029, 0.2231029, 0.22310287, 1)
+polygon = PackedVector2Array(-69, -74, 86, -133, 99, 120, -63, 70)
+
+[node name="Polygon2D3" type="Polygon2D" parent="StaticMap" unique_id=886775301]
+position = Vector2(2, 631)
+color = Color(0.2231029, 0.2231029, 0.22310287, 1)
+polygon = PackedVector2Array(-69, -74, 77, -61, 143, 78, -128, 75)
+
+[node name="Polygon2D4" type="Polygon2D" parent="StaticMap" unique_id=276122189]
+position = Vector2(-904, 10)
+color = Color(0.2231029, 0.2231029, 0.22310287, 1)
+polygon = PackedVector2Array(-72, -126, 77, -61, 73, 69, -57, 104)
+
+[node name="Polygon2D5" type="Polygon2D" parent="StaticMap" unique_id=1571470435]
+position = Vector2(3, -707)
+color = Color(0.2231029, 0.2231029, 0.22310287, 1)
+polygon = PackedVector2Array(-176, -96, 228, -63, 73, 69, -63, 70)
+
+[node name="Polygon2D6" type="Polygon2D" parent="StaticMap" unique_id=1473640731]
+position = Vector2(-727, -640)
+color = Color(0.2231029, 0.2231029, 0.22310287, 1)
+polygon = PackedVector2Array(-58, -59, 77, -61, 73, 69, -63, 70)
+
+[node name="Polygon2D7" type="Polygon2D" parent="StaticMap" unique_id=386742026]
+position = Vector2(740, -569)
+color = Color(0.2231029, 0.2231029, 0.22310287, 1)
+polygon = PackedVector2Array(-69, -74, 77, -61, 73, 69, -63, 70)
+
+[node name="Polygon2D8" type="Polygon2D" parent="StaticMap" unique_id=330107992]
+position = Vector2(760, 604)
+color = Color(0.2231029, 0.2231029, 0.22310287, 1)
+polygon = PackedVector2Array(-60, -56, 77, -61, 73, 69, -63, 70)
+
+[node name="Polygon2D9" type="Polygon2D" parent="StaticMap" unique_id=2116675026]
+position = Vector2(-633, 505)
+color = Color(0.2231029, 0.2231029, 0.22310287, 1)
+polygon = PackedVector2Array(-50, -72, 77, -61, 73, 69, -63, 70)
