@@ -28,12 +28,16 @@ func _init(lobby_id_: int, as_host: bool) -> void:								# TODO REVERSE ORDER O
 
 
 
+
+
 # Cleanup
 func _notification(what: int) -> void:
 	match what:
 		NOTIFICATION_PREDELETE:
-			multiplayer_peer.close()
-			if lobby_id != 0: Steam.leaveLobby(lobby_id)
+			if multiplayer_peer and is_instance_valid(multiplayer_peer):
+				multiplayer_peer.close()
+			if lobby_id != 0:
+				Steam.leaveLobby(lobby_id)
 		#NOTIFICATION_CRASH:												# TODO TEST IF THIS IS NEEDED
 
 
