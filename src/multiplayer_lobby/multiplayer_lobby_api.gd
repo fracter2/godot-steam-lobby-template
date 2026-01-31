@@ -44,7 +44,6 @@ signal player_info_changed(peer_id: int, update_type: PLAYER_INFO_UPDATE, param:
 # TODO Chat history...?
 
 enum PLAYER_INFO_UPDATE {
-	PROPERTY_ADDED,
 	PROPERTY_CHANGED,
 	PROPERTY_REMOVED,
 	PLAYER_ADDED,
