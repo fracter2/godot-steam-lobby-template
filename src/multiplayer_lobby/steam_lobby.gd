@@ -10,10 +10,14 @@ var lobby_id: int = 0
 # ---- Procedure ----
 #
 
-func _init(lobby_id_: int, as_host: bool) -> void:
+func _init(lobby_id_: int, as_host: bool) -> void:								# TODO REVERSE ORDER OF ARGS and CLARIFY LOBBY ID DOESN'T MATTER IF HOSTING
+	if not Steamworks.steam_enabled:
+		print_debug("Cannot create SteamMultiplayerLobby when steam is not enabled and active!")
+		return
+
 	lobby_id = lobby_id_
 	init_as_host = as_host
-	if not Steamworks.steam_enabled: return
+
 	Steam.lobby_created.connect(_on_lobby_created_wrapper)
 	Steam.lobby_joined.connect(_on_lobby_joined_wrapper)
 	Steam.lobby_kicked.connect(_on_kicked)
