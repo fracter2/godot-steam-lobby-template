@@ -20,12 +20,12 @@ func is_online() -> bool:
 # ---- Procedure ----
 #
 
-func _init():
+func _init() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	process_priority = -1														# TODO Consider global constants CONST autoload
 	process_physics_priority = -1
 
-func _ready():
+func _ready() -> void:
 	OS.set_environment("SteamAppID", str(app_id))
 	OS.set_environment("SteamGameID", str(app_id))								# TODO Clarify difference between AppID and GameID
 	_initialize_steam()
