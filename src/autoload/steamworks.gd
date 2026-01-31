@@ -6,6 +6,20 @@ const default_app_id: int = 480 												# NOTE This is SpaceWars.
 const app_id: int = default_app_id												# NOTE Replace this when you get your app id!
 
 
+
+#
+# ---- API ----
+#
+
+func is_online() -> bool:
+	return steam_enabled and Steam.getPersonaState() != Steam.PERSONA_STATE_OFFLINE
+
+
+
+#
+# ---- Procedure ----
+#
+
 func _init():
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	process_priority = -1														# TODO Consider global constants CONST autoload
