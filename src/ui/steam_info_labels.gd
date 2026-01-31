@@ -4,7 +4,7 @@ extends Control
 
 
 func _ready() -> void:
-	if Steamworks.enabled:
+	if Steamworks.steam_enabled:
 		steam_status.text = ("Connected to Steam as %s %s" %
 			[Steam.getPersonaName(),
 			"(online)" if Steamworks.is_online() else "(offline)"])
