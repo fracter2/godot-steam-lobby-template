@@ -55,15 +55,17 @@ func _on_peer_disconnected(peer_id: int) -> void:
 func _check_if_player_spawned(node: Node) -> void:
 	assert(not multiplayer.is_server(), "_on_entity_spawned() should only be called by non-servers, as described in the MultiplayerSpawner signal description.")
 	if node is Player:
-		assert(not player_nodes.has(node.peer_id), "in _on_entity_spawned(), a new player node shouldn't already be registered here. obviously.")
-		player_nodes[node.peer_id] = node
+		var peer_id: int = (node as Player).peer_id
+		assert(not player_nodes.has(peer_id), "in _on_entity_spawned(), a new player node shouldn't already be registered here. obviously.")
+		player_nodes[peer_id] = node
 
 ## Removes the node from [member player_nodes] if it is a [Player]
 func _check_if_player_despawned(node: Node) -> void:
 	assert(not multiplayer.is_server(), "_on_entity_despawned() should only be called by non-servers, as described in the MultiplayerSpawner signal description.")
 	if node is Player:
-		assert(player_nodes.has(node.peer_id), "in _on_entity_despawned(), the deleted player should still be in the player_nodes dict!")
-		player_nodes.erase(node.peer_id)
+		var peer_id: int = (node as Player).peer_id
+		assert(player_nodes.has(peer_id), "in _on_entity_despawned(), the deleted player should still be in the player_nodes dict!")
+		player_nodes.erase(peer_id)
 
 
 #
