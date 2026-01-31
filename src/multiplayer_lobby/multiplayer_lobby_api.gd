@@ -3,7 +3,7 @@ class_name MultiplayerLobbyAPI	# TODO Consider renaming to just MultiplayerLobby
 extends RefCounted
 
 ## Lobby id. May be the same as Owner ID, like with EnetMultiplayerLobby
-var id: int = 0	# TODO Rename to lobby_id for extra clarity
+var lobby_id: int = 0	# TODO Rename to lobby_id for extra clarity
 
 ## Owner user id. This is not nessessarily the peer_id from multiplayer.get_unique_id().
 ## With steam it is the account id.

@@ -2,9 +2,6 @@ class_name SteamMultiplayerLobby
 extends MultiplayerLobbyAPI
 
 var init_as_host: bool
-var lobby_id: int = 0
-
-
 
 #
 # ---- Procedure ----
@@ -36,7 +33,7 @@ func _notification(what: int) -> void:
 	match what:
 		NOTIFICATION_PREDELETE:
 			multiplayer_peer.close()
-			if id != 0: Steam.leaveLobby(id)
+			if lobby_id != 0: Steam.leaveLobby(lobby_id)
 		#NOTIFICATION_CRASH:												# TODO TEST IF THIS IS NEEDED
 
 
@@ -44,7 +41,7 @@ func _notification(what: int) -> void:
 # ---- API ----
 #
 
-func is_active() -> bool: return id != 0
+func is_active() -> bool: return lobby_id != 0
 
 ## Returns Steam.getPersonaName()
 func get_user_name() -> String: return Steam.getPersonaName()
@@ -74,25 +71,25 @@ func initiate_connection() -> bool:
 # ---- Signals ----
 #
 
-func _on_lobby_joined_wrapper(lobby_id: int, _permissions: int, _locked: bool, response: int) -> void:
-	var err: String = _on_lobby_joined(lobby_id, _permissions, _locked, response)
+func _on_lobby_joined_wrapper(joined_lobby_id: int, _permissions: int, _locked: bool, response: int) -> void:
+	var err: String = _on_lobby_joined(joined_lobby_id, _permissions, _locked, response)
 	if err: disconnected.emit(err)
 	else: connected_as_client.emit()
 
 
 # NOTE Returns "" on success
-func _on_lobby_joined(lobby_id: int, _permissions: int, _locked: bool, response: int) -> String:	# TODO User Error as return type
+func _on_lobby_joined(joined_lobby_id: int, _permissions: int, _locked: bool, response: int) -> String:	# TODO User Error as return type
 	if is_active(): return "LOBBY IS ALREADY SET UP!"
 	if response != 1: return _get_fail_response_description(response)
 
 	# TODO IF SteamMultiplayerPeer DOESN'T NEED THIS, MOVE THIS BELOW
-	id = lobby_id
-	owner_id = Steam.getLobbyOwner(id)
+	lobby_id = joined_lobby_id
+	owner_id = Steam.getLobbyOwner(lobby_id)
 	if owner_id == Steam.getSteamID():
 		return "joined lobby and became the owner right away... Dunno how to handle this so just break"
 
-	var peer = SteamMultiplayerPeer.new()
-	var error = peer.create_client(owner_id, 0)
+	var peer: SteamMultiplayerPeer = SteamMultiplayerPeer.new()
+	var error: Error = peer.create_client(owner_id, 0)
 	if error != OK:
 		return "ERROR CREATING CLIENT\nCODE: " + str(error)
 
@@ -108,19 +105,19 @@ func _on_lobby_created_wrapper(conn: int, lobby_id: int) -> void:
 
 
 # NOTE Returns "" on success
-func _on_lobby_created(conn: int, lobby_id: int) -> String:										# TODO DOESN'T QUIT PREVIOUS LOBBY... does it prevent mutliple lobbies? prob not... 	# TODO User Error as return type
+func _on_lobby_created(conn: int, created_lobby_id: int) -> String:										# TODO DOESN'T QUIT PREVIOUS LOBBY... does it prevent mutliple lobbies? prob not... 	# TODO User Error as return type
 	if is_active(): return "LOBBY IS ALREADY SET UP!"
 	if conn != 1: return 'ERROR CREATING STEAM LOBBY\nCODE: '+str(conn)
 
 	# TODO IF SteamMultiplayerPeer DOESN'T NEED THIS, MOVE THIS BELOW
-	id = lobby_id
+	lobby_id = created_lobby_id
 	owner_id = Steam.getSteamID()
 	var my_name: String = NetworkLobby._limit_string_to_size(Steam.getPersonaName(), 20)
-	Steam.setLobbyData(id, "name", (my_name+"'s Lobby"))
-	Steam.setLobbyJoinable(id, true)
+	Steam.setLobbyData(lobby_id, "name", (my_name+"'s Lobby"))
+	Steam.setLobbyJoinable(lobby_id, true)
 
-	var peer = SteamMultiplayerPeer.new()
-	var error = peer.create_host(0) # this is virtual port not player limit do not change
+	var peer: SteamMultiplayerPeer = SteamMultiplayerPeer.new()
+	var error: Error = peer.create_host(0) # this is virtual port not player limit do not change
 	if error != OK:
 		return "ERROR CREATING HOST CLIENT\nCODE: " + str(error)
 
