@@ -12,7 +12,7 @@ func _init(is_host: bool = false, ip: String = "127.0.0.1", port: int = 8080, us
 	init_ip = ip
 	init_port = port
 
-func is_active() -> bool: return id != 0
+func is_active() -> bool: return lobby_id != 0
 func get_user_name() -> String: return username								# NOTE if there is a (non-steam) account system, this would be the account name
 func get_user_id() -> int: return multiplayer_peer.get_unique_id()			# NOTE if there is a (non-steam) account system, this would be the account id
 
