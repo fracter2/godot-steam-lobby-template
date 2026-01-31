@@ -31,7 +31,9 @@ func _ready() -> void:
 #
 
 func _on_connected() -> void:
+	print("Lobby connected, setting game multiplayer authority")
 	multiplayer.multiplayer_peer = Lobby.multiplayer.multiplayer_peer
+	_spawn_player(1)	# NOTE 1 is always the server peer_id
 
 
 func _on_disconnected(message: String) -> void:
@@ -40,6 +42,7 @@ func _on_disconnected(message: String) -> void:
 
 
 func _on_peer_connected(peer_id: int) -> void:
+	print("Peer connected with id: %d" % peer_id)
 	if multiplayer.is_server():
 		_spawn_player(peer_id)
 
