@@ -27,6 +27,7 @@ func initiate_connection() -> bool:
 			push_warning("error while trying to EnetMultiplayerPeer.create_client(), error: " + str(error))
 			return false
 		else:
+			multiplayer_peer = peer
 			_delegate_join_lobby.call_deferred()
 			connected_as_client.emit()
 			return true
