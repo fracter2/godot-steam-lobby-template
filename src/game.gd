@@ -25,6 +25,12 @@ func _ready() -> void:
 	multiplayer_spawner.spawned.connect(_check_if_player_spawned)
 	multiplayer_spawner.despawned.connect(_check_if_player_despawned)
 
+	if Lobby.is_in_lobby():
+		_on_connected()
+	else:
+		print("Started game without being in a lobby! Is this ok?")
+		# NOTE Lobby.connected will emit after entering a lobby, with the same callback _on_connected()
+
 
 #
 # ---- SIGNALS ----
