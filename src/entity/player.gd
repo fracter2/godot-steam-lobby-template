@@ -16,6 +16,8 @@ extends Node2D
 
 func _ready() -> void:
 	Lobby.player_info_updated.connect(_check_if_name_changed)
+	name_label.text = Lobby.get_player_info(peer_id, "name", "DefaultName")
+
 	if is_multiplayer_authority():
 		_spawn_local_camera()
 
