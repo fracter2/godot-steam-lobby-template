@@ -167,7 +167,7 @@ func _on_connected_as_host() -> void:
 func _on_disconnected() -> void:
 	disconnected.emit()
 
-func _on_player_info_changed(peer_id: int, update_type: PLAYER_INFO_UPDATE, param: String, value: Variant) -> void:
+func _on_player_info_changed(peer_id: int, update_type: MultiplayerLobbyAPI.PLAYER_INFO_UPDATE, param: String, value: Variant) -> void:
 	player_info_updated.emit(peer_id, update_type, param)
 
 
