@@ -43,10 +43,13 @@ func _ready():
 # ---- API ----
 #
 
+func is_in_lobby() -> bool:
+	return lobby_instance != null
+
 ## Returns the result of the initiation [b]attempt[/b]. [signal connected] and [signal disconnected]
 ## emit when the result is granted (imagine it like waiting for the host / setup to respond)
 func initiate_lobby(lobby: MultiplayerLobbyAPI) -> bool:
-	if lobby_instance != null:
+	if is_in_lobby():
 		return false
 
 	if lobby.initiate_connection():
@@ -62,12 +65,14 @@ func initiate_lobby(lobby: MultiplayerLobbyAPI) -> bool:
 
 
 func leave_lobby(message: String) -> void:
-	if lobby_instance != null:
-		lobby_instance.free()													# NOTE This will handle all the cleanup internally
-		lobby_instance = null
-	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()					# TODO This prob not needed. Reconsider
+	if not is_in_lobby():
+		print_debug("Tried to quit lobby when not in a lobby")
+		return
+
+	lobby_instance.free() 														# NOTE This will handle all the cleanup internally
+	lobby_instance = null
+	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 	disconnected.emit(message)
-	# TODO GO TO MAIN MENU
 
 
 @rpc("any_peer", "reliable")													# TODO Delegatate to multiplayer lobby instance
