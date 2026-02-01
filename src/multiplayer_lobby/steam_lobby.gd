@@ -121,7 +121,7 @@ func _on_lobby_created(conn: int, created_lobby_id: int) -> String:										# T
 	if error != OK:
 		return "ERROR CREATING HOST CLIENT\nCODE: " + str(error)
 
-	var my_name: String = NetworkLobby._limit_string_to_size(Steam.getPersonaName(), 20)
+	var my_name: String = Util.limit_string_to_size(Steam.getPersonaName(), 20)
 	Steam.setLobbyData(lobby_id, "name", (my_name+"'s Lobby"))					# TODO Allow setting a lobby name
 	Steam.setLobbyJoinable(lobby_id, true)
 

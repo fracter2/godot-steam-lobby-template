@@ -15,7 +15,7 @@ extends Node2D
 
 
 func _ready() -> void:
-	Lobby.player_info_updated.connect(_check_if_name_changed)
+	Lobby.player_info_set.connect(_update_name)
 	name_label.text = Lobby.get_player_info(peer_id, "name", "DefaultName")
 
 	if is_multiplayer_authority():
@@ -29,10 +29,8 @@ func _physics_process(delta: float) -> void:
 	position += input_dir * speed * delta
 
 
-func _check_if_name_changed(peer_id_: int, update_type: MultiplayerLobby.PLAYER_INFO_UPDATE, param: String, value: Variant) -> void:
-	if (get_multiplayer_authority() == peer_id_
-	and update_type == MultiplayerLobby.PLAYER_INFO_UPDATE.PROPERTY_CHANGED
-	and param == "name"):
+func _update_name(peer_id_: int, param: String, value: Variant) -> void:
+	if (get_multiplayer_authority() == peer_id_ and param == "name"):
 		name_label.text = value
 
 

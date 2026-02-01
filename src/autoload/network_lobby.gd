@@ -2,6 +2,7 @@ extends Node
 
 var lobby_instance: MultiplayerLobby = null
 
+## A non-recoverable issue has occured and the [MultiplayerLobby] has been destroyed.
 signal critical_error(message:String)
 
 ## Successfully hosted or joined as client
@@ -10,7 +11,14 @@ signal lobby_entered
 ## Disconnect as host / client, or failed lobby_entered attempt
 signal lobby_exited(message:String) # lobby_exited
 
-signal player_info_updated(peer_id: int, update_type: MultiplayerLobby.PLAYER_INFO_UPDATE, param: String, value: Variant)		# TODO ADD A WRAPPER HERE that calls this and changes the corresponding element
+#signal player_info_updated(peer_id: int, param: String, value: Variant)		# TODO ADD A WRAPPER HERE that calls this and changes the corresponding element
+
+signal player_info_set(peer_id: int, param: String, value: Variant)
+
+signal player_info_removed(peer_id: int, param: String)
+
+signal player_info_cleared(peer_id: int)
+
 
 #
 # ---- MAIN CALLBACKS ----
@@ -51,7 +59,9 @@ func initiate_lobby(lobby: MultiplayerLobby) -> bool:
 	lobby.connected_as_client.connect(_on_connected_as_client)
 	lobby.connected_as_host.connect(_on_connected_as_host)
 	lobby.disconnected.connect(_on_disconnected)
-	lobby.player_info_changed.connect(_on_player_info_changed)
+	lobby.player_info_set.connect(_on_player_info_set)
+	lobby.player_info_removed.connect(_on_player_info_removed)
+	lobby.player_info_cleared.connect(_on_player_info_cleared)
 
 	if lobby.initiate_connection():
 		lobby_instance = lobby
@@ -61,7 +71,9 @@ func initiate_lobby(lobby: MultiplayerLobby) -> bool:
 		lobby.connected_as_client.disconnect(_on_connected_as_client)
 		lobby.connected_as_host.disconnect(_on_connected_as_host)
 		lobby.disconnected.disconnect(_on_disconnected)
-		lobby.player_info_changed.disconnect(_on_player_info_changed)
+		lobby.player_info_set.disconnect(_on_player_info_set)
+		lobby.player_info_removed.disconnect(_on_player_info_removed)
+		lobby.player_info_cleared.disconnect(_on_player_info_cleared)
 		return false
 
 
@@ -120,13 +132,6 @@ func _receive_player_data(data : Dictionary, _id:int) -> void:					# TODO Delega
 	#players_changed.emit()
 
 
-static func _limit_string_to_size(txt: String, size: int) -> String:			# TODO Move to some utility file
-	assert(size > 3)
-	if txt.length() > size:														# TODO Clarify max name length const
-		txt = txt.substr(0, size-3) + '...'
-	return txt
-
-
 func _check_launch_commands() -> void:
 	if LaunchArgs.has_command("+connect_lobby"):
 		var lobby_id_str: String = LaunchArgs.get_values("+connect_lobby")[0]	# Should only have one value anyway
@@ -154,7 +159,7 @@ func _on_lobby_join_requested(this_lobby_id: int, _friend_id: int) -> void:
 # TODO Connect to lobby_entered signal, or similar.
 func _on_connected_to_server() -> void:											# TODO Delegate to lobby instance
 	var peer_id: int = multiplayer.get_unique_id()
-	var my_name : String = _limit_string_to_size(lobby_instance.get_user_name(), 20)
+	var my_name : String = Util.limit_string_to_size(lobby_instance.get_user_name(), 20)
 	var my_user_id: int = lobby_instance.get_user_id()
 
 	lobby_instance.players[peer_id] = {"name": my_name, "id": my_user_id}		# TODO Optimize sync_ifo logic to only send new data. Bandwidth aint free... # TODO Delegatate to multiplayer lobby instance
@@ -167,8 +172,7 @@ func _on_peer_disconnected(id: int) -> void:									# TODO Delegatate to multip
 		leave_lobby("Host left lobby")			# TODO This should be handled by the lobby!!
 	else:
 		lobby_instance.players.erase(id)
-		player_info_updated.emit(id, MultiplayerLobby.PLAYER_INFO_UPDATE.PLAYER_REMOVED, "")
-
+		player_info_removed.emit(id)
 
 # TODO Connect to lobby_exited signal, or similar.
 func _on_connection_failed() -> void:											# TODO Delegatate to multiplayer lobby instance
@@ -186,9 +190,17 @@ func _on_connected_as_host() -> void:
 func _on_disconnected(message: String) -> void:
 	lobby_exited.emit(message)
 
-func _on_player_info_changed(peer_id: int, update_type: MultiplayerLobby.PLAYER_INFO_UPDATE, param: String, value: Variant) -> void:
-	player_info_updated.emit(peer_id, update_type, param, value)
+## Simple wrapper over [member lobby_instance] signal, for convenience
+func _on_player_info_set(peer_id: int, param: String, value: Variant) -> void:
+	player_info_set.emit(peer_id, param, value)
 
+## Simple wrapper over [member lobby_instance] signal, for convenience
+func _on_player_info_removed(peer_id: int, param: String) -> void:
+	player_info_removed.emit(peer_id, param)
+
+## Simple wrapper over [member lobby_instance] signal, for convenience
+func _on_player_info_cleared(peer_id: int) -> void:
+	player_info_cleared.emit(peer_id)
 
 #
 # ----

@@ -17,7 +17,7 @@ var players : Dictionary = {}													# TODO Consider a dedicated info class
 ## This is the same as Lobby.multiplayer.multiplayer_peer, set by the various join funcs.
 var multiplayer_peer: MultiplayerPeer
 
-## API to get the local users name. With SteamMultiplayerLobby it is the account name.
+## API to get the local users name. With [SteamMultiplayerLobby] it is the account name.
 @abstract func get_user_name() -> String
 
 ## Gets the local users user_id. This may be different from the peer_id, wich you get from
@@ -30,22 +30,24 @@ var multiplayer_peer: MultiplayerPeer
 @abstract func initiate_connection() -> bool
 
 ## Successfully hosted or joined as client
-signal connected_as_client
+signal connected_as_client																			# TODO Does it matter if it connected as client or host in Lobby or elsewhere?
 signal connected_as_host
 
 ## Disconnect as host / client, or failed lobby_entered attempt
 signal disconnected(message:String)
 
-##
-signal player_info_changed(peer_id: int, update_type: PLAYER_INFO_UPDATE, param: String, value: Variant)		# TODO Sepparate into multiple signals for property change / remove / player added / removed
+## Emited when a parameter is added or changed. The parameter and value are provided for convenience.
+signal player_info_set(peer_id: int, param: String, value: Variant)
+
+## Not sure why it would be useful to selectively remove parameters, but here we go anyway...
+signal player_info_removed(peer_id: int, param: String)												# TODO CONSIDER YAGNI
+
+## Emited when an entire player_id is removed from [member players]. [br]
+## The opposite equivolent would be just checking if a player joined through the Lobby autoload
+## or through [MultiplayerPeer] or [MultiplayerAPI]
+signal player_info_cleared(peer_id: int)															# TODO CONSIDER YAGNI
+
 
 # TODO Chat messages, recieve and send signals...?
 # TODO Chat send func
 # TODO Chat history...?
-
-enum PLAYER_INFO_UPDATE {
-	PROPERTY_CHANGED,
-	PROPERTY_REMOVED,															# TODO Consider having this just be a changed to Variant null
-	PLAYER_ADDED,
-	PLAYER_REMOVED
-}
