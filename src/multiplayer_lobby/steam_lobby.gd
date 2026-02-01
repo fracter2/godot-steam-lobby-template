@@ -1,5 +1,5 @@
 class_name SteamMultiplayerLobby
-extends MultiplayerLobbyAPI
+extends MultiplayerLobby
 
 var init_as_host: bool
 

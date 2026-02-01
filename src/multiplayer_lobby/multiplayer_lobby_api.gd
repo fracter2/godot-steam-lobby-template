@@ -1,5 +1,5 @@
 @abstract
-class_name MultiplayerLobbyAPI	# TODO Consider renaming to just MultiplayerLobby
+class_name MultiplayerLobby
 extends RefCounted
 
 ## Lobby id. May be the same as Owner ID, like with EnetMultiplayerLobby
@@ -24,7 +24,7 @@ var multiplayer_peer: MultiplayerPeer
 ## multiplayer.get_unique_id() or multiplayer.get_peers().
 @abstract func get_user_id() -> int
 
-## Start the connection to join / host a game, based on parameters from the [MultiplayerLobbyAPI] implementation. [br]
+## Start the connection to join / host a game, based on parameters from the [MultiplayerLobby] implementation. [br]
 ## Returns false if the parameters or other local step failed. True means you are attempting to host/join and
 ## can expect a [signal connected_as_client] or [signal connected_as_host] or [signal disconnected].
 @abstract func initiate_connection() -> bool

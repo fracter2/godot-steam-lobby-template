@@ -1,5 +1,5 @@
 class_name EnetMultiplayerLobby
-extends MultiplayerLobbyAPI
+extends MultiplayerLobby
 
 var username: String = "DefaultName"
 var init_as_host:bool

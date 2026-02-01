@@ -29,9 +29,9 @@ func _physics_process(delta: float) -> void:
 	position += input_dir * speed * delta
 
 
-func _check_if_name_changed(peer_id_: int, update_type: MultiplayerLobbyAPI.PLAYER_INFO_UPDATE, param: String, value: Variant) -> void:
+func _check_if_name_changed(peer_id_: int, update_type: MultiplayerLobby.PLAYER_INFO_UPDATE, param: String, value: Variant) -> void:
 	if (get_multiplayer_authority() == peer_id_
-	and update_type == MultiplayerLobbyAPI.PLAYER_INFO_UPDATE.PROPERTY_CHANGED
+	and update_type == MultiplayerLobby.PLAYER_INFO_UPDATE.PROPERTY_CHANGED
 	and param == "name"):
 		name_label.text = value
 

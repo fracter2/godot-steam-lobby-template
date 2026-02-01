@@ -4,7 +4,7 @@ class_name NetworkLobby extends Node
 # NOTE DEPENDS ON GODOTSTEAM plugin and launchcmd_parser.gd
 
 
-var lobby_instance: MultiplayerLobbyAPI = null
+var lobby_instance: MultiplayerLobby = null
 
 signal critical_error(message:String)
 
@@ -14,7 +14,7 @@ signal connected																# TODO Consider renaming to "lobby_entered" or s
 ## Disconnect as host / client, or failed connected attempt
 signal disconnected(message:String)												# TODO Consider renaming to "lobby_exited" or similar
 
-signal player_info_updated(peer_id: int, update_type: MultiplayerLobbyAPI.PLAYER_INFO_UPDATE, param: String, value: Variant)		# TODO ADD A WRAPPER HERE that calls this and changes the corresponding element
+signal player_info_updated(peer_id: int, update_type: MultiplayerLobby.PLAYER_INFO_UPDATE, param: String, value: Variant)		# TODO ADD A WRAPPER HERE that calls this and changes the corresponding element
 
 #
 # ---- MAIN CALLBACKS ----
@@ -51,7 +51,7 @@ func is_lobby_owner() -> bool:
 
 ## Returns the result of the initiation [b]attempt[/b]. [signal connected] and [signal disconnected]
 ## emit when the result is granted (imagine it like waiting for the host / setup to respond)
-func initiate_lobby(lobby: MultiplayerLobbyAPI) -> bool:
+func initiate_lobby(lobby: MultiplayerLobby) -> bool:
 	if is_in_lobby():
 		return false
 
@@ -174,7 +174,7 @@ func _on_peer_disconnected(id: int) -> void:									# TODO Delegatate to multip
 		leave_lobby("Host left lobby")			# TODO This should be handled by the lobby!!
 	else:
 		lobby_instance.players.erase(id)
-		player_info_updated.emit(id, MultiplayerLobbyAPI.PLAYER_INFO_UPDATE.PLAYER_REMOVED, "")
+		player_info_updated.emit(id, MultiplayerLobby.PLAYER_INFO_UPDATE.PLAYER_REMOVED, "")
 
 
 # TODO Connect to disconnected signal, or similar.
@@ -193,7 +193,7 @@ func _on_connected_as_host() -> void:
 func _on_disconnected(message: String) -> void:
 	disconnected.emit(message)
 
-func _on_player_info_changed(peer_id: int, update_type: MultiplayerLobbyAPI.PLAYER_INFO_UPDATE, param: String, value: Variant) -> void:
+func _on_player_info_changed(peer_id: int, update_type: MultiplayerLobby.PLAYER_INFO_UPDATE, param: String, value: Variant) -> void:
 	player_info_updated.emit(peer_id, update_type, param, value)
 
 
