@@ -16,7 +16,7 @@ func _init(lobby_id_: int, as_host: bool) -> void:								# TODO REVERSE ORDER O
 	init_as_host = as_host
 
 	Steam.lobby_created.connect(_on_lobby_created_wrapper)
-	Steam.lobby_joined.connect(_on_lobby_joined_wrapper)
+	Steam.lobby_joined.connect(_on_lobby_joined_wrapper)						# NOTE Called when YOU enter either your own or other's lobbies... # TODO Does it call for other users too?
 	Steam.lobby_kicked.connect(_on_kicked)
 	#Steam.lobby_chat_update
 	#Steam.lobby_match_list

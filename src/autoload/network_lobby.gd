@@ -51,7 +51,6 @@ func is_lobby_owner() -> bool:
 	return lobby_instance.owner_id == lobby_instance.get_user_id()
 
 ## Returns the result of the initiation [b]attempt[/b]. [signal lobby_entered] and [signal lobby_exited]
-## emit when the result is granted (imagine it like waiting for the host / setup to respond)
 ## emit when the result is granted (imagine it like waiting for the host / setup to respond) [br]
 ## [br]
 ## Lobby argument is freed on return false, to enforce intended use (Lobbies should only persist in this autoload)
@@ -60,7 +59,7 @@ func initiate_lobby(lobby: MultiplayerLobby) -> bool:
 		lobby.free()
 		return false
 
-	lobby.connected_as_client.connect(_on_connected_as_client)
+	lobby.connected_as_client.connect(_on_connected_as_client)					# TODO Consider internal func for connecting / disconnecting...
 	lobby.connected_as_host.connect(_on_connected_as_host)
 	lobby.disconnected.connect(_on_disconnected)
 	lobby.player_info_set.connect(_on_player_info_set)
@@ -89,7 +88,7 @@ func leave_lobby(message: String) -> void:
 		return
 
 	lobby_instance.free() 														# NOTE This will handle all the cleanup internally
-	lobby_instance = null
+	lobby_instance = null														# TODO Create a DummyLobby or NotALobbyLobby or SoloLobby to act as a stand-in... so funcs don't have to validate for everything...
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 	lobby_exited.emit(message)
 
