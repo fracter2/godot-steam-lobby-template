@@ -52,8 +52,12 @@ func is_lobby_owner() -> bool:
 
 ## Returns the result of the initiation [b]attempt[/b]. [signal lobby_entered] and [signal lobby_exited]
 ## emit when the result is granted (imagine it like waiting for the host / setup to respond)
+## emit when the result is granted (imagine it like waiting for the host / setup to respond) [br]
+## [br]
+## Lobby argument is freed on return false, to enforce intended use (Lobbies should only persist in this autoload)
 func initiate_lobby(lobby: MultiplayerLobby) -> bool:
 	if is_in_lobby():
+		lobby.free()
 		return false
 
 	lobby.connected_as_client.connect(_on_connected_as_client)
@@ -74,6 +78,8 @@ func initiate_lobby(lobby: MultiplayerLobby) -> bool:
 		lobby.player_info_set.disconnect(_on_player_info_set)
 		lobby.player_info_removed.disconnect(_on_player_info_removed)
 		lobby.player_info_cleared.disconnect(_on_player_info_cleared)
+
+		lobby.free()
 		return false
 
 

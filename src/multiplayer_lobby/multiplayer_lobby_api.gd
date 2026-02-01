@@ -1,6 +1,6 @@
 @abstract
 class_name MultiplayerLobby
-extends RefCounted
+extends Object
 
 ## Lobby id. May be the same as Owner ID, like with EnetMultiplayerLobby
 var lobby_id: int = 0
