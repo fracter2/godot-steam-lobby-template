@@ -4,8 +4,12 @@
 .vs/
 .DS_Store
 
-# Other
+# Convenience
 /[Ll]ocal/
+/[Bb]uild/
+
+# ~ prefixes are a common identifier for temporary or in-use files. GodotSteam uses this for .dll
+**/~*
 
 # Obsidian (according to some medium.com post)
 .obsidian/*
@@ -16,3 +20,4 @@
 !.obsidian/core-plugins.json
 !.obsidian/graph.json
 !.obsidian/hotkeys.json
+
