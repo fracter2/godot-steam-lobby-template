@@ -77,6 +77,7 @@ func initiate_connection() -> bool:
 #
 
 func _on_lobby_joined_wrapper(joined_lobby_id: int, _permissions: int, _locked: bool, response: int) -> void:
+	print("Recieved Steam lobby join response")
 	var err: String = _on_lobby_joined(joined_lobby_id, _permissions, _locked, response)
 	if err: disconnected.emit(err)
 	else: connected_as_client.emit()
@@ -103,6 +104,7 @@ func _on_lobby_joined(joined_lobby_id: int, _permissions: int, _locked: bool, re
 
 
 func _on_lobby_created_wrapper(conn: int, created_lobby_id: int) -> void:
+	print("Recieved Steam lobby created response")
 	var err: String = _on_lobby_created(conn, created_lobby_id)
 	if err: disconnected.emit(err)
 	else: connected_as_host.emit()
