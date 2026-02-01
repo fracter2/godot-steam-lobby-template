@@ -152,8 +152,13 @@ func _on_critical_error(message: String) -> void:
 	leave_lobby(message)
 
 
-func _on_lobby_join_requested(this_lobby_id: int, _friend_id: int) -> void:
-	Steam.joinLobby(int(this_lobby_id))
+func _on_lobby_join_requested(this_lobby_id: int, friend_id: int) -> void:
+	print("Steam lobby join requested, id: %d friend_name: %s" % [this_lobby_id, Steam.getFriendPersonaName(friend_id)])
+	if is_in_lobby():
+		print("Leaving lobby to join requested lobby!")
+		leave_lobby("Accepted request to join another lobby")
+
+	initiate_lobby(SteamMultiplayerLobby.new(this_lobby_id, false))
 
 
 # TODO Connect to lobby_entered signal, or similar.
