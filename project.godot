@@ -20,7 +20,7 @@ config/icon="res://icon.svg"
 LaunchArgs="*res://src/autoload/launch_parser.gd"
 Settings="*res://src/autoload/settings.gd"
 Steamworks="*res://src/autoload/steamworks.gd"
-Lobby="*res://src/autoload/network_lobby.gd"
+Lobby="*res://src/autoload/lobby_manager.gd"
 
 [debug]
 
