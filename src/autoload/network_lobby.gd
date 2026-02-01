@@ -1,8 +1,4 @@
-class_name NetworkLobby extends Node
-																				# TODO Remove class name, this shouldn't really be it's own class thing, just autoload
-
-# NOTE DEPENDS ON GODOTSTEAM plugin and launchcmd_parser.gd
-
+extends Node
 
 var lobby_instance: MultiplayerLobby = null
 
@@ -28,9 +24,6 @@ func _ready() -> void:
 	critical_error.connect(_on_critical_error)
 
 	Steam.join_requested.connect(_on_lobby_join_requested)
-
-	#Steam.lobby_invite 		# NOTE Allows automatic acceptance of invites. lol
-
 
 	multiplayer.connected_to_server.connect(_on_connected_to_server)			# NOTE So this only calls locally once.
 	multiplayer.connection_failed.connect(_on_connection_failed)
