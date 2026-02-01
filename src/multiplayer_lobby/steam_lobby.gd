@@ -2,6 +2,7 @@ class_name SteamMultiplayerLobby
 extends MultiplayerLobby
 
 var init_as_host: bool
+var init_id: int
 
 #
 # ---- Procedure ----
@@ -12,7 +13,7 @@ func _init(lobby_id_: int, as_host: bool) -> void:								# TODO REVERSE ORDER O
 		print_debug("Cannot create SteamMultiplayerLobby when steam is not enabled and active!")
 		return
 
-	lobby_id = lobby_id_
+	init_id = lobby_id_
 	init_as_host = as_host
 
 	Steam.lobby_created.connect(_on_lobby_created_wrapper)
@@ -36,7 +37,7 @@ func _notification(what: int) -> void:
 		NOTIFICATION_PREDELETE:
 			if multiplayer_peer and is_instance_valid(multiplayer_peer):
 				multiplayer_peer.close()
-			if lobby_id != 0:
+			if lobby_id != 0 and Steam.isLobby(lobby_id):
 				Steam.leaveLobby(lobby_id)
 		#NOTIFICATION_CRASH:												# TODO TEST IF THIS IS NEEDED
 
@@ -88,6 +89,7 @@ func _on_lobby_joined(joined_lobby_id: int, _permissions: int, _locked: bool, re
 	if is_active(): return "LOBBY IS ALREADY SET UP!"
 	if response != 1: return _get_fail_response_description(response)
 
+	assert(joined_lobby_id == init_id, "As far as i understand, these values should be the same if init_id was used to find/create the lobby...")
 	lobby_id = joined_lobby_id
 	owner_id = Steam.getLobbyOwner(lobby_id)
 	if owner_id == Steamworks.steam_id:
