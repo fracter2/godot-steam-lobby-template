@@ -46,7 +46,7 @@ func _notification(what: int) -> void:
 # ---- API ----
 #
 
-func is_active() -> bool: return lobby_id != 0
+func is_in_lobby() -> bool: return lobby_id != 0
 
 ## Returns Steam.getPersonaName()
 func get_user_name() -> String: return Steam.getPersonaName()
@@ -64,11 +64,11 @@ func initiate_connection() -> bool:
 		print("Attempting to host a lobby on steam! lobby type: %d, max player count: %d" % [Steam.LOBBY_TYPE_FRIENDS_ONLY, 4])
 		Steam.createLobby(Steam.LOBBY_TYPE_FRIENDS_ONLY, 4) # 4 player lobby					# TODO Clarify player limit and lobby type to a var
 
-	elif Steam.isLobby(lobby_id):
-		print("Attempting to join a lobby on steam! lobby id: %d" % lobby_id)
-		Steam.joinLobby(lobby_id)
+	elif Steam.isLobby(init_id):
+		print("Attempting to join a lobby on steam! lobby id: %d" % init_id)
+		Steam.joinLobby(init_id)
 	else:
-		push_warning("lobby_id %s could not be found or is not a lobby!" % lobby_id)
+		push_warning("lobby_id %s could not be found or is not a lobby!" % init_id)
 		return false
 
 	return true
@@ -86,7 +86,7 @@ func _on_lobby_joined_wrapper(joined_lobby_id: int, _permissions: int, _locked: 
 
 # NOTE Returns "" on success
 func _on_lobby_joined(joined_lobby_id: int, _permissions: int, _locked: bool, response: int) -> String:	# TODO User Error as return type
-	if is_active(): return "LOBBY IS ALREADY SET UP!"
+	if is_in_lobby(): return "DIFFERENT LOBBY IS ALREADY SET UP! CANNOT JOIN 2 AT ONCE"
 	if response != 1: return _get_fail_response_description(response)
 
 	assert(joined_lobby_id == init_id, "As far as i understand, these values should be the same if init_id was used to find/create the lobby...")
@@ -114,7 +114,7 @@ func _on_lobby_created_wrapper(conn: int, created_lobby_id: int) -> void:
 
 # NOTE Returns "" on success
 func _on_lobby_created(conn: int, created_lobby_id: int) -> String:										# TODO DOESN'T QUIT PREVIOUS LOBBY... does it prevent mutliple lobbies? prob not... 	# TODO User Error as return type
-	if is_active(): return "LOBBY IS ALREADY SET UP!"
+	if is_in_lobby(): return "LOBBY IS ALREADY SET UP!"
 	if conn != 1: return 'ERROR CREATING STEAM LOBBY\nCODE: '+str(conn)
 
 	lobby_id = created_lobby_id
