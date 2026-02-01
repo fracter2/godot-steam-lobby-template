@@ -43,13 +43,13 @@ func get_values(key: String) -> PackedStringArray:
 		return []
 
 ## Conforms the input string to a valid key.[br]
-## NOTE result is the same as: [codeblock lang=gdscript] key.to_lower().remove_chars(":/?*\"|\\%<>").strip_escapes().lstrip("-+"). [/codeblock]
+## NOTE result is the same as: [codeblock lang=gdscript] key.to_lower().remove_chars(":/?*\"|\\%<>").strip_escapes().remove_chars("-+"). [/codeblock]
 func sanitize_key(key: String) -> String:
 	return (key
 		.to_lower()						# To avoid capitalization inconsistensies
 		.remove_chars(":/?*\"|\\%<>")	# To prevent unintended string logic
 		.strip_escapes()				# To prevent unintended string logic
-		.lstrip("-+")					# To remove key-signifier
+		.remove_chars("-+")				# To remove key-signifier and standardize spacing (eg one-two -> onetwo)
 		)
 
 
