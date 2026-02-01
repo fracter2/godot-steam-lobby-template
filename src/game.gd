@@ -15,8 +15,8 @@ var player_nodes: Dictionary[int, Player] = {}
 #
 
 func _ready() -> void:
-	Lobby.connected.connect(_on_connected)										# NOTE Local connected only
-	Lobby.disconnected.connect(_on_disconnected)
+	Lobby.lobby_entered.connect(_on_connected)										# NOTE Local lobby_entered only
+	Lobby.lobby_exited.connect(_on_disconnected)
 
 	multiplayer.peer_connected.connect(_on_peer_connected)
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
@@ -29,7 +29,7 @@ func _ready() -> void:
 		_on_connected()
 	else:
 		print("Started game without being in a lobby! Is this ok?")
-		# NOTE Lobby.connected will emit after entering a lobby, with the same callback _on_connected()
+		# NOTE Lobby.lobby_entered will emit after entering a lobby, with the same callback _on_connected()
 
 
 #

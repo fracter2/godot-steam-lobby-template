@@ -9,10 +9,10 @@ var lobby_instance: MultiplayerLobby = null
 signal critical_error(message:String)
 
 ## Successfully hosted or joined as client
-signal connected																# TODO Consider renaming to "lobby_entered" or similar
+signal lobby_entered
 
-## Disconnect as host / client, or failed connected attempt
-signal disconnected(message:String)												# TODO Consider renaming to "lobby_exited" or similar
+## Disconnect as host / client, or failed lobby_entered attempt
+signal lobby_exited(message:String) # lobby_exited
 
 signal player_info_updated(peer_id: int, update_type: MultiplayerLobby.PLAYER_INFO_UPDATE, param: String, value: Variant)		# TODO ADD A WRAPPER HERE that calls this and changes the corresponding element
 
@@ -34,7 +34,7 @@ func _ready() -> void:
 
 	multiplayer.connected_to_server.connect(_on_connected_to_server)			# NOTE So this only calls locally once.
 	multiplayer.connection_failed.connect(_on_connection_failed)
-	#multiplayer.peer_connected													# TODO CLARIFY does this emit for EACH when joining late? or only when already connected?	# TODO Ideally use this to get most player info locally
+	#multiplayer.peer_connected													# TODO CLARIFY does this emit for EACH when joining late? or only when already lobby_entered?	# TODO Ideally use this to get most player info locally
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 
 	_check_launch_commands()
@@ -49,7 +49,7 @@ func is_in_lobby() -> bool:
 func is_lobby_owner() -> bool:
 	return lobby_instance.owner_id == lobby_instance.get_user_id()
 
-## Returns the result of the initiation [b]attempt[/b]. [signal connected] and [signal disconnected]
+## Returns the result of the initiation [b]attempt[/b]. [signal lobby_entered] and [signal lobby_exited]
 ## emit when the result is granted (imagine it like waiting for the host / setup to respond)
 func initiate_lobby(lobby: MultiplayerLobby) -> bool:
 	if is_in_lobby():
@@ -80,7 +80,7 @@ func leave_lobby(message: String) -> void:
 	lobby_instance.free() 														# NOTE This will handle all the cleanup internally
 	lobby_instance = null
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
-	disconnected.emit(message)
+	lobby_exited.emit(message)
 
 
 ## Just a thin wrapper to make it simple
@@ -158,7 +158,7 @@ func _on_lobby_join_requested(this_lobby_id: int, _friend_id: int) -> void:
 	Steam.joinLobby(int(this_lobby_id))
 
 
-# TODO Connect to connected signal, or similar.
+# TODO Connect to lobby_entered signal, or similar.
 func _on_connected_to_server() -> void:											# TODO Delegate to lobby instance
 	var peer_id: int = multiplayer.get_unique_id()
 	var my_name : String = _limit_string_to_size(lobby_instance.get_user_name(), 20)
@@ -168,7 +168,7 @@ func _on_connected_to_server() -> void:											# TODO Delegate to lobby insta
 	sync_info.rpc(my_name, my_user_id)
 
 
-# TODO Connect to disconnected signal, or similar.
+# TODO Connect to lobby_exited signal, or similar.
 func _on_peer_disconnected(id: int) -> void:									# TODO Delegatate to multiplayer lobby instance
 	if id == 1:
 		leave_lobby("Host left lobby")			# TODO This should be handled by the lobby!!
@@ -177,21 +177,21 @@ func _on_peer_disconnected(id: int) -> void:									# TODO Delegatate to multip
 		player_info_updated.emit(id, MultiplayerLobby.PLAYER_INFO_UPDATE.PLAYER_REMOVED, "")
 
 
-# TODO Connect to disconnected signal, or similar.
+# TODO Connect to lobby_exited signal, or similar.
 func _on_connection_failed() -> void:											# TODO Delegatate to multiplayer lobby instance
 	multiplayer.multiplayer_peer.close()
 	critical_error.emit('FAILED TO CONNECT...')
 
 
 func _on_connected_as_client() -> void:
-	connected.emit()
+	lobby_entered.emit()
 
 
 func _on_connected_as_host() -> void:
-	connected.emit()
+	lobby_entered.emit()
 
 func _on_disconnected(message: String) -> void:
-	disconnected.emit(message)
+	lobby_exited.emit(message)
 
 func _on_player_info_changed(peer_id: int, update_type: MultiplayerLobby.PLAYER_INFO_UPDATE, param: String, value: Variant) -> void:
 	player_info_updated.emit(peer_id, update_type, param, value)

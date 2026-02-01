@@ -10,7 +10,7 @@ const GAME = preload("uid://dx0gencnp27xs")
 #
 
 func _ready() -> void:
-	Lobby.connected.connect(_on_connected)										# NOTE Local connected only
+	Lobby.lobby_entered.connect(_on_connected)										# NOTE Local lobby_entered only
 
 
 #

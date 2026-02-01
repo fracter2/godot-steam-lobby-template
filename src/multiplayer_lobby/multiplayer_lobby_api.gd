@@ -3,7 +3,7 @@ class_name MultiplayerLobby
 extends RefCounted
 
 ## Lobby id. May be the same as Owner ID, like with EnetMultiplayerLobby
-var lobby_id: int = 0	# TODO Rename to lobby_id for extra clarity
+var lobby_id: int = 0
 
 ## Owner user id. This is not nessessarily the peer_id from multiplayer.get_unique_id().
 ## With steam it is the account id.
@@ -33,7 +33,7 @@ var multiplayer_peer: MultiplayerPeer
 signal connected_as_client
 signal connected_as_host
 
-## Disconnect as host / client, or failed connected attempt
+## Disconnect as host / client, or failed lobby_entered attempt
 signal disconnected(message:String)
 
 ##
