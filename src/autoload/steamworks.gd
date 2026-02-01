@@ -28,8 +28,13 @@ func _init() -> void:
 	process_physics_priority = -1
 
 func _ready() -> void:
+	if LaunchArgs.has_command("--no-steam"):
+		print("Launch arg no-steam set. Skipping Steamworks init.")
+		return
+
 	OS.set_environment("SteamAppID", str(app_id))
 	OS.set_environment("SteamGameID", str(app_id))								# TODO Clarify difference between AppID and GameID
+
 	_initialize_steam()
 	if steam_enabled:
 		steam_id = Steam.getSteamID()
@@ -37,7 +42,8 @@ func _ready() -> void:
 
 
 func _process(_d:float) -> void:
-	Steam.run_callbacks()
+	if steam_enabled:
+		Steam.run_callbacks()
 
 
 #
