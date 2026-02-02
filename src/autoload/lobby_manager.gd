@@ -11,12 +11,13 @@ signal lobby_entered
 ## Disconnect as host / client, or failed lobby_entered attempt
 signal lobby_exited(message:String) # lobby_exited
 
-#signal player_info_updated(peer_id: int, param: String, value: Variant)		# TODO ADD A WRAPPER HERE that calls this and changes the corresponding element
-
+## Emits when a key in the player info dictionary is set. This is a wrapper on the corresponding [MultiplayerLobby] instance.
 signal player_info_set(peer_id: int, param: String, value: Variant)
 
+## Emits when a key in the player info dictionary is removed. This is a wrapper on the corresponding [MultiplayerLobby] instance.
 signal player_info_removed(peer_id: int, param: String)
 
+## Emits when a player in the player info dictionary is fully removed. This is a wrapper on the corresponding [MultiplayerLobby] instance.
 signal player_info_cleared(peer_id: int)
 
 

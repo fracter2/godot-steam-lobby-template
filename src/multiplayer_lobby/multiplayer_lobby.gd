@@ -11,6 +11,7 @@ var owner_id: int = 0															# TODO Consider removing this...? since Stea
 																				# Could be a getter func instead, since a third party account system might have their own account id's
 ## Player info [Dictionary].
 var players : Dictionary = {}													# TODO Consider a dedicated info class... even as a simple Dictionary wrapper with embedded peer_id + user_id + name...
+																				# TODO Consider mooving to Lobby with propper has/get/set
 
 ## The [MultiplayerPeer] used in the connection. This can be used as the multiplayer_peer for
 ## any scene, like the actual game scene. [br]
@@ -22,7 +23,8 @@ var multiplayer_peer: MultiplayerPeer
 
 ## Gets the local users user_id. This may be different from the peer_id, wich you get from
 ## multiplayer.get_unique_id() or multiplayer.get_peers().
-@abstract func get_user_id() -> int
+@abstract func get_user_id() -> int																	# TODO REMOVE, THIS IS USELESS OUTSIDE OF EACH LOBBY IMPLEMENTATION.
+																									# TODO MAKE A is_lobby_owner() GETTER
 
 ## Start the connection to join / host a game, based on parameters from the [MultiplayerLobby] implementation. [br]
 ## Returns false if the parameters or other local step failed. True means you are attempting to host/join and
