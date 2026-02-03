@@ -32,6 +32,7 @@ func _init(lobby_id_: int, as_host: bool) -> void:								# TODO REVERSE ORDER O
 	#Steam.createBeacon() 	# Wasdis about??
 
 
+
 # Cleanup
 func _notification(what: int) -> void:
 	match what:

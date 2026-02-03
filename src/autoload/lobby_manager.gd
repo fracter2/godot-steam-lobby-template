@@ -38,6 +38,7 @@ func _ready() -> void:
 	critical_error.connect(_on_critical_error)
 
 	Steam.join_requested.connect(_on_lobby_join_requested)
+	#Steam.join_game_requested													# TODO Consider this if above doesn't work
 
 	# TODO Delegate these callbacks
 	multiplayer.connected_to_server.connect(_on_connected_to_server)			# NOTE So this only calls locally once.
