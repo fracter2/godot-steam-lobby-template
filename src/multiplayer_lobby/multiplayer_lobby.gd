@@ -2,16 +2,11 @@
 class_name MultiplayerLobby
 extends Object
 
-## Lobby id. May be the same as Owner ID, like with EnetMultiplayerLobby
-var lobby_id: int = 0
 
 ## Owner user id. This is not nessessarily the peer_id from multiplayer.get_unique_id().
 ## With steam it is the account id.
-var owner_id: int = 0															# TODO Consider removing this...? since Steam.getLobbyOwner() and peer_id 1 is always the owner / host
+#var owner_id: int = 0															# TODO Consider removing this...? since Steam.getLobbyOwner() and peer_id 1 is always the owner / host
 																				# Could be a getter func instead, since a third party account system might have their own account id's
-## Player info [Dictionary].
-var players : Dictionary = {}													# TODO Consider a dedicated info class... even as a simple Dictionary wrapper with embedded peer_id + user_id + name...
-																				# TODO Consider mooving to Lobby with propper has/get/set
 
 ## The [MultiplayerPeer] used in the connection. This can be used as the multiplayer_peer for
 ## any scene, like the actual game scene. [br]
@@ -38,16 +33,8 @@ signal connected_as_host
 ## Disconnect as host / client, or failed lobby_entered attempt
 signal disconnected(message:String)
 
-## Emited when a parameter is added or changed. The parameter and value are provided for convenience.
-signal player_info_set(peer_id: int, param: String, value: Variant)
-
-## Not sure why it would be useful to selectively remove parameters, but here we go anyway...
-signal player_info_removed(peer_id: int, param: String)												# TODO CONSIDER YAGNI
-
-## Emited when an entire player_id is removed from [member players]. [br]
-## The opposite equivolent would be just checking if a player joined through the Lobby autoload
-## or through [MultiplayerPeer] or [MultiplayerAPI]
-signal player_info_cleared(peer_id: int)															# TODO CONSIDER YAGNI
+## Emited when the multiplayer peer is set. Only useful during initialisation, to avoid missing any "peer_connected" signals
+signal multiplayer_peer_set(peer: MultiplayerPeer)
 
 
 # TODO Chat messages, recieve and send signals...?

@@ -4,6 +4,10 @@ extends MultiplayerLobby
 var init_as_host: bool
 var init_id: int
 
+## Steam lobby id assosiated with this lobby resource.
+var lobby_id: int = 0
+var owner_steam_id: int = 0
+
 #
 # ---- Procedure ----
 #
@@ -26,9 +30,6 @@ func _init(lobby_id_: int, as_host: bool) -> void:								# TODO REVERSE ORDER O
 
 	#Steam.joinParty()
 	#Steam.createBeacon() 	# Wasdis about??
-
-
-
 
 
 # Cleanup
@@ -82,29 +83,36 @@ func _on_lobby_joined_wrapper(joined_lobby_id: int, _permissions: int, _locked: 
 	if is_in_lobby():
 		print_debug("Already in a lobby but still recieved join response. Ignoring")
 		return
-	var err: String = _on_lobby_joined(joined_lobby_id, _permissions, _locked, response)
+
+	var err: String = _on_lobby_joined(joined_lobby_id, _permissions, _locked, response)			# TODO Rename to... _setup_join_lobby_connection
 	if err: disconnected.emit(err)
-	else: connected_as_client.emit()
+
+	connected_as_client.emit()
+	var my_peer_id: int = multiplayer_peer.get_unique_id()
+	Lobby.set_player_info(my_peer_id, "name", Steamworks.persona_name)
+	Lobby.set_player_info(my_peer_id, "steam_id", Steamworks.steam_id)
+	var owner_peer_id: int = (multiplayer_peer as SteamMultiplayerPeer).get_peer_id_for_steam_id(owner_steam_id)
+	Lobby.set_player_info(owner_peer_id, "name", Steam.getFriendPersonaName(owner_steam_id))
+	Lobby.set_player_info(owner_peer_id, "steam_id", owner_steam_id)
 
 
 # NOTE Returns "" on success
-func _on_lobby_joined(joined_lobby_id: int, _permissions: int, _locked: bool, response: int) -> String:	# TODO User Error as return type
+func _on_lobby_joined(joined_lobby_id: int, _permissions: int, _locked: bool, response: int) -> String:			# TODO User Error as return type
 	if is_in_lobby(): return "DIFFERENT LOBBY IS ALREADY SET UP! CANNOT JOIN 2 AT ONCE"
 	if response != 1: return _get_fail_response_description(response)
 
 	assert(joined_lobby_id == init_id, "As far as i understand, these values should be the same if init_id was used to find/create the lobby...")
 	lobby_id = joined_lobby_id
-	owner_id = Steam.getLobbyOwner(lobby_id)
-	if owner_id == Steamworks.steam_id:
+	owner_steam_id = Steam.getLobbyOwner(lobby_id)
+	if owner_steam_id == Steamworks.steam_id:
 		return "joined lobby and became the owner right away... Dunno how to handle this so just break"
 
 	_create_multiplayer_peer()
-	var error: Error = (multiplayer_peer as SteamMultiplayerPeer).create_client(owner_id, 0)
+	#var error: Error = (multiplayer_peer as SteamMultiplayerPeer).create_client(owner_steam_id, 0)	# TEST
+	var error: Error = (multiplayer_peer as SteamMultiplayerPeer).connect_to_lobby(lobby_id)		# TEST
 	if error != OK:
 		return "ERROR CREATING CLIENT\nCODE: " + str(error)
 
-	players[1] = {"name": Steam.getFriendPersonaName(owner_id), "id": owner_id}						# TODO Make player info struct
-	players[multiplayer_peer.get_unique_id()] = {"name": Steamworks.persona_name, "id": Steamworks.steam_id}
 	return ""
 
 
@@ -114,31 +122,33 @@ func _on_lobby_created_wrapper(conn: int, created_lobby_id: int) -> void:
 		print_debug("Already in a lobby but still recieved created response. Ignoring. I screwed up somewhow")
 		breakpoint
 		return
-	var err: String = _on_lobby_created(conn, created_lobby_id)
+	var err: String = _on_lobby_created(conn, created_lobby_id)										# TODO Rename to... setup_created_lobby_connection
 	if err: disconnected.emit(err)
-	else: connected_as_host.emit()
+
+	connected_as_host.emit()
+	var my_peer_id: int = multiplayer_peer.get_unique_id()
+	Lobby.set_player_info(my_peer_id, "name", Steamworks.persona_name)
+	Lobby.set_player_info(my_peer_id, "steam_id", Steamworks.steam_id)
 
 
 # NOTE Returns "" on success
-func _on_lobby_created(conn: int, created_lobby_id: int) -> String:										# TODO DOESN'T QUIT PREVIOUS LOBBY... does it prevent mutliple lobbies? prob not... 	# TODO User Error as return type
-	if is_in_lobby(): return "LOBBY IS ALREADY SET UP!"
+func _on_lobby_created(conn: int, created_lobby_id: int) -> String:				# TODO User Error as return type
+	if is_in_lobby(): return "LOBBY IS ALREADY SET UP!"							# TODO Remove redundant with earlier check
 	if conn != 1: return 'ERROR CREATING STEAM LOBBY\nCODE: '+str(conn)
 
 	lobby_id = created_lobby_id
-	owner_id = Steam.getSteamID()
+	owner_steam_id = Steamworks.steam_id
+	assert(Steamworks.steam_id == Steam.getLobbyOwner(created_lobby_id))
 
 	_create_multiplayer_peer()
-	var error: Error = (multiplayer_peer as SteamMultiplayerPeer).create_host(0) # this is virtual port not player limit do not change
+	#var error: Error = (multiplayer_peer as SteamMultiplayerPeer).create_host(0) 					# TEST		# this is virtual port not player limit do not change
+	var error: Error = (multiplayer_peer as SteamMultiplayerPeer).host_with_lobby(created_lobby_id) # TEST
 	if error != OK:
 		return "ERROR CREATING HOST CLIENT\nCODE: " + str(error)
 
-	var my_name: String = Util.limit_string_to_size(Steam.getPersonaName(), 20)
+	var my_name: String = Util.limit_string_to_size(Steamworks.persona_name, 20)
 	Steam.setLobbyData(lobby_id, "name", (my_name+"'s Lobby"))					# TODO Allow setting a lobby name
 	Steam.setLobbyJoinable(lobby_id, true)
-
-
-
-	players[1] = {"name": my_name, "id": Steam.getSteamID()}
 	Steam.allowP2PPacketRelay(true)												# TODO Remove, this should be redundant
 	return ""
 
@@ -148,18 +158,22 @@ func _on_kicked() -> void:
 
 
 func _on_peer_connected(peer_id: int) -> void:
-	if players.has(peer_id):
+	if Lobby.players.has(peer_id):
 		print_debug("in SteamMultiplayerLobby._on_peer_connected(%d), somehow already have the peer_id in the players[] dict" % peer_id)
-		return
+	else:
+		Lobby.add_new_player_info(peer_id)
+
 	var steam_id: int = (multiplayer_peer as SteamMultiplayerPeer).get_steam_id_for_peer_id(peer_id)
-	players[peer_id] = {"name": Steam.getFriendPersonaName(steam_id), "id": steam_id}
+	Lobby.set_player_info(peer_id, "name", Steam.getFriendPersonaName(steam_id))
+	Lobby.set_player_info(peer_id, "steam_id", steam_id)
 
 
-func _on_peer_disconnected(peer_id: int) -> void:
-	if not players.has(peer_id):
+func _on_peer_disconnected(peer_id: int) -> void:													# TODO REMOVE THIS IS JUST TO TEST WHAT TRIGGERS FIRST, multiplayer.peer_connected or this
+	if Lobby.players.has(peer_id):
+		Lobby.clear_player_info(peer_id)
+	else:
 		print_debug("in SteamMultiplayerLobby._on_peer_disconnected(%d), somehow dont have the peer_id in the players[] dict" % peer_id)
-		return
-	players.erase(peer_id)
+
 
 #
 # ---- Internal logic ----
@@ -170,6 +184,7 @@ func _create_multiplayer_peer() -> void:
 	peer.peer_connected.connect(_on_peer_connected)
 	peer.peer_disconnected.connect(_on_peer_disconnected)
 	multiplayer_peer = peer
+	multiplayer_peer_set.emit(peer)
 
 
 func _get_fail_response_description(response: int) -> String:
