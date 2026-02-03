@@ -71,7 +71,7 @@ func initiate_lobby(lobby: MultiplayerLobby) -> bool:
 	lobby.connected_as_client.connect(_on_connected_as_client)					# TODO Consider internal func for connecting / disconnecting...
 	lobby.connected_as_host.connect(_on_connected_as_host)
 	lobby.disconnected.connect(_on_disconnected)
-	lobby.multiplayer_peer_set.connect(_on_multiplayer_peer_set)
+	#lobby.multiplayer_peer_set.connect(_on_multiplayer_peer_set)
 
 	if lobby.initiate_connection():
 		lobby_instance = lobby
@@ -82,7 +82,7 @@ func initiate_lobby(lobby: MultiplayerLobby) -> bool:
 		lobby.connected_as_client.disconnect(_on_connected_as_client)
 		lobby.connected_as_host.disconnect(_on_connected_as_host)
 		lobby.disconnected.disconnect(_on_disconnected)
-		lobby.multiplayer_peer_set.disconnect(_on_multiplayer_peer_set)
+		#lobby.multiplayer_peer_set.disconnect(_on_multiplayer_peer_set)
 
 		lobby.free()
 		return false
@@ -216,6 +216,8 @@ func _on_connection_failed() -> void:
 
 func _on_connected_as_client() -> void:
 	print("Lobby: connected as CLIENT with %d peers!" % multiplayer.get_peers())
+	multiplayer.multiplayer_peer = lobby_instance.multiplayer_peer
+
 	add_new_player_info(multiplayer.get_unique_id())
 	set_player_info(multiplayer.get_unique_id(), "name", lobby_instance.get_user_name())
 
@@ -229,8 +231,9 @@ func _on_connected_as_client() -> void:
 
 
 func _on_connected_as_host() -> void:
-	print("Lobby: connected as HOST with %d peers!" % multiplayer.get_peers())
-	assert(players.is_empty())
+	print("Lobby: connected as HOST with %d peers!" % multiplayer.get_peers().size())
+	multiplayer.multiplayer_peer = lobby_instance.multiplayer_peer
+
 	add_new_player_info(multiplayer.get_unique_id())
 	set_player_info(multiplayer.get_unique_id(), "name", lobby_instance.get_user_name())
 	lobby_entered.emit()
@@ -240,9 +243,9 @@ func _on_disconnected(message: String) -> void:
 	leave_lobby(message)
 
 
-func _on_multiplayer_peer_set(peer: MultiplayerPeer) -> void:
-	print("Lobby setting new multiplayer peer")
-	multiplayer.multiplayer_peer = peer
+#func _on_multiplayer_peer_set(peer: MultiplayerPeer) -> void:
+#	print("Lobby setting new multiplayer peer")
+#	multiplayer.multiplayer_peer = peer
 
 ### Simple wrapper over [member lobby_instance] signal, for convenience
 #func _on_player_info_set(peer_id: int, param: String, value: Variant) -> void:
