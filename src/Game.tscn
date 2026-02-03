@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://dx0gencnp27xs"]
 
-[ext_resource type="Script" uid="uid://vv32jnu32d2q" path="res://src/ui/steam_info_labels.gd" id="1_2c5w0"]
+[ext_resource type="Script" uid="uid://vv32jnu32d2q" path="res://src/ui/debug/steam_info_labels.gd" id="1_2c5w0"]
 [ext_resource type="Script" uid="uid://ho3n3j0rxror" path="res://src/game.gd" id="1_kqvf5"]
-[ext_resource type="Script" uid="uid://cbaivxnsabs1o" path="res://src/ui/pause_menu.gd" id="3_lqjwq"]
+[ext_resource type="Script" uid="uid://cbaivxnsabs1o" path="res://src/ui/menus/pause_menu.gd" id="3_lqjwq"]
 
 [node name="Game" type="Node2D" unique_id=303895278]
 script = ExtResource("1_kqvf5")

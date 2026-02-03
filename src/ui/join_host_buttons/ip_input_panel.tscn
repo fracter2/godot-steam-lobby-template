@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dgjg26vena25e"]
 
-[ext_resource type="Script" uid="uid://dt7q8n7wxe23c" path="res://src/ui/ip_input_panel.gd" id="1_fka66"]
+[ext_resource type="Script" uid="uid://dt7q8n7wxe23c" path="res://src/ui/join_host_buttons/ip_input_panel.gd" id="1_fka66"]
 
 [node name="IPPanel" type="PanelContainer" unique_id=194192369]
 offset_right = 246.0
