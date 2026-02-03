@@ -1,0 +1,62 @@
+[gd_scene format=3 uid="uid://7abbq726h0tk"]
+
+[ext_resource type="Script" uid="uid://uy7iybx47110" path="res://src/ui/hud/lobby_player_list.gd" id="1_4dqp2"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_iqdfy"]
+bg_color = Color(0.20827892, 0.20827892, 0.2082789, 0.42352942)
+
+[sub_resource type="Gradient" id="Gradient_d8cr2"]
+colors = PackedColorArray(0.13901246, 0.26174945, 0.29291666, 1, 0.2675493, 0.4588191, 0.5076824, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_1lu5v"]
+gradient = SubResource("Gradient_d8cr2")
+width = 32
+height = 32
+fill_from = Vector2(0, 1)
+metadata/_snap_enabled = true
+
+[sub_resource type="LabelSettings" id="LabelSettings_y1eef"]
+font_size = 12
+
+[node name="PlayerList" type="PanelContainer" unique_id=1639136409]
+anchors_preset = -1
+anchor_top = 0.18028398
+anchor_bottom = 0.68996304
+offset_top = 0.17597961
+offset_right = 227.0
+offset_bottom = -0.09603882
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_iqdfy")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=619650624]
+layout_mode = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer" unique_id=1110762534]
+layout_mode = 2
+follow_focus = true
+horizontal_scroll_mode = 4
+vertical_scroll_mode = 4
+
+[node name="List" type="VBoxContainer" parent="MarginContainer/ScrollContainer" unique_id=1886616825]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("1_4dqp2")
+
+[node name="PlayerRowTemplate" type="HBoxContainer" parent="MarginContainer/ScrollContainer/List" unique_id=521769205]
+visible = false
+layout_mode = 2
+
+[node name="TextureAvatar" type="TextureRect" parent="MarginContainer/ScrollContainer/List/PlayerRowTemplate" unique_id=14893073]
+layout_mode = 2
+texture = SubResource("GradientTexture2D_1lu5v")
+
+[node name="LabelName" type="Label" parent="MarginContainer/ScrollContainer/List/PlayerRowTemplate" unique_id=1896138875]
+layout_mode = 2
+text = "name"
+label_settings = SubResource("LabelSettings_y1eef")
