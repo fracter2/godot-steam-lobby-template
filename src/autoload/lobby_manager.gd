@@ -5,6 +5,17 @@ var lobby_instance: MultiplayerLobby = null
 ## Player info [Dictionary].
 var players : Dictionary[int, PlayerInfo] = {}
 
+# TODO REWORK PLAYER HAS/GET/SET TO PROVIDE STRONGER TYPING
+#
+# TODO ALTERNATIVE 1: SEPPARATE DICTS FOR EACH PARAMETER (name, nickname, steam_id, avatar32x32...)
+#			- PRO: WE KNOW WHAT IT "HAS"
+#			- CON: CANNOT GET ALL INFO FROM ONE PLAYER EASILY
+# TODO ALTERNATIVE 2: ENFORCE PlayerInfo CLASS WITH ALL PARAMETERS.
+# 			- MAKE get_player_info() -> PlayerInfo
+#			- META CAN BE SET TO PlayerInfo OBJECT
+#			PRO: ALL INFO IS IN ONE RETURNED OBJECT
+#			CON: CANNOT KNOW IF PROPERTY IS INVALID
+
 
 ## A non-recoverable issue has occured and the [MultiplayerLobby] has been destroyed.
 signal critical_error(message:String)
