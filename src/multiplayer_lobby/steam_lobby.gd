@@ -89,12 +89,17 @@ func _on_lobby_joined_wrapper(joined_lobby_id: int, _permissions: int, _locked: 
 	if err: disconnected.emit(err)
 
 	connected_as_client.emit()
-	var my_peer_id: int = multiplayer_peer.get_unique_id()
-	Lobby.set_player_info(my_peer_id, "name", Steamworks.persona_name)
-	Lobby.set_player_info(my_peer_id, "steam_id", Steamworks.steam_id)
+	assert(Lobby.players.has(multiplayer_peer.get_unique_id()), "Users player info resource should have been created by now!")
 	var owner_peer_id: int = (multiplayer_peer as SteamMultiplayerPeer).get_peer_id_for_steam_id(owner_steam_id)
-	Lobby.set_player_info(owner_peer_id, "name", Steam.getFriendPersonaName(owner_steam_id))
-	Lobby.set_player_info(owner_peer_id, "steam_id", owner_steam_id)
+	assert(Lobby.players.has(owner_peer_id), "owners player info resource should have been created by now!")
+
+	var my_p_info: PlayerInfo = Lobby.players.get(multiplayer_peer.get_unique_id())
+	my_p_info.display_name = Steamworks.persona_name
+	my_p_info.steam_id = Steamworks.steam_id
+
+	var owner_info: PlayerInfo = Lobby.players.get(owner_peer_id)
+	owner_info.display_name = Steam.getFriendPersonaName(owner_steam_id)
+	owner_info.steam_id = owner_steam_id
 
 
 # NOTE Returns "" on success
@@ -123,13 +128,15 @@ func _on_lobby_created_wrapper(conn: int, created_lobby_id: int) -> void:
 		print_debug("Already in a lobby but still recieved created response. Ignoring. I screwed up somewhow")
 		breakpoint
 		return
+
 	var err: String = _on_lobby_created(conn, created_lobby_id)										# TODO Rename to... setup_created_lobby_connection
 	if err: disconnected.emit(err)
 
 	connected_as_host.emit()
-	var my_peer_id: int = multiplayer_peer.get_unique_id()
-	Lobby.set_player_info(my_peer_id, "name", Steamworks.persona_name)
-	Lobby.set_player_info(my_peer_id, "steam_id", Steamworks.steam_id)
+	assert(Lobby.players.has(multiplayer_peer.get_unique_id()), "Users player info resource should have been created by now!")
+	var my_p_info: PlayerInfo = Lobby.players.get(multiplayer_peer.get_unique_id())
+	my_p_info.display_name = Steamworks.persona_name
+	my_p_info.steam_id = Steamworks.steam_id
 
 
 # NOTE Returns "" on success
@@ -165,8 +172,9 @@ func _on_peer_connected(peer_id: int) -> void:
 		Lobby.add_new_player_info(peer_id)
 
 	var steam_id: int = (multiplayer_peer as SteamMultiplayerPeer).get_steam_id_for_peer_id(peer_id)
-	Lobby.set_player_info(peer_id, "name", Steam.getFriendPersonaName(steam_id))
-	Lobby.set_player_info(peer_id, "steam_id", steam_id)
+	var peer_info: PlayerInfo = Lobby.players.get(steam_id)
+	peer_info.display_name = Steam.getFriendPersonaName(steam_id)
+	peer_info.steam_id = steam_id
 
 
 func _on_peer_disconnected(peer_id: int) -> void:													# TODO REMOVE THIS IS JUST TO TEST WHAT TRIGGERS FIRST, multiplayer.peer_connected or this

@@ -2,21 +2,6 @@ extends Node
 
 var lobby_instance: MultiplayerLobby = null
 
-## Player info [Dictionary].
-var players : Dictionary[int, PlayerInfo] = {}
-
-# TODO REWORK PLAYER HAS/GET/SET TO PROVIDE STRONGER TYPING
-#
-# TODO ALTERNATIVE 1: SEPPARATE DICTS FOR EACH PARAMETER (name, nickname, steam_id, avatar32x32...)
-#			- PRO: WE KNOW WHAT IT "HAS"
-#			- CON: CANNOT GET ALL INFO FROM ONE PLAYER EASILY
-# TODO ALTERNATIVE 2: ENFORCE PlayerInfo CLASS WITH ALL PARAMETERS.
-# 			- MAKE get_player_info() -> PlayerInfo
-#			- META CAN BE SET TO PlayerInfo OBJECT
-#			PRO: ALL INFO IS IN ONE RETURNED OBJECT
-#			CON: CANNOT KNOW IF PROPERTY IS INVALID
-
-
 ## A non-recoverable issue has occured and the [MultiplayerLobby] has been destroyed.
 signal critical_error(message:String)
 
@@ -26,15 +11,19 @@ signal lobby_entered
 ## Disconnect as host / client, or failed lobby_entered attempt
 signal lobby_exited(message:String) # lobby_exited
 
+
+## Player info [Dictionary].
+var players : Dictionary[int, PlayerInfo] = {}
+
 ## Emits when a key in the player info dictionary is set.
-signal player_info_set(peer_id: int, param: String, value: Variant)
-
-## Emits when a key in the player info dictionary is removed. However usefull that may be.
-#signal player_info_removed(peer_id: int, param: String)
-
-## Emits when a player in the player info resouce for a peer is removed (like when the peer disconnects). [br]
-## The info_resource contains all info that was dropped.
-signal player_info_cleared(peer_id: int, info_resource: PlayerInfo)
+signal player_added				(player: PlayerInfo)
+signal player_removed			(player: PlayerInfo)
+signal player_name_set			(new_name: StringName, player: PlayerInfo)
+signal player_nickname_set		(new_name: StringName, player: PlayerInfo)
+signal player_steam_id_set		(steam_id: int, player: PlayerInfo)
+signal player_small_avatar_set	(avatar: Image, player: PlayerInfo)
+signal player_medium_avatar_set	(avatar: Image, player: PlayerInfo)
+signal player_large_avatar_set	(avatar: Image, player: PlayerInfo)
 
 
 #
@@ -51,8 +40,7 @@ func _ready() -> void:
 	Steam.join_requested.connect(_on_lobby_join_requested)
 	#Steam.join_game_requested													# TODO Consider this if above doesn't work
 
-	# TODO Delegate these callbacks
-	multiplayer.connected_to_server.connect(_on_connected_to_server)			# NOTE So this only calls locally once.
+	#multiplayer.connected_to_server.connect(_on_connected_to_server)			# NOTE So this only calls locally once.
 	multiplayer.connection_failed.connect(_on_connection_failed)
 	multiplayer.peer_connected.connect(_on_peer_connected)
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
@@ -67,12 +55,11 @@ func _ready() -> void:
 func is_in_lobby() -> bool:
 	return lobby_instance != null
 
-func is_lobby_owner() -> bool:
-	return lobby_instance.owner_id == lobby_instance.get_user_id()
+#func is_lobby_owner() -> bool:
+#	return lobby_instance.owner_id == lobby_instance.get_user_id()
 
 ## Returns the result of the initiation [b]attempt[/b]. [signal lobby_entered] and [signal lobby_exited]
-## emit when the result is granted (imagine it like waiting for the host / setup to respond) [br]
-## [br]
+## emit when the result is granted (imagine it like waiting for the host / setup to respond) [br] [br]
 ## Lobby argument is freed on return false, to enforce intended use (Lobbies should only persist in this autoload)
 func initiate_lobby(lobby: MultiplayerLobby) -> bool:
 	if is_in_lobby():
@@ -115,52 +102,30 @@ func leave_lobby(message: String) -> void:
 
 
 ##
-func has_player_info(peer_id: int, key: String) -> bool:
-	if players.has(peer_id):
-		return players[peer_id].info.has(key)
-	else:
-		return false
-
-##
-func get_player_info(peer_id: int, key: String, default: Variant = null) -> Variant:
-	if players.has(peer_id):
-		return players[peer_id].info.get(key, default)
-	else:
-		return default
-
-##
-func set_player_info(peer_id: int, key: String, value: Variant) -> bool:
-	if not players.has(peer_id):
-		return false
-
-	players[peer_id].info.set(key, value)
-	player_info_set.emit(peer_id, key, value)
-	return true
-
-
-##
 func clear_player_info(id: int) -> bool:
 	if not players.has(id):
 		return false
 
 	var info_res: PlayerInfo = players.get(id)
 	players.erase(id)
-	player_info_cleared.emit(id, info_res)
+	player_removed.emit(id, info_res)
 	return true
 
 
 ##
-func add_new_player_info(id: int) -> bool:
-	if not multiplayer.get_peers().has(id) and id != multiplayer.get_unique_id():
-		print_debug("add_new_player_info(%d) called when peer doesn't exist!" % id)
+func add_new_player_info(peer_id: int) -> bool:
+	if not multiplayer.get_peers().has(peer_id) and peer_id != multiplayer.get_unique_id():
+		print_debug("add_new_player_info(%d) called when peer doesn't exist!" % peer_id)
 		return false
 
-	if players.has(id):
-		print_debug("add_new_player_info(%d) called when peer info is already registered!" % id)
+	if players.has(peer_id):
+		print_debug("add_new_player_info(%d) called when peer info is already registered!" % peer_id)
 		return false
 
-	players.set(id, PlayerInfo.new())
-	set_player_info(id, "id", id)
+	var info: PlayerInfo = PlayerInfo.new(peer_id)
+	players.set(peer_id, info)
+	_wrap_player_info_signals(info)
+	player_added.emit(peer_id, info)
 	return true
 
 
@@ -198,16 +163,6 @@ func _on_lobby_join_requested(this_lobby_id: int, friend_id: int) -> void:
 	initiate_lobby(SteamMultiplayerLobby.new(this_lobby_id, false))
 
 
-
-func _on_connected_to_server() -> void:
-	print("Lobby: Connected to server!")
-	var id: int = multiplayer.get_unique_id()
-	var my_name : String = lobby_instance.get_user_name()
-
-	add_new_player_info(id)
-	set_player_info(id, "name", my_name)
-
-
 func _on_peer_connected(id: int ) -> void:
 	print("Lobby: Peer connected, peer_id: %d" % id)
 	if players.has(id): print("Peer was already registered... prob by lobby instance right before...")
@@ -229,8 +184,9 @@ func _on_connected_as_client() -> void:
 	print("Lobby: connected as CLIENT with %d peers!" % multiplayer.get_peers())
 	multiplayer.multiplayer_peer = lobby_instance.multiplayer_peer
 
-	add_new_player_info(multiplayer.get_unique_id())
-	set_player_info(multiplayer.get_unique_id(), "name", lobby_instance.get_user_name())
+	var id: int = multiplayer.get_unique_id()
+	add_new_player_info(id)
+	players[id].display_name = lobby_instance.get_user_name()
 
 	for peer_id: int in multiplayer.get_peers():
 		if players.has(peer_id):
@@ -245,8 +201,9 @@ func _on_connected_as_host() -> void:
 	print("Lobby: connected as HOST with %d peers!" % multiplayer.get_peers().size())
 	multiplayer.multiplayer_peer = lobby_instance.multiplayer_peer
 
-	add_new_player_info(multiplayer.get_unique_id())
-	set_player_info(multiplayer.get_unique_id(), "name", lobby_instance.get_user_name())
+	var id: int = multiplayer.get_unique_id()
+	add_new_player_info(id)
+	players[id].display_name = lobby_instance.get_user_name()
 	lobby_entered.emit()
 
 
@@ -254,21 +211,36 @@ func _on_disconnected(message: String) -> void:
 	leave_lobby(message)
 
 
-#func _on_multiplayer_peer_set(peer: MultiplayerPeer) -> void:
-#	print("Lobby setting new multiplayer peer")
-#	multiplayer.multiplayer_peer = peer
 
-### Simple wrapper over [member lobby_instance] signal, for convenience
-#func _on_player_info_set(peer_id: int, param: String, value: Variant) -> void:
-	#player_info_set.emit(peer_id, param, value)
-#
-### Simple wrapper over [member lobby_instance] signal, for convenience
-#func _on_player_info_removed(peer_id: int, param: String) -> void:
-	#player_info_removed.emit(peer_id, param)
-#
-### Simple wrapper over [member lobby_instance] signal, for convenience
-#func _on_player_info_cleared(peer_id: int) -> void:
-	#player_info_cleared.emit(peer_id)
+func _wrap_player_info_signals(player_info: PlayerInfo) -> void:
+	# TODO CHECK IF IT IS ALREADY BOUND
+
+	player_info.display_name_set.connect(_on_player_name_set.bind(player_info))
+	player_info.nickname_set.connect(_on_player_nickname_set.bind(player_info))
+	player_info.steam_id_set.connect(_on_player_steam_id_set.bind(player_info))
+	player_info.avatar_small_set.connect(_on_player_small_avatar_set.bind(player_info))
+	player_info.avatar_medium_set.connect(_on_player_medium_avatar_set.bind(player_info))
+	player_info.avatar_large_set.connect(_on_player_large_avatar_set.bind(player_info))
+
+
+# Signal call wrappers for use with PlayerInfo signal
+func _on_player_name_set(new_name: StringName, player: PlayerInfo) -> void:
+	player_name_set.emit(new_name, player)
+
+func _on_player_nickname_set(new_name: StringName, player: PlayerInfo) -> void:
+	player_nickname_set.emit(new_name, player)
+
+func _on_player_steam_id_set(steam_id: int, player: PlayerInfo) -> void:
+	player_steam_id_set.emit(steam_id, player)
+
+func _on_player_small_avatar_set(avatar: Image, player: PlayerInfo) -> void:
+	player_small_avatar_set.emit(avatar, player)
+
+func _on_player_medium_avatar_set(avatar: Image, player: PlayerInfo) -> void:
+	player_medium_avatar_set.emit(avatar, player)
+
+func _on_player_large_avatar_set(avatar: Image, player: PlayerInfo)-> void:
+	player_large_avatar_set.emit(avatar, player)
 
 #
 # ----

@@ -29,8 +29,9 @@ fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 0.5)
 metadata/_snap_enabled = true
 
-[node name="Player" type="Node2D" unique_id=596255812]
+[node name="Player" type="Node2D" unique_id=596255812 node_paths=PackedStringArray("name_label")]
 script = ExtResource("1_xumei")
+name_label = NodePath("NameLabel")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=215914632]
 replication_config = SubResource("SceneReplicationConfig_t2aqf")
