@@ -27,14 +27,14 @@ var multiplayer_peer: MultiplayerPeer
 @abstract func initiate_connection() -> bool
 
 ## Successfully hosted or joined as client
-signal connected_as_client																			# TODO Does it matter if it connected as client or host in Lobby or elsewhere?
-signal connected_as_host
+@warning_ignore("unused_signal") signal connected_as_client
+@warning_ignore("unused_signal") signal connected_as_host
 
 ## Disconnect as host / client, or failed lobby_entered attempt
-signal disconnected(message:String)
+@warning_ignore("unused_signal") signal disconnected(message:String)
 
 ## Emited when the multiplayer peer is set. Only useful during initialisation, to avoid missing any "peer_connected" signals
-signal multiplayer_peer_set(peer: MultiplayerPeer)
+@warning_ignore("unused_signal") signal multiplayer_peer_set(peer: MultiplayerPeer)
 
 
 # TODO Chat messages, recieve and send signals...?
