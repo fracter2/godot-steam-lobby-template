@@ -27,7 +27,7 @@ func _init() -> void:
 	process_priority = -1														# TODO Consider global constants CONST autoload
 	process_physics_priority = -1
 
-func _ready() -> void:
+func _enter_tree() -> void:
 	if LaunchArgs.has_command("--no-steam"):
 		print("Launch arg no-steam set. Skipping Steamworks init.")
 		return
