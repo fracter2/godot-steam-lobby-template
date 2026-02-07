@@ -14,7 +14,11 @@ func _init(is_host: bool = false, ip: String = "127.0.0.1", port: int = 8080, us
 
 func is_active() -> bool: return false
 func get_user_name() -> String: return username								# NOTE if there is a (non-steam) account system, this would be the account name
-func get_user_id() -> int: return multiplayer_peer.get_unique_id()			# NOTE if there is a (non-steam) account system, this would be the account id
+
+func is_lobby_owner() -> bool:
+	if multiplayer_peer == null: return false
+	return multiplayer_peer.get_unique_id() == 1
+
 
 func initiate_connection() -> bool:
 	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
