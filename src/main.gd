@@ -9,8 +9,9 @@ const GAME = preload("uid://dx0gencnp27xs")
 # ---- PROCEDURE ----
 #
 
-func _ready() -> void:
-	Lobby.lobby_entered.connect(_on_connected)										# NOTE Local lobby_entered only
+func _enter_tree() -> void:
+	Lobby.lobby_entered.connect(_on_connected)
+
 
 
 #
@@ -18,5 +19,4 @@ func _ready() -> void:
 #
 
 func _on_connected() -> void:
-	#multiplayer.multiplayer_peer = Lobby.multiplayer.multiplayer_peer
 	get_tree().change_scene_to_packed(GAME)
