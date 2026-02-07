@@ -173,8 +173,8 @@ func _on_peer_connected(peer_id: int) -> void:
 	else:
 		Lobby.add_new_player_info(peer_id)
 
+	var peer_info: PlayerInfo = Lobby.players.get(peer_id)
 	var steam_id: int = (multiplayer_peer as SteamMultiplayerPeer).get_steam_id_for_peer_id(peer_id)
-	var peer_info: PlayerInfo = Lobby.players.get(steam_id)
 	peer_info.display_name = Steam.getFriendPersonaName(steam_id)
 	peer_info.steam_id = steam_id
 
