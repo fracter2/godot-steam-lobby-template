@@ -138,6 +138,28 @@ func add_new_player_info(peer_id: int) -> bool:
 #
 
 func _check_launch_commands() -> void:
+
+	##
+	if LaunchArgs.has_command("-init-enet-lobby"):
+		var args: PackedStringArray = LaunchArgs.get_values("-init-enet-lobby")
+		print("Attempting to join or host an enet-lobby.")
+		for a: String in args:
+			print("arg: %s" % a)
+
+		if args.size() < 4:
+			push_error("-init-enet-lobby aborted due to missing values. It should be -init-enet-lobby=ishost=ip=port=username.
+						ishost can be either true/false. The ip can be anything (it's ignored) for hosts")
+			return
+
+		var ishost: bool = true if args[0] == "true" else false
+		var ip: String = args[1]
+		var port: int = args[2].to_int()
+		var username: String = args[3]
+
+		var lobby: EnetMultiplayerLobby = EnetMultiplayerLobby.new(ishost, ip, port, username)
+		if not initiate_lobby(lobby):
+			print("-init-enet-lobby attempt got aborted (figure out why yourself. bad args?)")
+
 	## Check for steam connect arg												# TODO DELEGATE TO IT'S OWN FUNC
 	if LaunchArgs.has_command("+connect_lobby"):
 		var lobby_id_str: String = LaunchArgs.get_values("+connect_lobby")[0]	# Should only have one value anyway
