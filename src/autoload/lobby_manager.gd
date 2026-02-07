@@ -69,18 +69,17 @@ func initiate_lobby(lobby: MultiplayerLobby) -> bool:
 	lobby.connected_as_client.connect(_on_connected_as_client)					# TODO Consider internal func for connecting / disconnecting...
 	lobby.connected_as_host.connect(_on_connected_as_host)
 	lobby.disconnected.connect(_on_disconnected)
-	#lobby.multiplayer_peer_set.connect(_on_multiplayer_peer_set)
+	lobby_instance = lobby	# NOTE Set here instead of in "if lobby.initiate_connection(): " to avoid signal callbacks from init success trying to access lobby_instance.
 
 	if lobby.initiate_connection():
-		lobby_instance = lobby
 		return true
 
 	else:
+		lobby_instance = null
 		# TODO REMOVE THESE DISCONNECTS, lobby.free() should take care of it... unless the notification_pre_delete may influence
 		lobby.connected_as_client.disconnect(_on_connected_as_client)
 		lobby.connected_as_host.disconnect(_on_connected_as_host)
 		lobby.disconnected.disconnect(_on_disconnected)
-		#lobby.multiplayer_peer_set.disconnect(_on_multiplayer_peer_set)
 
 		lobby.free()
 		return false
