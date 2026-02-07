@@ -53,8 +53,10 @@ func is_in_lobby() -> bool: return lobby_id != 0
 ## Returns Steam.getPersonaName()
 func get_user_name() -> String: return Steam.getPersonaName()
 
-## Returns Steam.getSteamID()
-func get_user_id() -> int: return Steam.getSteamID()
+##
+func is_lobby_owner() -> bool:
+	return owner_steam_id == Steamworks.steam_id
+
 
 func initiate_connection() -> bool:
 	if !Steamworks.steam_enabled:
@@ -193,7 +195,7 @@ func _create_multiplayer_peer() -> void:
 	peer.peer_connected.connect(_on_peer_connected)
 	peer.peer_disconnected.connect(_on_peer_disconnected)
 	multiplayer_peer = peer
-	multiplayer_peer_set.emit(peer)
+	#multiplayer_peer_set.emit(peer)	# TODO CONSIDER REMOVING, UNUSED
 
 
 func _get_fail_response_description(response: int) -> String:
