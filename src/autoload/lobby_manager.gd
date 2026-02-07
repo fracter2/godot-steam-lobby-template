@@ -34,19 +34,24 @@ func _init() -> void:
 	process_priority = -1														# TODO Consider global constants CONST autoload
 	process_physics_priority = -1
 
-func _ready() -> void:
+
+func _enter_tree() -> void:
 	critical_error.connect(_on_critical_error)
 
-	Steam.join_requested.connect(_on_lobby_join_requested)
-	#Steam.join_game_requested													# TODO Consider this if above doesn't work
-
-	#multiplayer.connected_to_server.connect(_on_connected_to_server)			# NOTE So this only calls locally once.
 	multiplayer.connection_failed.connect(_on_connection_failed)
 	multiplayer.peer_connected.connect(_on_peer_connected)
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 	#multiplayer.server_disconnected
 
+	Steam.join_requested.connect(_on_lobby_join_requested)
+	#Steam.join_game_requested													# TODO Consider this if above doesn't work
+
+
+func _ready() -> void:
+	# We wait a bit more in case any node in the main scene connect to Lobby signals at _on_ready()
+	await get_tree().current_scene.ready
 	_check_launch_commands()
+
 
 #
 # ---- API ----
