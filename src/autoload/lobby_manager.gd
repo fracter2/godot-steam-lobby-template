@@ -138,11 +138,19 @@ func add_new_player_info(peer_id: int) -> bool:
 #
 
 func _check_launch_commands() -> void:
+	## Check for steam connect arg												# TODO DELEGATE TO IT'S OWN FUNC
 	if LaunchArgs.has_command("+connect_lobby"):
 		var lobby_id_str: String = LaunchArgs.get_values("+connect_lobby")[0]	# Should only have one value anyway
 		if not lobby_id_str.is_valid_int():
 			push_error("Attempted to join lobby via launch argument '+connect_lobby with' with invalid lobby id: " + lobby_id_str)
 			return
+
+		if not Steamworks.steam_enabled:
+			push_error("Attempt to join steam lobby cancelled due to steam not being active/enabled")
+			return
+
+		if lobby_instance != null:
+			push_error("Attempted to join steam lobby, but we already got a lobby set! Possibly from other launch args")
 
 		print("Attempting to join lobby right on start. Lobby id: " + lobby_id_str)
 		var lobby: SteamMultiplayerLobby = SteamMultiplayerLobby.new(int(lobby_id_str), false)
