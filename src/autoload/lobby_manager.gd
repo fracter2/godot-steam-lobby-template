@@ -134,7 +134,7 @@ func add_new_player_info(peer_id: int) -> bool:
 	var info: PlayerInfo = PlayerInfo.new(peer_id)
 	players.set(peer_id, info)
 	_wrap_player_info_signals(info)
-	player_added.emit(peer_id, info)
+	player_added.emit(info)
 	return true
 
 
