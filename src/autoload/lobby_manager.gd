@@ -11,6 +11,8 @@ signal lobby_entered
 ## Disconnect as host / client, or failed lobby_entered attempt
 signal lobby_exited(message:String) # lobby_exited
 
+## Disconnecting as host / client, or failed lobby_entered attempt
+signal lobby_exiting(message:String) # lobby_exiting
 
 ## Player info [Dictionary].
 var players : Dictionary[int, PlayerInfo] = {}
@@ -94,6 +96,8 @@ func leave_lobby(message: String) -> void:
 	if not is_in_lobby():
 		print_debug("Tried to quit lobby when not in a lobby")
 		return
+
+	lobby_exiting.emit(message)
 
 	for id: int in multiplayer.get_peers():
 		clear_player_info(id)
