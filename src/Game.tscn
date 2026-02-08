@@ -57,7 +57,7 @@ text = "Exit to Main menu"
 [node name="PlayerList" parent="UI" unique_id=1639136409 instance=ExtResource("4_7omc5")]
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="." unique_id=925975575]
-_spawnable_scenes = PackedStringArray("uid://ctac7w7mgcdq8")
+_spawnable_scenes = PackedStringArray("uid://bd7v4xsokklmx")
 spawn_path = NodePath("../NetworkedEntities")
 
 [node name="NetworkedEntities" type="Node2D" parent="." unique_id=1300342717]

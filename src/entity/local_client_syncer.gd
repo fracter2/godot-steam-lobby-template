@@ -2,7 +2,7 @@ class_name LocalClientSyncronizer
 extends MultiplayerSynchronizer
 
 #@onready var player: Player = $".."
-@export var player: DummyPlayer
+@export var player: PlayerEntity
 
 @export var position: Vector2 = Vector2.ZERO
 

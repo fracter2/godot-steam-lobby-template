@@ -4,10 +4,12 @@ extends Node2D
 @onready var multiplayer_spawner: MultiplayerSpawner = $MultiplayerSpawner
 @onready var networked_entities: Node2D = $NetworkedEntities
 
-const PREL_PLAYER: PackedScene = preload("uid://ctac7w7mgcdq8")
-const MAIN_MENU: PackedScene = preload("uid://bp3lhs80g85ky")
+#const PLAYER_PRELOAD = preload("uid://ctac7w7mgcdq8")
+const MAIN_MENU_PRELOAD = preload("uid://bp3lhs80g85ky")
+const MAIN_MENU_PATH = "res://src/Main.tscn"
+const PLAYER_ENTITY_PRELOAD = preload("uid://bd7v4xsokklmx")
 
-var player_nodes: Dictionary[int, Player] = {}
+var player_nodes: Dictionary[int, PlayerEntity] = {}
 
 
 #
@@ -64,16 +66,16 @@ func _on_peer_disconnected(peer_id: int) -> void:
 ## Adds the node to [member player_nodes] if it is a [Player]
 func _check_if_player_spawned(node: Node) -> void:
 	assert(not multiplayer.is_server(), "_on_entity_spawned() should only be called by non-servers, as described in the MultiplayerSpawner signal description.")
-	if node is Player:
-		var peer_id: int = (node as Player).peer_id
+	if node is PlayerEntity:
+		var peer_id: int = (node as PlayerEntity).peer_id
 		assert(not player_nodes.has(peer_id), "in _on_entity_spawned(), a new player node shouldn't already be registered here. obviously.")
 		player_nodes[peer_id] = node
 
 ## Removes the node from [member player_nodes] if it is a [Player]
 func _check_if_player_despawned(node: Node) -> void:
 	assert(not multiplayer.is_server(), "_on_entity_despawned() should only be called by non-servers, as described in the MultiplayerSpawner signal description.")
-	if node is Player:
-		var peer_id: int = (node as Player).peer_id
+	if node is PlayerEntity:
+		var peer_id: int = (node as PlayerEntity).peer_id
 		assert(player_nodes.has(peer_id), "in _on_entity_despawned(), the deleted player should still be in the player_nodes dict!")
 		player_nodes.erase(peer_id)
 
@@ -86,7 +88,8 @@ func _spawn_player(id: int) -> void:
 	assert(multiplayer.is_server())
 	assert(not player_nodes.has(id), "in _spawn_player() Spawning a player that is already registered!")
 
-	var player_instance: Player = PREL_PLAYER.instantiate()
+	var player_instance: PlayerEntity = PLAYER_ENTITY_PRELOAD.instantiate()
+	player_instance.name = "player_peer_%d" % id
 	player_instance.peer_id = id
 	player_nodes[id] = player_instance											# NOTE player_nodes is kept synced on remote peers by the MultiplayerSpawner signal callbacks
 	networked_entities.add_child(player_instance)
