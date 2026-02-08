@@ -19,4 +19,4 @@ func _enter_tree() -> void:
 #
 
 func _on_connected() -> void:
-	get_tree().change_scene_to_packed(GAME)
+	get_tree().change_scene_to_packed.call_deferred(GAME)	# NOTE Call deffered to avoid complaints when connecting through launch args
