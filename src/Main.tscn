@@ -5,6 +5,7 @@
 [ext_resource type="Script" uid="uid://cribs4tpca7u7" path="res://src/ui/join_host_buttons/btn_join_steam.gd" id="3_8ec3e"]
 [ext_resource type="Script" uid="uid://betn2wl3eiyv" path="res://src/ui/join_host_buttons/btn_host_enet.gd" id="3_chrbn"]
 [ext_resource type="Script" uid="uid://vv32jnu32d2q" path="res://src/ui/debug/steam_info_labels.gd" id="4_5qjmp"]
+[ext_resource type="Script" uid="uid://dvlkl8l8c5dsp" path="res://src/ui/join_host_buttons/btn_join_enet.gd" id="5_38a0m"]
 [ext_resource type="PackedScene" uid="uid://dgjg26vena25e" path="res://src/ui/join_host_buttons/ip_input_panel.tscn" id="5_vjwby"]
 
 [node name="Main" type="Node2D" unique_id=1188752306]
@@ -48,7 +49,7 @@ offset_bottom = 169.0
 text = "HOST (ENET, port 8080)"
 script = ExtResource("3_chrbn")
 
-[node name="BtnJoinEnet" type="Button" parent="UI/ConnectMenu" unique_id=1709458108]
+[node name="BtnJoinEnet" type="Button" parent="UI/ConnectMenu" unique_id=1709458108 node_paths=PackedStringArray("ip_textbox", "port_textbox", "name_textbox")]
 layout_mode = 0
 offset_left = 23.0
 offset_top = 137.0
@@ -56,6 +57,10 @@ offset_right = 120.0
 offset_bottom = 168.0
 size_flags_horizontal = 0
 text = "JOIN (ENET)"
+script = ExtResource("5_38a0m")
+ip_textbox = NodePath("../IPPanel/MarginContainer/VBoxContainer/IPBox/IPInput")
+port_textbox = NodePath("../IPPanel/MarginContainer/VBoxContainer/PortBox/PortInput")
+name_textbox = NodePath("../EnetNameBox/TextEdit")
 metadata/_edit_use_anchors_ = true
 
 [node name="IPPanel" parent="UI/ConnectMenu" unique_id=194192369 instance=ExtResource("5_vjwby")]
@@ -65,6 +70,23 @@ offset_top = 38.0
 offset_right = 265.0
 offset_bottom = 120.0
 metadata/_edit_use_anchors_ = true
+
+[node name="EnetNameBox" type="HBoxContainer" parent="UI/ConnectMenu" unique_id=412892183]
+layout_mode = 0
+offset_left = 282.0
+offset_top = 79.0
+offset_right = 584.0
+offset_bottom = 119.0
+
+[node name="Label" type="Label" parent="UI/ConnectMenu/EnetNameBox" unique_id=1323180018]
+layout_mode = 2
+text = "Enet Username:"
+
+[node name="TextEdit" type="LineEdit" parent="UI/ConnectMenu/EnetNameBox" unique_id=586480170]
+custom_minimum_size = Vector2(175, 0)
+layout_mode = 2
+text = "Client"
+placeholder_text = "Enamuell"
 
 [node name="SteamInfoLabels" type="Control" parent="UI" unique_id=1390363155 node_paths=PackedStringArray("steam_status")]
 layout_mode = 3
@@ -85,3 +107,5 @@ offset_right = 40.0
 offset_bottom = 23.0
 text = "SteamStatus"
 metadata/_edit_use_anchors_ = true
+
+[editable path="UI/ConnectMenu/IPPanel"]
