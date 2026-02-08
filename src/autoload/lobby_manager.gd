@@ -239,9 +239,12 @@ func _on_connected_as_host() -> void:
 	print("Lobby: connected as HOST with %d peers!" % multiplayer.get_peers().size())
 	multiplayer.multiplayer_peer = lobby_instance.multiplayer_peer
 
+	assert(players.is_empty(), "Lobby player info should be reset / empty when just started to host!")
+
 	var id: int = multiplayer.get_unique_id()
 	add_new_player_info(id)
 	players[id].display_name = lobby_instance.get_user_name()
+
 	lobby_entered.emit()
 
 
