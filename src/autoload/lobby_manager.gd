@@ -14,7 +14,8 @@ signal lobby_exited(message:String) # lobby_exited
 ## Disconnecting as host / client, or failed lobby_entered attempt
 signal lobby_exiting(message:String) # lobby_exiting
 
-## Player info [Dictionary].
+
+## Player info [Dictionary]. Contains all active lobby members, including the local user.
 var players : Dictionary[int, PlayerInfo] = {}
 
 ## Emits when a key in the player info dictionary is set.
@@ -110,7 +111,7 @@ func leave_lobby(message: String) -> void:
 
 
 ##
-func clear_player_info(id: int) -> bool:
+func clear_player_info(id: int) -> bool:										# TODO RENAME TO "remove_player_info"
 	if not players.has(id):
 		return false
 
@@ -127,7 +128,7 @@ func add_new_player_info(peer_id: int) -> bool:
 	#	return false
 
 	if players.has(peer_id):
-		print_debug("add_new_player_info(%d) called when peer info is already registered!" % peer_id)
+		print_debug("From peer_%d: add_new_player_info(%d) called when peer info is already registered!" % [multiplayer.get_unique_id(), peer_id])
 		return false
 
 	var info: PlayerInfo = PlayerInfo.new(peer_id)
@@ -138,7 +139,7 @@ func add_new_player_info(peer_id: int) -> bool:
 
 
 #
-# ---- LOCAL UTIL ----
+# ---- INTERNAL ----
 #
 
 func _check_launch_commands() -> void:
@@ -201,13 +202,13 @@ func _on_lobby_join_requested(this_lobby_id: int, friend_id: int) -> void:
 	initiate_lobby(SteamMultiplayerLobby.new(this_lobby_id, false))
 
 
-func _on_peer_connected(id: int ) -> void:
+func _on_peer_connected(id: int ) -> void: 		# TODO HANDLE THIS IN LOBBY after TEST, TO SEE WHAT TRIGGERS FIRST
 	print("Lobby: Peer connected, peer_id: %d" % id)
 	if players.has(id): print("Peer was already registered... prob by lobby instance right before...")
 	else: add_new_player_info(id)
 
 
-func _on_peer_disconnected(id: int) -> void:
+func _on_peer_disconnected(id: int) -> void:	# TODO HANDLE THIS IN LOBBY after TEST, TO SEE WHAT TRIGGERS FIRST
 	if id == 1:
 		leave_lobby("Host left lobby")			# TODO This should be handled by the lobby!!
 	else:
