@@ -220,7 +220,7 @@ func _on_connection_failed() -> void:
 
 
 func _on_connected_as_client() -> void:
-	print("Lobby: connected as CLIENT with %d peers!" % multiplayer.get_peers())
+	print("Lobby: connected as CLIENT with %d peers!" % multiplayer.get_peers().size())
 	multiplayer.multiplayer_peer = lobby_instance.multiplayer_peer
 
 	var id: int = multiplayer.get_unique_id()
