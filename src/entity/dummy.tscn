@@ -1,0 +1,50 @@
+[gd_scene format=3 uid="uid://bd7v4xsokklmx"]
+
+[ext_resource type="Script" uid="uid://bt0aybcfio7f5" path="res://src/entity/dummy.gd" id="1_liscu"]
+[ext_resource type="Script" uid="uid://dw6qse5es2uqb" path="res://src/entity/local_client_syncer.gd" id="2_xtxcq"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_xtxcq"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath(".:peer_id")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_sixnd"]
+properties/0/path = NodePath("LocalClientSyncronizer:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[sub_resource type="Gradient" id="Gradient_liscu"]
+offsets = PackedFloat32Array(0.8863636, 0.9127566)
+colors = PackedColorArray(0.5622709, 0.5076099, 0.38192296, 1, 0.5668828, 0.51137, 0.38514262, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_xtxcq"]
+gradient = SubResource("Gradient_liscu")
+width = 32
+height = 32
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+metadata/_snap_enabled = true
+
+[node name="Dummy" type="Node2D" unique_id=115763383 node_paths=PackedStringArray("local_client_syncronizer")]
+script = ExtResource("1_liscu")
+local_client_syncronizer = NodePath("LocalClientSyncronizer")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=650418203]
+replication_config = SubResource("SceneReplicationConfig_xtxcq")
+
+[node name="LocalClientSyncronizer" type="MultiplayerSynchronizer" parent="." unique_id=1417060263 node_paths=PackedStringArray("player")]
+replication_config = SubResource("SceneReplicationConfig_sixnd")
+script = ExtResource("2_xtxcq")
+player = NodePath("..")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=43171346]
+texture_filter = 2
+texture = SubResource("GradientTexture2D_xtxcq")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1690213867]
+enabled = false
+position_smoothing_enabled = true
