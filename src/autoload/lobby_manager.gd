@@ -117,7 +117,7 @@ func clear_player_info(id: int) -> bool:										# TODO RENAME TO "remove_playe
 
 	var info_res: PlayerInfo = players.get(id)
 	players.erase(id)
-	player_removed.emit(id, info_res)
+	player_removed.emit(info_res)
 	return true
 
 
