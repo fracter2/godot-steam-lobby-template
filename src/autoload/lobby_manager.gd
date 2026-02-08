@@ -122,9 +122,9 @@ func clear_player_info(id: int) -> bool:
 
 ##
 func add_new_player_info(peer_id: int) -> bool:
-	if not multiplayer.get_peers().has(peer_id) and peer_id != multiplayer.get_unique_id():
-		print_debug("add_new_player_info(%d) called when peer doesn't exist!" % peer_id)
-		return false
+	#if not multiplayer.get_peers().has(peer_id) and peer_id != multiplayer.get_unique_id():		# NOTE When recieving this callback, the peer is not yet added to get_peers()!!!
+	#	print_debug("From peer_%d: add_new_player_info(%d) called when peer doesn't exist!" % [multiplayer.get_unique_id(), peer_id])
+	#	return false
 
 	if players.has(peer_id):
 		print_debug("add_new_player_info(%d) called when peer info is already registered!" % peer_id)
