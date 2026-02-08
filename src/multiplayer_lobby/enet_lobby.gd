@@ -9,11 +9,20 @@ var init_port: int
 var max_clients: int = 1000	# NOTE limited by ENetMultiplayerPeer.create_server
 
 
+
+#
+# ---- PROCEDURE ----
+#
+
 func _init(is_host: bool = false, ip: String = "127.0.0.1", port: int = 8080, username_: String = "DefaultName") -> void:
 	init_as_host = is_host
 	username = username_
 	init_ip = ip
 	init_port = port
+
+#
+# ---- API ----
+#
 
 func is_active() -> bool: return false
 func get_user_name() -> String: return username								# NOTE if there is a (non-steam) account system, this would be the account name
@@ -32,6 +41,28 @@ func initiate_connection() -> bool:
 	else:
 		return _initiate_as_client()
 
+
+#
+# ---- SIGNAL CALLBACKS ----
+#
+
+func _on_peer_connected(peer_id: int) -> void:
+	if Lobby.players.has(peer_id):
+		print_debug("in ENetMultiplayerPeer._on_peer_connected(%d), somehow already have the peer_id in the players[] dict" % peer_id)
+	else:
+		Lobby.add_new_player_info(peer_id)
+
+
+func _on_peer_disconnected(peer_id: int) -> void:													# TODO REMOVE THIS IS JUST TO TEST WHAT TRIGGERS FIRST, multiplayer.peer_connected or this
+	if Lobby.players.has(peer_id):
+		Lobby.clear_player_info(peer_id)
+	else:
+		print_debug("in ENetMultiplayerPeer._on_peer_disconnected(%d), somehow dont have the peer_id in the players[] dict" % peer_id)
+
+
+#
+# ---- INTERNALS ----
+#
 
 func _initiate_as_host() -> bool:
 	var error: Error = (multiplayer_peer as ENetMultiplayerPeer).create_server(init_port, max_clients)
@@ -69,21 +100,3 @@ func _create_multiplayer_peer() -> void:
 	peer.peer_disconnected.connect(_on_peer_disconnected)
 	multiplayer_peer = peer
 	#multiplayer_peer_set.emit(peer)	# TODO CONSIDER REMOVING UNSUED
-
-func _on_peer_connected(peer_id: int) -> void:
-	if Lobby.players.has(peer_id):
-		print_debug("in SteamMultiplayerLobby._on_peer_connected(%d), somehow already have the peer_id in the players[] dict" % peer_id)
-	else:
-		Lobby.add_new_player_info(peer_id)
-
-	var steam_id: int = (multiplayer_peer as SteamMultiplayerPeer).get_steam_id_for_peer_id(peer_id)
-	var peer_info: PlayerInfo = Lobby.players.get(steam_id)
-	peer_info.display_name = Steam.getFriendPersonaName(steam_id)
-	peer_info.steam_id = steam_id
-
-
-func _on_peer_disconnected(peer_id: int) -> void:													# TODO REMOVE THIS IS JUST TO TEST WHAT TRIGGERS FIRST, multiplayer.peer_connected or this
-	if Lobby.players.has(peer_id):
-		Lobby.clear_player_info(peer_id)
-	else:
-		print_debug("in SteamMultiplayerLobby._on_peer_disconnected(%d), somehow dont have the peer_id in the players[] dict" % peer_id)
