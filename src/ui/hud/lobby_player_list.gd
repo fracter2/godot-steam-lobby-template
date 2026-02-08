@@ -13,10 +13,12 @@ func _ready() -> void:
 		_get_player_avatar_and_name(player)
 		add_new_row(player)
 
-	Lobby.player_steam_id_set.connect(_on_player_steam_id_set)
+	Lobby.player_added.connect(add_new_row)
+	Lobby.player_removed.connect(remove_row)
 	Lobby.player_name_set.connect(_on_player_name_set)
 	Lobby.player_nickname_set.connect(_on_player_name_set)
 
+	Lobby.player_steam_id_set.connect(_on_player_steam_id_set)
 	Steam.avatar_loaded.connect(_on_avatar_loaded)
 	#Steam.avatar_image_loaded
 
@@ -63,16 +65,22 @@ func add_new_row(player: PlayerInfo) -> void:
 	_set_peer_display_name(player)
 
 
+func remove_row(player:PlayerInfo) -> void:
+	if player_rows.has(player.peer_id):
+		player_rows[player.peer_id].queue_free()
+		player_rows.erase(player.peer_id)
+
 func _id_to_node_name(id: int) -> String:
 	return "peer_%d" % id
 
 
-func _set_peer_display_name(p_info: PlayerInfo) -> void:
-	if not player_rows.has(p_info.peer_id): return
+func _set_peer_display_name(player: PlayerInfo) -> void:
+	if not player_rows.has(player.peer_id):
+		add_new_row(player)
 
 	var new_name: String = "DefaultName"
-	if not p_info.nickname.is_empty(): new_name =  p_info.nickname
-	elif not p_info.display_name.is_empty(): new_name =  p_info.display_name
+	if not player.nickname.is_empty(): new_name =  player.nickname
+	elif not player.display_name.is_empty(): new_name =  player.display_name
 
-	var node: HBoxContainer = player_rows.get(p_info.peer_id)
+	var node: HBoxContainer = player_rows.get(player.peer_id)
 	(node.get_child(display_name_child_index) as Label).text = new_name
