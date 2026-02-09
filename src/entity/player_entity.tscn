@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bd7v4xsokklmx"]
 
-[ext_resource type="Script" uid="uid://bt0aybcfio7f5" path="res://src/entity/player_entity.gd" id="1_liscu"]
-[ext_resource type="Script" uid="uid://dw6qse5es2uqb" path="res://src/entity/local_client_syncer.gd" id="2_xtxcq"]
+[ext_resource type="Script" uid="uid://bt0aybcfio7f5" path="res://src/entity/player_entity.gd" id="1_boh5v"]
+[ext_resource type="Script" uid="uid://dw6qse5es2uqb" path="res://src/entity/local_client_syncer.gd" id="2_ic26k"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_xtxcq"]
 properties/0/path = NodePath(".:peer_id")
@@ -30,7 +30,7 @@ fill_to = Vector2(1, 0.5)
 metadata/_snap_enabled = true
 
 [node name="Dummy" type="Node2D" unique_id=115763383 node_paths=PackedStringArray("name_label", "local_client_syncronizer")]
-script = ExtResource("1_liscu")
+script = ExtResource("1_boh5v")
 name_label = NodePath("NameLabel")
 local_client_syncronizer = NodePath("LocalClientSyncronizer")
 
@@ -39,9 +39,9 @@ replication_config = SubResource("SceneReplicationConfig_xtxcq")
 
 [node name="LocalClientSyncronizer" type="MultiplayerSynchronizer" parent="." unique_id=1417060263 node_paths=PackedStringArray("player")]
 replication_config = SubResource("SceneReplicationConfig_sixnd")
-script = ExtResource("2_xtxcq")
-player = NodePath("..")
+script = ExtResource("2_ic26k")
 position = null
+player = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=43171346]
 texture_filter = 2
