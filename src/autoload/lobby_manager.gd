@@ -138,6 +138,11 @@ func add_new_player_info(peer_id: int) -> bool:
 	return true
 
 
+@rpc("any_peer", "call_remote", "reliable")
+func sync_username(username: StringName) -> void:								# TODO STANDARDIZE A WAY FOR UNDERLYING LOBBY TO SEND RPCs, EITHER FOR COMMON DATA (names) BUT PREFERRABLY SEPPARATE FROM Lobby
+	var sender_id: int = multiplayer.get_remote_sender_id()
+	assert(players.has(sender_id))
+	players[sender_id].display_name = username
 #
 # ---- INTERNAL ----
 #
