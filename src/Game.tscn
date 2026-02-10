@@ -63,6 +63,7 @@ spawn_path = NodePath("../NetworkedEntities")
 [node name="NetworkedEntities" type="Node2D" parent="." unique_id=1300342717]
 
 [node name="StaticMap" type="Node2D" parent="." unique_id=1296001154]
+z_index = -10
 
 [node name="Polygon2D" type="Polygon2D" parent="StaticMap" unique_id=231710110]
 color = Color(0.2231029, 0.2231029, 0.22310287, 1)
