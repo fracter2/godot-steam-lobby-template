@@ -88,20 +88,23 @@ func _on_lobby_joined_wrapper(joined_lobby_id: int, _permissions: int, _locked: 
 		return
 
 	var err: String = _on_lobby_joined(joined_lobby_id, _permissions, _locked, response)			# TODO Rename to... _setup_join_lobby_connection
-	if err: disconnected.emit(err)
+	if err:
+		disconnected.emit(err)
+		return
 
 	connected_as_client.emit()
 	assert(Lobby.players.has(multiplayer_peer.get_unique_id()), "Users player info resource should have been created by now!")
 	var owner_peer_id: int = (multiplayer_peer as SteamMultiplayerPeer).get_peer_id_for_steam_id(owner_steam_id)
-	assert(Lobby.players.has(owner_peer_id), "owners player info resource should have been created by now!")
+	#assert(Lobby.players.has(owner_peer_id), "owners player info resource should have been created by now!")
 
 	var my_p_info: PlayerInfo = Lobby.players.get(multiplayer_peer.get_unique_id())
 	my_p_info.display_name = Steamworks.persona_name
 	my_p_info.steam_id = Steamworks.steam_id
 
-	var owner_info: PlayerInfo = Lobby.players.get(owner_peer_id)
-	owner_info.display_name = Steam.getFriendPersonaName(owner_steam_id)
-	owner_info.steam_id = owner_steam_id
+	# BUG we can't get peer id yet! why?
+	#var owner_info: PlayerInfo = Lobby.players.get(owner_peer_id)
+	#owner_info.display_name = Steam.getFriendPersonaName(owner_steam_id)
+	#owner_info.steam_id = owner_steam_id
 
 
 # NOTE Returns "" on success
