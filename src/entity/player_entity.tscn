@@ -40,8 +40,8 @@ replication_config = SubResource("SceneReplicationConfig_xtxcq")
 [node name="LocalClientSyncronizer" type="MultiplayerSynchronizer" parent="." unique_id=1417060263 node_paths=PackedStringArray("player")]
 replication_config = SubResource("SceneReplicationConfig_sixnd")
 script = ExtResource("2_ic26k")
-position = null
 player = NodePath("..")
+position = null
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=43171346]
 texture_filter = 2
