@@ -103,11 +103,8 @@ func leave_lobby(message: String) -> void:
 	for id: int in multiplayer.get_peers():
 		clear_player_info(id)
 
-	lobby_instance.free() 														# NOTE This will handle all the cleanup internally
-	lobby_instance = null														# TODO Create a DummyLobby or NotALobbyLobby or SoloLobby to act as a stand-in... so funcs don't have to validate for everything...
-	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
-	lobby_exited.emit(message)
-	print("Left lobby! Message: %s" % message)
+	# NOTE Defer callback in case leave_lobby is called BY the lobby instance itself (happened when accepting invite in steam... dunnowhy)
+	_reset_lobby_instance.call_deferred(message)
 
 
 ##
@@ -188,6 +185,15 @@ func _check_launch_commands() -> void:
 		var lobby: SteamMultiplayerLobby = SteamMultiplayerLobby.new(int(lobby_id_str), false)
 		if not initiate_lobby(lobby):
 			print("Attempt to join lobby got cancelled (figure out why yourself)")
+
+
+# NOTE Only meant to be called by leave_lobby()
+func _reset_lobby_instance(message: String) -> void:
+	lobby_instance.free() 														# NOTE This will handle all the cleanup internally
+	lobby_instance = null														# TODO Create a DummyLobby or NotALobbyLobby or SoloLobby to act as a stand-in... so funcs don't have to validate for everything...
+	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
+	lobby_exited.emit(message)
+	print("Left lobby! Message: %s" % message)
 
 #
 # ---- SIGNAL CALLBACKS ----
