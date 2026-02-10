@@ -74,7 +74,7 @@ func _load_avatar_and_name(player: PlayerInfo) -> void:
 		if nick != null: player.nickname = nick
 
 	if player.avatar_medium == null:
-		Steam.getPlayerAvatar()
+		Steam.getPlayerAvatar(Steam.AVATAR_MEDIUM, player.steam_id)
 
 
 func add_new_row(player: PlayerInfo) -> void:
