@@ -12,6 +12,7 @@ extends Node2D
 
 @onready var camera_2d: Camera2D = $Camera2D
 @export var name_label: Label
+@export var sprite_2d: Sprite2D
 
 #@onready var local_client_syncronizer: LocalClientSyncronizer = $LocalClientSyncronizer
 @export var local_client_syncronizer: LocalClientSyncronizer

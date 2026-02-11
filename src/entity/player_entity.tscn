@@ -29,9 +29,10 @@ fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 0.5)
 metadata/_snap_enabled = true
 
-[node name="Player" type="Node2D" unique_id=115763383 node_paths=PackedStringArray("name_label", "local_client_syncronizer")]
+[node name="Player" type="Node2D" unique_id=115763383 node_paths=PackedStringArray("name_label", "sprite_2d", "local_client_syncronizer")]
 script = ExtResource("1_boh5v")
 name_label = NodePath("NameLabel")
+sprite_2d = NodePath("Sprite2D")
 local_client_syncronizer = NodePath("LocalClientSyncronizer")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=650418203]
