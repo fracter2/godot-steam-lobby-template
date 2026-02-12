@@ -5,6 +5,7 @@ This is a template to quickly get started with networking using a lobby-style mu
 It is primarily intended as a project for me to learn networking with Steam integration, and to provide reusable tools and systems.
 
 TODO ADD LICENSE
+TODO CREATE BASE FOLDER STRUCTURE (content/, core/, ui/, docs/)
 
 
 ### Roadmap
@@ -59,3 +60,6 @@ TODO ADD LICENSE
 - [ ] Make sure name is suitable. Maybe "CON"
 - [ ] Add scene paths and groups and layer names
 - [ ] Add tool scripts to automate?
+
+##### Pause Menu
+- [ ] Add a simple escape-menu implementation 
