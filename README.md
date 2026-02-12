@@ -7,8 +7,7 @@ It is primarily intended as a project for me to learn networking with Steam inte
 TODO ADD LICENSE
 TODO CREATE BASE FOLDER STRUCTURE (content/, core/, ui/, docs/)
 
-
-### Roadmap
+### Feature Goals
 
 ##### Steam Lobby
 - [X] Add joining by right-clicking friends in the steam overlay
