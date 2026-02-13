@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bd7v4xsokklmx"]
 
 [ext_resource type="Script" uid="uid://bt0aybcfio7f5" path="res://src/entity/player_entity.gd" id="1_boh5v"]
-[ext_resource type="Script" uid="uid://dw6qse5es2uqb" path="res://src/entity/local_client_syncer.gd" id="2_ic26k"]
+[ext_resource type="Script" uid="uid://cewyemix0vhca" path="res://src/entity/player_character.gd" id="3_ic26k"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_xtxcq"]
 properties/0/path = NodePath(".:peer_id")
@@ -12,7 +12,7 @@ properties/1/spawn = true
 properties/1/replication_mode = 1
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_sixnd"]
-properties/0/path = NodePath("LocalClientSyncronizer:position")
+properties/0/path = NodePath(".:position")
 properties/0/spawn = true
 properties/0/replication_mode = 1
 
@@ -29,38 +29,41 @@ fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 0.5)
 metadata/_snap_enabled = true
 
-[node name="Player" type="Node2D" unique_id=115763383 node_paths=PackedStringArray("name_label", "sprite_2d", "local_client_syncronizer")]
+[node name="Player" type="Node2D" unique_id=115763383 node_paths=PackedStringArray("camera_2d", "name_label", "sprite_2d", "client_owned_nodes")]
 script = ExtResource("1_boh5v")
-name_label = NodePath("NameLabel")
-sprite_2d = NodePath("Sprite2D")
-local_client_syncronizer = NodePath("LocalClientSyncronizer")
+camera_2d = NodePath("Character/Camera2D")
+name_label = NodePath("Character/NameLabel")
+sprite_2d = NodePath("Character/Sprite2D")
+client_owned_nodes = [NodePath("LocalClientSyncronizer"), NodePath("Character")]
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=650418203]
 replication_config = SubResource("SceneReplicationConfig_xtxcq")
 
-[node name="LocalClientSyncronizer" type="MultiplayerSynchronizer" parent="." unique_id=1417060263 node_paths=PackedStringArray("player")]
+[node name="LocalClientSyncronizer" type="MultiplayerSynchronizer" parent="." unique_id=1417060263]
+root_path = NodePath("../Character")
 replication_config = SubResource("SceneReplicationConfig_sixnd")
-script = ExtResource("2_ic26k")
-player = NodePath("..")
-position = null
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=43171346]
+[node name="Character" type="Node2D" parent="." unique_id=1665914198 node_paths=PackedStringArray("player_entity")]
+script = ExtResource("3_ic26k")
+player_entity = NodePath("..")
+
+[node name="Sprite2D" type="Sprite2D" parent="Character" unique_id=43171346]
 texture_filter = 2
 texture = SubResource("GradientTexture2D_xtxcq")
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=1690213867]
+[node name="Camera2D" type="Camera2D" parent="Character" unique_id=1690213867]
 enabled = false
 position_smoothing_enabled = true
 
-[node name="NameLabel" type="Label" parent="." unique_id=900350787]
+[node name="NameLabel" type="Label" parent="Character" unique_id=900350787]
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -20.0
+offset_left = -28.5
 offset_top = -69.0
-offset_right = 20.0
+offset_right = 28.5
 offset_bottom = -46.0
 grow_horizontal = 2
 grow_vertical = 2

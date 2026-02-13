@@ -1,4 +1,4 @@
-class_name PlayerEntity
+class_name PlayerEntity															# TODO CONSIDER RENAMING TO PlayerMaster or PlayerBranch
 extends Node2D
 
 
@@ -10,14 +10,13 @@ extends Node2D
 			node.set_multiplayer_authority(id, false)
 		player_info = Lobby.players.get(id)
 
-@export var speed: float = 100
 
-@onready var camera_2d: Camera2D = $Camera2D
+@export var camera_2d: Camera2D
 @export var name_label: Label
 @export var sprite_2d: Sprite2D
 
-#@onready var local_client_syncronizer: LocalClientSyncronizer = $LocalClientSyncronizer
-@export var local_client_syncronizer: LocalClientSyncronizer
+## Syncronizes client-owned nodes
+#@export var local_client_syncronizer: LocalClientSyncronizer	# TODO REMOVE REF, UNUSED
 
 ## Nodes that should be set to this peers multiplayer authority. Does NOT propagate to children.
 @export var client_owned_nodes: Array[Node] = []
@@ -46,17 +45,10 @@ func _enter_tree() -> void:
 		push_error("PlayerEntity at %s \n -> peer_id %d set but player_info not found!" % [get_path(), peer_id])
 
 
-# Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	if multiplayer.get_unique_id() == peer_id:
 		camera_2d.enabled = true
 		camera_2d.make_current()
-
-
-func _physics_process(_delta: float) -> void:
-	if not is_multiplayer_authority(): return
-
-	position = local_client_syncronizer.position
 
 
 #
