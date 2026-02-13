@@ -39,7 +39,7 @@ var player_info: PlayerInfo = null:
 
 func _enter_tree() -> void:
 	if player_info == null:
-		push_warning("Player entity at %s is missing player_info on _enter_tree()!")
+		push_warning("Player entity at %s is missing player_info on _enter_tree()!" % get_path())
 
 	if not Lobby.players.has(peer_id):
 		push_error("PlayerEntity at %s \n -> peer_id %d set but player_info not found!" % [get_path(), peer_id])
