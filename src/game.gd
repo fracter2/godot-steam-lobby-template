@@ -1,8 +1,8 @@
 extends Node2D
 
 
-@onready var multiplayer_spawner: MultiplayerSpawner = $MultiplayerSpawner
-@onready var networked_entities: Node2D = $NetworkedEntities
+@onready var player_spawner: MultiplayerSpawner = $PlayerSpawner
+@onready var players: Node2D = $Players
 
 #const PLAYER_PRELOAD = preload("uid://ctac7w7mgcdq8")
 const MAIN_MENU_PRELOAD = preload("uid://bp3lhs80g85ky")
@@ -24,8 +24,8 @@ func _ready() -> void:
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 
 	# NOTE MultiplayerSpawner soawned and despawned signals only emit on remote peers... so non-server clients
-	multiplayer_spawner.spawned.connect(_check_if_player_spawned)
-	multiplayer_spawner.despawned.connect(_check_if_player_despawned)
+	player_spawner.spawned.connect(_check_if_player_spawned)
+	player_spawner.despawned.connect(_check_if_player_despawned)
 
 	if Lobby.is_in_lobby():
 		_on_connected()
@@ -98,4 +98,4 @@ func _spawn_player(id: int) -> void:
 	player_instance.name = "player_peer_%d" % id
 	player_instance.peer_id = id
 	player_nodes[id] = player_instance											# NOTE player_nodes is kept synced on remote peers by the MultiplayerSpawner signal callbacks
-	networked_entities.add_child(player_instance)
+	players.add_child(player_instance)
