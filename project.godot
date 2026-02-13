@@ -21,6 +21,7 @@ LaunchArgs="*res://src/autoload/launch_parser.gd"
 Settings="*res://src/autoload/settings.gd"
 Steamworks="*res://src/autoload/steamworks.gd"
 Lobby="*res://src/autoload/lobby_manager.gd"
+PATHS="*uid://ce1320xe8c15j"
 
 [debug]
 
