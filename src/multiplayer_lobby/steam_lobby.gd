@@ -92,7 +92,7 @@ func _on_lobby_joined_wrapper(joined_lobby_id: int, _permissions: int, _locked: 
 		disconnected.emit(err)
 		return
 
-	connected_as_client.emit()
+	connected_as_client.emit()													# TODO CONSIDER DIRECTLY CALLING THE CORRESPONDING Lobby FUNC TO CLARIFY DEPENDANCY
 	assert(Lobby.players.has(multiplayer_peer.get_unique_id()), "Users player info resource should have been created by now!")
 	var owner_peer_id: int = (multiplayer_peer as SteamMultiplayerPeer).get_peer_id_for_steam_id(owner_steam_id)
 	#assert(Lobby.players.has(owner_peer_id), "owners player info resource should have been created by now!")
@@ -137,7 +137,7 @@ func _on_lobby_created_wrapper(conn: int, created_lobby_id: int) -> void:
 	var err: String = _on_lobby_created(conn, created_lobby_id)										# TODO Rename to... setup_created_lobby_connection
 	if err: disconnected.emit(err)
 
-	connected_as_host.emit()
+	connected_as_host.emit()													# TODO CONSIDER DIRECTLY CALLING THE CORRESPONDING Lobby FUNC TO CLARIFY DEPENDANCY
 	assert(Lobby.players.has(multiplayer_peer.get_unique_id()), "Users player info resource should have been created by now!")
 	var my_p_info: PlayerInfo = Lobby.players.get(multiplayer_peer.get_unique_id())
 	my_p_info.display_name = Steamworks.persona_name

@@ -213,15 +213,15 @@ func _on_lobby_join_requested(this_lobby_id: int, friend_id: int) -> void:
 	initiate_lobby(SteamMultiplayerLobby.new(this_lobby_id, false))
 
 
-func _on_peer_connected(id: int ) -> void: 		# TODO HANDLE THIS IN LOBBY after TEST, TO SEE WHAT TRIGGERS FIRST
+func _on_peer_connected(id: int ) -> void: 										# TODO HANDLE THIS IN LOBBY after TEST, TO SEE WHAT TRIGGERS FIRST
 	print("Lobby: Peer connected, peer_id: %d" % id)
 	if players.has(id): print("Peer was already registered... prob by lobby instance right before...")
 	else: add_new_player_info(id)
 
 
-func _on_peer_disconnected(id: int) -> void:	# TODO HANDLE THIS IN LOBBY after TEST, TO SEE WHAT TRIGGERS FIRST
+func _on_peer_disconnected(id: int) -> void:									# TODO HANDLE THIS IN LOBBY after TEST, TO SEE WHAT TRIGGERS FIRST
 	if id == 1:
-		leave_lobby("Host left lobby")			# TODO This should be handled by the lobby!!
+		leave_lobby("Host left lobby")											# TODO This should be handled by the lobby!!
 	else:
 		clear_player_info(id)
 

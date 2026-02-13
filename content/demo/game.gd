@@ -32,6 +32,12 @@ func _ready() -> void:
 		# NOTE Lobby.lobby_entered will emit after entering a lobby, with the same callback _on_connected()
 
 
+func _exit_tree() -> void:
+	# TODO NOTIFY SERVER BY DISCONNECTING FORMALLY (THROUGH LOBBY MAYBE?)
+	#multiplayer.disconnect() # NOTE NOT THIS, SINCE THE SAME PEER IS USED FOR LOBBY!
+	# NOTE Some errors may appear of "on_sync_recieve: Ignoring sync data from non-authority or for missing node". THIS IS OK! WE ARE QUITTING! LOL
+	pass
+
 #
 # ---- SIGNALS ----
 #
