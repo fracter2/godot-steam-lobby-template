@@ -20,6 +20,7 @@ func _ready() -> void:
 
 	multiplayer.peer_connected.connect(_on_peer_connected)
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
+	multiplayer.server_disconnected.connect(_on_lobby_exiting.bind("Server disconnected"))
 
 	# NOTE MultiplayerSpawner soawned and despawned signals only emit on remote peers... so non-server clients
 	player_spawner.spawned.connect(_check_if_player_spawned)
