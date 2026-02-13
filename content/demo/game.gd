@@ -56,6 +56,7 @@ func _on_peer_connected(peer_id: int) -> void:
 
 
 func _on_peer_disconnected(peer_id: int) -> void:
+	if multiplayer == null: return 		# NOTE When host disconnectes and the scene changes through _on_lobby_exiting(), this callback still remains, and multiplayer is set to null.
 	print("Peer_%d: calling _on_peer_disconnected() on peer_%d" % [multiplayer.get_unique_id(), peer_id])
 	if multiplayer.is_server():
 		if not player_nodes.has(peer_id):
