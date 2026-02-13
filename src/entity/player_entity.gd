@@ -5,7 +5,9 @@ extends Node2D
 @export var peer_id: int = 1:
 	set(id):
 		peer_id = id
-		local_client_syncronizer.set_multiplayer_authority(id)
+		#local_client_syncronizer.set_multiplayer_authority(id)
+		for node in client_owned_nodes:
+			node.set_multiplayer_authority(id, false)
 		player_info = Lobby.players.get(id)
 
 @export var speed: float = 100
@@ -16,6 +18,10 @@ extends Node2D
 
 #@onready var local_client_syncronizer: LocalClientSyncronizer = $LocalClientSyncronizer
 @export var local_client_syncronizer: LocalClientSyncronizer
+
+## Nodes that should be set to this peers multiplayer authority. Does NOT propagate to children.
+@export var client_owned_nodes: Array[Node] = []
+
 
 var player_info: PlayerInfo = null:
 	set(info):
