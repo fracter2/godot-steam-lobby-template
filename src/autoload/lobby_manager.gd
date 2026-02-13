@@ -94,6 +94,7 @@ func initiate_lobby(lobby: MultiplayerLobby) -> bool:
 
 
 func leave_lobby(message: String) -> void:
+	print("leaving lobby with message: %s" % message)
 	if not is_in_lobby():
 		print_debug("Tried to quit lobby when not in a lobby")
 		return
