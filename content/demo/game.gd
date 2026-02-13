@@ -4,9 +4,9 @@ extends Node2D
 @onready var player_spawner: MultiplayerSpawner = $PlayerSpawner
 @onready var players: Node2D = $Players
 
-#const PLAYER_PRELOAD = preload("uid://ctac7w7mgcdq8")
+# TODO MOVE THESE TO CONSTANTS AUTOLOAD / STATIC CLASS
 const MAIN_MENU_PRELOAD = preload("uid://bp3lhs80g85ky")
-const MAIN_MENU_PATH = "res://src/Main.tscn"
+const MAIN_MENU_PATH = "res://src/ui/menus/Main.tscn"
 const PLAYER_ENTITY_PRELOAD = preload("uid://bd7v4xsokklmx")
 
 var player_nodes: Dictionary[int, PlayerEntity] = {}

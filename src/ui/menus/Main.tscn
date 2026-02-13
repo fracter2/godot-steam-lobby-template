@@ -1,15 +1,15 @@
 [gd_scene format=3 uid="uid://bp3lhs80g85ky"]
 
-[ext_resource type="Script" uid="uid://bqr5r210mrghq" path="res://src/ui/join_host_buttons/host_steam_btn.gd" id="1_4gxt3"]
-[ext_resource type="Script" uid="uid://2x8i2f4boblq" path="res://src/main.gd" id="1_hk4rc"]
-[ext_resource type="Script" uid="uid://cribs4tpca7u7" path="res://src/ui/join_host_buttons/btn_join_steam.gd" id="3_8ec3e"]
-[ext_resource type="Script" uid="uid://betn2wl3eiyv" path="res://src/ui/join_host_buttons/btn_host_enet.gd" id="3_chrbn"]
-[ext_resource type="Script" uid="uid://vv32jnu32d2q" path="res://src/ui/debug/steam_info_labels.gd" id="4_5qjmp"]
-[ext_resource type="Script" uid="uid://dvlkl8l8c5dsp" path="res://src/ui/join_host_buttons/btn_join_enet.gd" id="5_38a0m"]
-[ext_resource type="PackedScene" uid="uid://dgjg26vena25e" path="res://src/ui/join_host_buttons/ip_input_panel.tscn" id="5_vjwby"]
+[ext_resource type="Script" uid="uid://2x8i2f4boblq" path="res://src/ui/menus/main.gd" id="1_mfwgv"]
+[ext_resource type="Script" uid="uid://bqr5r210mrghq" path="res://src/ui/join_host_buttons/host_steam_btn.gd" id="2_ebnl6"]
+[ext_resource type="Script" uid="uid://cribs4tpca7u7" path="res://src/ui/join_host_buttons/btn_join_steam.gd" id="3_yta0c"]
+[ext_resource type="Script" uid="uid://betn2wl3eiyv" path="res://src/ui/join_host_buttons/btn_host_enet.gd" id="4_oi4mg"]
+[ext_resource type="Script" uid="uid://dvlkl8l8c5dsp" path="res://src/ui/join_host_buttons/btn_join_enet.gd" id="5_t3cdy"]
+[ext_resource type="PackedScene" uid="uid://dgjg26vena25e" path="res://src/ui/join_host_buttons/ip_input_panel.tscn" id="6_7xqfr"]
+[ext_resource type="Script" uid="uid://vv32jnu32d2q" path="res://src/ui/debug/steam_info_labels.gd" id="7_tgu27"]
 
 [node name="Main" type="Node2D" unique_id=1188752306]
-script = ExtResource("1_hk4rc")
+script = ExtResource("1_mfwgv")
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=1923950707]
 
@@ -27,7 +27,7 @@ offset_top = 190.0
 offset_right = 254.0
 offset_bottom = 221.0
 text = "HOST (STEAM)"
-script = ExtResource("1_4gxt3")
+script = ExtResource("2_ebnl6")
 metadata/_edit_use_anchors_ = true
 
 [node name="BtnJoinSteam" type="Button" parent="UI/ConnectMenu" unique_id=6367654]
@@ -37,7 +37,7 @@ offset_top = 191.0
 offset_right = 129.0
 offset_bottom = 222.0
 text = "JOIN (Steam)"
-script = ExtResource("3_8ec3e")
+script = ExtResource("3_yta0c")
 metadata/_edit_use_anchors_ = true
 
 [node name="BtnHostEnet" type="Button" parent="UI/ConnectMenu" unique_id=163812267]
@@ -47,7 +47,7 @@ offset_top = 138.0
 offset_right = 320.0
 offset_bottom = 169.0
 text = "HOST (ENET, port 8080)"
-script = ExtResource("3_chrbn")
+script = ExtResource("4_oi4mg")
 
 [node name="BtnJoinEnet" type="Button" parent="UI/ConnectMenu" unique_id=1709458108 node_paths=PackedStringArray("ip_textbox", "port_textbox", "name_textbox")]
 layout_mode = 0
@@ -57,13 +57,13 @@ offset_right = 120.0
 offset_bottom = 168.0
 size_flags_horizontal = 0
 text = "JOIN (ENET)"
-script = ExtResource("5_38a0m")
+script = ExtResource("5_t3cdy")
 ip_textbox = NodePath("../IPPanel/MarginContainer/VBoxContainer/IPBox/IPInput")
 port_textbox = NodePath("../IPPanel/MarginContainer/VBoxContainer/PortBox/PortInput")
 name_textbox = NodePath("../EnetNameBox/TextEdit")
 metadata/_edit_use_anchors_ = true
 
-[node name="IPPanel" parent="UI/ConnectMenu" unique_id=194192369 instance=ExtResource("5_vjwby")]
+[node name="IPPanel" parent="UI/ConnectMenu" unique_id=194192369 instance=ExtResource("6_7xqfr")]
 layout_mode = 0
 offset_left = 19.0
 offset_top = 38.0
@@ -93,7 +93,7 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
-script = ExtResource("4_5qjmp")
+script = ExtResource("7_tgu27")
 steam_status = NodePath("SteamStatus")
 metadata/_edit_use_anchors_ = true
 

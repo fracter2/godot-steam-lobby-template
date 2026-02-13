@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bd7v4xsokklmx"]
 
-[ext_resource type="Script" uid="uid://bt0aybcfio7f5" path="res://src/entity/player_entity.gd" id="1_boh5v"]
-[ext_resource type="Script" uid="uid://cewyemix0vhca" path="res://src/entity/player_character.gd" id="3_ic26k"]
+[ext_resource type="Script" uid="uid://bt0aybcfio7f5" path="res://content/base/player_entity.gd" id="1_eengm"]
+[ext_resource type="Script" uid="uid://cewyemix0vhca" path="res://content/base/player_character.gd" id="2_5jhtk"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_xtxcq"]
 properties/0/path = NodePath(".:peer_id")
@@ -30,7 +30,7 @@ fill_to = Vector2(1, 0.5)
 metadata/_snap_enabled = true
 
 [node name="Player" type="Node2D" unique_id=115763383 node_paths=PackedStringArray("camera_2d", "name_label", "sprite_2d", "client_owned_nodes")]
-script = ExtResource("1_boh5v")
+script = ExtResource("1_eengm")
 camera_2d = NodePath("Character/Camera2D")
 name_label = NodePath("Character/NameLabel")
 sprite_2d = NodePath("Character/Sprite2D")
@@ -44,7 +44,7 @@ root_path = NodePath("../Character")
 replication_config = SubResource("SceneReplicationConfig_sixnd")
 
 [node name="Character" type="Node2D" parent="." unique_id=1665914198 node_paths=PackedStringArray("player_entity")]
-script = ExtResource("3_ic26k")
+script = ExtResource("2_5jhtk")
 player_entity = NodePath("..")
 
 [node name="Sprite2D" type="Sprite2D" parent="Character" unique_id=43171346]
