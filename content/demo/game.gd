@@ -16,7 +16,7 @@ var player_nodes: Dictionary[int, PlayerEntity] = {}
 
 func _ready() -> void:
 	Lobby.lobby_entered.connect(_on_connected)										# NOTE Local lobby_entered only
-	Lobby.lobby_exiting.connect(_on_lobby_exiting, ConnectFlags.CONNECT_DEFERRED)	# NOTE Deffered to avouid quitting in the middle of processing... Theoretically helpfull
+	Lobby.lobby_exiting.connect(_on_lobby_exiting)	#, ConnectFlags.CONNECT_DEFERRED # NOTE Deffered to avouid quitting in the middle of processing... Theoretically helpfull
 
 	multiplayer.peer_connected.connect(_on_peer_connected)
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
