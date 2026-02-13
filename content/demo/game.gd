@@ -4,10 +4,8 @@ extends Node2D
 @onready var player_spawner: MultiplayerSpawner = $PlayerSpawner
 @onready var players: Node2D = $Players
 
-# TODO MOVE THESE TO CONSTANTS AUTOLOAD / STATIC CLASS
-const MAIN_MENU_PRELOAD = preload("uid://bp3lhs80g85ky")
-const MAIN_MENU_PATH = "res://src/ui/menus/main_menu.tscn"
-const PLAYER_ENTITY_PRELOAD = preload("uid://bd7v4xsokklmx")
+var main_menu_preload : PackedScene = preload(PATHS.MAIN_MENU)
+const PLAYER_ENTITY_PRELOAD = preload(PATHS.PLAYER_ENTITY)
 
 var player_nodes: Dictionary[int, PlayerEntity] = {}
 
@@ -48,7 +46,7 @@ func _on_connected() -> void:
 
 func _on_lobby_exiting(message: String) -> void:
 	print("Peer_%d: Quit level, message: %s" % [multiplayer.get_unique_id(), message])
-	get_tree().change_scene_to_file(MAIN_MENU_PATH)
+	get_tree().change_scene_to_file(PATHS.MAIN_MENU)
 
 
 func _on_peer_connected(peer_id: int) -> void:

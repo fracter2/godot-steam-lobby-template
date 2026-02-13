@@ -1,7 +1,7 @@
 extends Node2D
 
 
-const GAME = preload("uid://dx0gencnp27xs")
+const GAME = preload(PATHS.DEMO_GAME)
 
 
 
