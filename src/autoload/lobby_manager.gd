@@ -94,7 +94,7 @@ func initiate_lobby(lobby: MultiplayerLobby) -> bool:
 
 
 func leave_lobby(message: String) -> void:
-	print("leaving lobby with message: %s" % message)
+	print("Lobby Exiting... with message: %s" % message)
 	if not is_in_lobby():
 		print_debug("Tried to quit lobby when not in a lobby")
 		return
@@ -194,7 +194,7 @@ func _reset_lobby_instance(message: String) -> void:
 	lobby_instance = null														# TODO Create a DummyLobby or NotALobbyLobby or SoloLobby to act as a stand-in... so funcs don't have to validate for everything...
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 	lobby_exited.emit(message)
-	print("Left lobby! Message: %s" % message)
+	print("Lobby Exited! Message: %s" % message)
 
 #
 # ---- SIGNAL CALLBACKS ----
