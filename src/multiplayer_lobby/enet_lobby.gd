@@ -80,25 +80,14 @@ func _initiate_as_client() -> bool:
 		push_warning("error while trying to EnetMultiplayerPeer.create_client(), error: " + str(error))
 		return false
 
-	#_delegate_join_lobby.call_deferred()										# TODO IS THIS NESSESSARY? MAYBE! Steam behaves more like this
 	connected_as_client.emit()	# NOTE Lobby will here create a player_info for each peer
 	#(multiplayer_peer as ENetMultiplayerPeer).get_packet()
 	#(multiplayer_peer as ENetMultiplayerPeer).get_available_packet_count()
 	return true
 
 
-func _recieve_username(peer_username: String) -> void:
+func _recieve_username(peer_username: String) -> void:							# TODO Create system for sending usernames... Add a child node for the lobby node?
 	pass
-
-
-func _delegate_join_lobby() -> void:
-	connected_as_client.emit()
-
-func _delegate_host_lobby() -> void:
-	connected_as_host.emit()
-
-func _delegate_on_disconnected(message: String) -> void:
-	disconnected.emit(message)
 
 
 func _create_multiplayer_peer() -> void:
@@ -106,4 +95,3 @@ func _create_multiplayer_peer() -> void:
 	peer.peer_connected.connect(_on_peer_connected)
 	peer.peer_disconnected.connect(_on_peer_disconnected)
 	multiplayer_peer = peer
-	#multiplayer_peer_set.emit(peer)	# TODO CONSIDER REMOVING UNSUED
