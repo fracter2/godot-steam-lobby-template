@@ -17,6 +17,6 @@ func _on_button_down() -> void:
 		return
 
 	if Lobby.initiate_lobby(SteamMultiplayerLobby.new(0, true)):
-		print("Successfully initiated SteamMultiplayerLobby")
+		Log.pprint("Successfully initiated SteamMultiplayerLobby")
 	else:
-		print("Failed to initiate SteamMultiplayerLobby")
+		Log.pprint("Failed to initiate SteamMultiplayerLobby")

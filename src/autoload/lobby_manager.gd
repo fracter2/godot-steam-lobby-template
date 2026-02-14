@@ -94,7 +94,7 @@ func initiate_lobby(lobby: MultiplayerLobby) -> bool:
 
 
 func leave_lobby(message: String) -> void:
-	print("Lobby Exiting... with message: %s" % message)
+	Log.pprint("Lobby Exiting... with message: %s" % message)
 	if not is_in_lobby():
 		print_debug("Tried to quit lobby when not in a lobby")
 		return
@@ -150,9 +150,9 @@ func _check_launch_commands() -> void:
 	##
 	if LaunchArgs.has_command("-init-enet-lobby"):
 		var args: PackedStringArray = LaunchArgs.get_values("-init-enet-lobby")
-		print("Attempting to join or host an enet-lobby.")
+		Log.pprint("Attempting to join or host an enet-lobby.")
 		for a: String in args:
-			print("arg: %s" % a)
+			Log.pprint("arg: %s" % a)
 
 		if args.size() < 4:
 			push_error("-init-enet-lobby aborted due to missing values. It should be -init-enet-lobby=ishost=ip=port=username.
@@ -166,7 +166,7 @@ func _check_launch_commands() -> void:
 
 		var lobby: EnetMultiplayerLobby = EnetMultiplayerLobby.new(ishost, ip, port, username)
 		if not initiate_lobby(lobby):
-			print("-init-enet-lobby attempt got aborted (figure out why yourself. bad args?)")
+			Log.pprint("-init-enet-lobby attempt got aborted (figure out why yourself. bad args?)")
 
 	## Check for steam connect arg												# TODO DELEGATE TO IT'S OWN FUNC
 	if LaunchArgs.has_command("+connect_lobby"):
@@ -182,10 +182,10 @@ func _check_launch_commands() -> void:
 		if lobby_instance != null:
 			push_error("Attempted to join steam lobby, but we already got a lobby set! Possibly from other launch args")
 
-		print("Attempting to join lobby right on start. Lobby id: " + lobby_id_str)
+		Log.pprint("Attempting to join lobby right on start. Lobby id: " + lobby_id_str)
 		var lobby: SteamMultiplayerLobby = SteamMultiplayerLobby.new(int(lobby_id_str), false)
 		if not initiate_lobby(lobby):
-			print("Attempt to join lobby got cancelled (figure out why yourself)")
+			Log.pprint("Attempt to join lobby got cancelled (figure out why yourself)")
 
 
 # NOTE Only meant to be called by leave_lobby()
@@ -194,7 +194,7 @@ func _reset_lobby_instance(message: String) -> void:
 	lobby_instance = null														# TODO Create a DummyLobby or NotALobbyLobby or SoloLobby to act as a stand-in... so funcs don't have to validate for everything...
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 	lobby_exited.emit(message)
-	print("Lobby Exited! Message: %s" % message)
+	Log.pprint("Lobby Exited! Message: %s" % message)
 
 #
 # ---- SIGNAL CALLBACKS ----
@@ -206,17 +206,17 @@ func _on_critical_error(message: String) -> void:
 
 
 func _on_lobby_join_requested(this_lobby_id: int, friend_id: int) -> void:
-	print("Steam lobby join requested, id: %d friend_name: %s" % [this_lobby_id, Steam.getFriendPersonaName(friend_id)])
+	Log.pprint("Steam lobby join requested, id: %d friend_name: %s" % [this_lobby_id, Steam.getFriendPersonaName(friend_id)])
 	if is_in_lobby():
-		print("Leaving lobby to join requested lobby!")
+		Log.pprint("Leaving lobby to join requested lobby!")
 		leave_lobby("Accepted request to join another lobby")
 
 	initiate_lobby(SteamMultiplayerLobby.new(this_lobby_id, false))
 
 
 func _on_peer_connected(id: int ) -> void: 										# TODO HANDLE THIS IN LOBBY after TEST, TO SEE WHAT TRIGGERS FIRST
-	print("Lobby: Peer connected, peer_id: %d" % id)
-	if players.has(id): print("Peer was already registered... prob by lobby instance right before...")
+	Log.pprint("Lobby: Peer connected, peer_id: %d" % id)
+	if players.has(id): Log.pprint("Peer was already registered... prob by lobby instance right before...")
 	else: add_new_player_info(id)
 
 
@@ -232,7 +232,7 @@ func _on_connection_failed() -> void:
 
 
 func _on_connected_as_client() -> void:
-	print("Lobby: connected as CLIENT with %d peers!" % multiplayer.get_peers().size())
+	Log.pprint("Lobby: connected as CLIENT with %d peers!" % multiplayer.get_peers().size())
 	multiplayer.multiplayer_peer = lobby_instance.multiplayer_peer
 
 	var id: int = multiplayer.get_unique_id()
@@ -241,7 +241,7 @@ func _on_connected_as_client() -> void:
 
 	for peer_id: int in multiplayer.get_peers():
 		if players.has(peer_id):
-			print("Already added this peer_id to info")
+			Log.pprint("Already added this peer_id to info")
 		else:
 			add_new_player_info(peer_id)
 
@@ -249,7 +249,7 @@ func _on_connected_as_client() -> void:
 
 
 func _on_connected_as_host() -> void:
-	print("Lobby: connected as HOST with %d peers!" % multiplayer.get_peers().size())
+	Log.pprint("Lobby: connected as HOST with %d peers!" % multiplayer.get_peers().size())
 	multiplayer.multiplayer_peer = lobby_instance.multiplayer_peer
 
 	assert(players.is_empty(), "Lobby player info should be reset / empty when just started to host!")

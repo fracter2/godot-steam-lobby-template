@@ -27,4 +27,4 @@ func _on_button_down() -> void:
 
 	var lobby: EnetMultiplayerLobby = EnetMultiplayerLobby.new(ishost, ip, port, username)
 	if not Lobby.initiate_lobby(lobby):
-		print("join enet btn attempt got aborted (figure out why yourself. bad args?)")
+		Log.pprint("join enet btn attempt got aborted (figure out why yourself. bad args?)")

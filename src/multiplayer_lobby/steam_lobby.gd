@@ -65,11 +65,11 @@ func initiate_connection() -> bool:
 
 
 	if init_as_host:
-		print("Attempting to host a lobby on steam! lobby type: %d, max player count: %d" % [Steam.LOBBY_TYPE_FRIENDS_ONLY, 4])
+		Log.pprint("Attempting to host a lobby on steam! lobby type: %d, max player count: %d" % [Steam.LOBBY_TYPE_FRIENDS_ONLY, 4])
 		Steam.createLobby(Steam.LOBBY_TYPE_FRIENDS_ONLY, 4) # 4 player lobby					# TODO Clarify player limit and lobby type to a var
 
 	elif Steam.isLobby(init_id):
-		print("Attempting to join a lobby on steam! lobby id: %d" % init_id)
+		Log.pprint("Attempting to join a lobby on steam! lobby id: %d" % init_id)
 		Steam.joinLobby(init_id)
 	else:
 		push_warning("lobby_id %s could not be found or is not a lobby!" % init_id)
@@ -82,7 +82,7 @@ func initiate_connection() -> bool:
 #
 
 func _on_lobby_joined_wrapper(joined_lobby_id: int, _permissions: int, _locked: bool, response: int) -> void:
-	print("Recieved Steam lobby join response")
+	Log.pprint("Recieved Steam lobby join response")
 	if is_in_lobby():
 		print_debug("Already in a lobby but still recieved join response. Ignoring")
 		return
@@ -128,7 +128,7 @@ func _on_lobby_joined(joined_lobby_id: int, _permissions: int, _locked: bool, re
 
 
 func _on_lobby_created_wrapper(conn: int, created_lobby_id: int) -> void:
-	print("Recieved Steam lobby created response")
+	Log.pprint("Recieved Steam lobby created response")
 	if is_in_lobby():
 		print_debug("Already in a lobby but still recieved created response. Ignoring. I screwed up somewhow")
 		breakpoint

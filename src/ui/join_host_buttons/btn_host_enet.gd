@@ -8,6 +8,6 @@ func _ready() -> void:
 
 func _on_button_down() -> void:
 	if Lobby.initiate_lobby(EnetMultiplayerLobby.new(true, "", 8080, "IAmHost")):
-		print("Successfully initiated EnetMultiplayerLobby")
+		Log.pprint("Successfully initiated EnetMultiplayerLobby")
 	else:
-		print("Failed to initiate EnetMultiplayerLobby")
+		Log.pprint("Failed to initiate EnetMultiplayerLobby")

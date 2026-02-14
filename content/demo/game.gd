@@ -44,7 +44,7 @@ func _exit_tree() -> void:
 #
 
 func _on_connected() -> void:
-	print("Peer_%d: Lobby connected, setting game multiplayer authority" % multiplayer.get_unique_id())
+	Log.pprint("Peer_%d: Lobby connected, setting game multiplayer authority" % multiplayer.get_unique_id())
 	multiplayer.multiplayer_peer = Lobby.multiplayer.multiplayer_peer
 	assert(multiplayer.multiplayer_peer != null, "obviously this shoulda not be null")
 	if multiplayer.is_server():
@@ -52,19 +52,19 @@ func _on_connected() -> void:
 
 
 func _on_lobby_exiting(message: String) -> void:
-	print("Peer_%d: Quit level, message: %s" % [multiplayer.get_unique_id(), message])
+	Log.pprint("Peer_%d: Quit level, message: %s" % [multiplayer.get_unique_id(), message])
 	get_tree().change_scene_to_file(PATHS.MAIN_MENU)
 
 
 func _on_peer_connected(peer_id: int) -> void:
-	print("Peer_%d: Peer connected with id: %d" % [multiplayer.get_unique_id(), peer_id])
+	Log.pprint("Peer_%d: Peer connected with id: %d" % [multiplayer.get_unique_id(), peer_id])
 	if multiplayer.is_server():
 		_spawn_player(peer_id)
 
 
 func _on_peer_disconnected(peer_id: int) -> void:
 	if multiplayer == null: return 		# NOTE When host disconnectes and the scene changes through _on_lobby_exiting(), this callback still remains, and multiplayer is set to null.
-	print("Peer_%d: calling _on_peer_disconnected() on peer_%d" % [multiplayer.get_unique_id(), peer_id])
+	Log.pprint("Peer_%d: calling _on_peer_disconnected() on peer_%d" % [multiplayer.get_unique_id(), peer_id])
 	if multiplayer.is_server():
 		if not player_nodes.has(peer_id):
 			push_warning("Peer disconnected but was not added to player_info anyway...")
@@ -78,7 +78,7 @@ func _check_if_player_spawned(node: Node) -> void:
 	assert(not multiplayer.is_server(), "_on_entity_spawned() should only be called by non-servers, as described in the MultiplayerSpawner signal description.")
 	if node is PlayerEntity:
 		var peer_id: int = (node as PlayerEntity).peer_id
-		print("Peer_%d: calling _check_if_player_spawned() on peer_%d" % [multiplayer.get_unique_id(), peer_id])
+		Log.pprint("Peer_%d: calling _check_if_player_spawned() on peer_%d" % [multiplayer.get_unique_id(), peer_id])
 		assert(not player_nodes.has(peer_id), "in _on_entity_spawned(), a new player node shouldn't already be registered here. obviously.")
 		player_nodes[peer_id] = node
 
@@ -98,7 +98,7 @@ func _check_if_player_despawned(node: Node) -> void:
 func _spawn_player(id: int) -> void:
 	assert(multiplayer.is_server())
 	assert(not player_nodes.has(id), "in _spawn_player() Spawning a player that is already registered!")
-	print("Peer_%d: calling _spawn_player(%d)" % [multiplayer.get_unique_id(), id])
+	Log.pprint("Peer_%d: calling _spawn_player(%d)" % [multiplayer.get_unique_id(), id])
 
 	var player_instance: PlayerEntity = PLAYER_ENTITY_PRELOAD.instantiate()
 	player_instance.name = "player_peer_%d" % id
