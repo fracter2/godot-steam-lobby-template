@@ -43,24 +43,6 @@ func initiate_connection() -> bool:
 
 
 #
-# ---- SIGNAL CALLBACKS ----
-#
-
-func _on_peer_connected(peer_id: int) -> void:
-	if Lobby.players.has(peer_id):
-		print_debug("in ENetMultiplayerPeer._on_peer_connected(%d), somehow already have the peer_id in the players[] dict" % peer_id)
-	else:
-		Lobby.add_new_player_info(peer_id)
-
-
-func _on_peer_disconnected(peer_id: int) -> void:													# TODO REMOVE THIS IS JUST TO TEST WHAT TRIGGERS FIRST, multiplayer.peer_connected or this
-	if Lobby.players.has(peer_id):
-		Lobby.clear_player_info(peer_id)
-	else:
-		print_debug("in ENetMultiplayerPeer._on_peer_disconnected(%d), somehow dont have the peer_id in the players[] dict" % peer_id)
-
-
-#
 # ---- INTERNALS ----
 #
 
@@ -91,7 +73,4 @@ func _recieve_username(peer_username: String) -> void:							# TODO Create syste
 
 
 func _create_multiplayer_peer() -> void:
-	var peer: ENetMultiplayerPeer = ENetMultiplayerPeer.new()
-	peer.peer_connected.connect(_on_peer_connected)
-	peer.peer_disconnected.connect(_on_peer_disconnected)
-	multiplayer_peer = peer
+	multiplayer_peer = ENetMultiplayerPeer.new()
