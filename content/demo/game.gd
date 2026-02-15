@@ -52,7 +52,7 @@ func _on_lobby_entered() -> void:
 
 
 func _on_lobby_exiting(message: String) -> void:
-	Log.pprint("Peer_%d: Quit level, message: %s" % [multiplayer.get_unique_id(), message])
+	Log.pprint("Quit level, message: %s" % message)
 	get_tree().change_scene_to_file(PATHS.MAIN_MENU)
 
 
