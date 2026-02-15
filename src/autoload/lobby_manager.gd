@@ -44,7 +44,7 @@ func _enter_tree() -> void:
 	multiplayer.connection_failed.connect(_on_connection_failed)
 	multiplayer.peer_connected.connect(_on_peer_connected)
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
-	#multiplayer.server_disconnected
+	multiplayer.server_disconnected.connect(_on_server_disconnected)
 
 	Steam.join_requested.connect(_on_lobby_join_requested)
 	#Steam.join_game_requested													# TODO Consider this if above doesn't work
@@ -207,6 +207,7 @@ func _on_critical_error(message: String) -> void:
 
 func _on_lobby_join_requested(this_lobby_id: int, friend_id: int) -> void:
 	Log.pprint("Steam lobby join requested, id: %d friend_name: %s" % [this_lobby_id, Steam.getFriendPersonaName(friend_id)])
+
 	if is_in_lobby():
 		Log.pprint("Leaving lobby to join requested lobby!")
 		leave_lobby("Accepted request to join another lobby")
@@ -214,17 +215,17 @@ func _on_lobby_join_requested(this_lobby_id: int, friend_id: int) -> void:
 	initiate_lobby(SteamMultiplayerLobby.new(this_lobby_id, false))
 
 
-func _on_peer_connected(id: int ) -> void: 										# TODO HANDLE THIS IN LOBBY after TEST, TO SEE WHAT TRIGGERS FIRST
-	Log.pprint("Lobby: Peer connected, peer_id: %d" % id)
-	if players.has(id): Log.pprint("Peer was already registered... prob by lobby instance right before...")
-	else: add_new_player_info(id)
+func _on_peer_connected(id: int ) -> void:
+	Log.pprint("Lobby: Peer CONNECTED with id %d" % id)
+	if not players.has(id):
+		add_new_player_info(id)
 
+func _on_peer_disconnected(id: int) -> void:
+	Log.pprint("Lobby: Peer DISCONNECTED, id: %d" % id)
+	clear_player_info(id)
 
-func _on_peer_disconnected(id: int) -> void:									# TODO HANDLE THIS IN LOBBY after TEST, TO SEE WHAT TRIGGERS FIRST
-	if id == 1:
-		leave_lobby("Host left lobby")											# TODO This should be handled by the lobby!!
-	else:
-		clear_player_info(id)
+func _on_server_disconnected() -> void:
+	leave_lobby("Server disconnected")
 
 
 func _on_connection_failed() -> void:
