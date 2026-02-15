@@ -36,13 +36,13 @@ TODO ADD LICENSE
 - [ ] Add player count display with player max
 - [ ] Add public lobby finding
 - [ ] Add setting lobby to private
-- [ ] Add sorting 
+- [ ] Add sorting
 - [ ] Add setting lobby password
 
 ### Convenience Goals
 
 ##### Pause Menu
-- [ ] Add a simple escape-menu implementation 
+- [ ] Add a simple escape-menu implementation
 
 ##### Lauch Command Parser
 - [X] Make a dedicated autoload
@@ -57,14 +57,22 @@ TODO ADD LICENSE
 - [ ] Add resolution changing
 - [ ] Add v-sync toggle
 - [ ] Add window / borderless / fullscreen
-- [ ] Add saving/setting settings from disk 
+- [ ] Add saving/setting settings from disk
 - [ ] Add Launch commands to set window size / location
 
-##### Constants autoload
-- [ ] Make a dedicated autoload
-- [ ] Make sure name is suitable. Maybe "CON"
-- [ ] Add scene paths and groups and layer names
-- [ ] Add tool scripts to automate?
+##### Constants Autoloads
+- [X] Add PATHS autoload to contain used file paths
+- [ ] Add GROUPS autoload to contain group names... if it isn't already a thing?
+- [ ] Add LAYERS autoload to contain layer names and bitmasks
+- [ ] Add META autoload to contain used meta names
+
+##### Log autoload
+- [X] Add Logg autoload to provide an easy print() using with color coding for running multiple window tests
+
+##### Smarted multi-window setup
+- [ ] Add "WindowMover" autoload to align windows via launch conmmands (to skip having to sepparate them every time you run)
+
+
 
 ##### Smarter MultiplayerSpawner
 To make it file-path renaming resistant, it should validate existing scenes on build, or add dynamically in runtime.
@@ -88,4 +96,3 @@ Cases that should be tested and covered:
 - [ ] Comparison with using rpc calls
 - [ ] Comparison when using packets
 - [ ] Possible comparison to using sockets directly
-
