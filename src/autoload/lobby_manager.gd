@@ -211,6 +211,7 @@ func _on_lobby_join_requested(this_lobby_id: int, friend_id: int) -> void:
 	if is_in_lobby():
 		Log.pprint("Leaving lobby to join requested lobby!")
 		leave_lobby("Accepted request to join another lobby")
+		await lobby_exited # NOTE To prevent delegated exit to not be accounted for
 
 	initiate_lobby(SteamMultiplayerLobby.new(this_lobby_id, false))
 
