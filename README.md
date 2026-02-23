@@ -30,7 +30,6 @@ TODO ADD LICENSE
 - [ ] Add "tab menu" player list and lobby info (names, ping, steam user link?, public/private...)
 - [ ] Consider adding Steam-specific funcs for convenience (getting peer_id from steam_id)
 
-
 ##### Steam lobby browser?
 - [ ] Add finding open friend lobbies
 - [ ] Add player count display with player max
@@ -38,6 +37,7 @@ TODO ADD LICENSE
 - [ ] Add setting lobby to private
 - [ ] Add sorting
 - [ ] Add setting lobby password
+
 
 ### Convenience Goals
 
@@ -67,15 +67,13 @@ TODO ADD LICENSE
 - [ ] Add META autoload to contain used meta names
 
 ##### Log autoload
-- [X] Add Logg autoload to provide an easy print() using with color coding for running multiple window tests
+- [X] Add Log autoload to provide an easy print() using with color coding for running multiple window tests
 
-##### Smarted multi-window setup
-- [ ] Add "WindowMover" autoload to align windows via launch conmmands (to skip having to sepparate them every time you run)
-
-
+##### Smarter multi-window setup
+- [X] Add "WindowSpawnAligner" autoload to align windows via launch conmmands (to skip having to sepparate them every time you run)
 
 ##### Smarter MultiplayerSpawner
-To make it file-path renaming resistant, it should validate existing scenes on build, or add dynamically in runtime.
+To make it file-path renaming resistant, it should validate existing scene-paths on build, or add dynamically in runtime.
 
 
 ### Docs
