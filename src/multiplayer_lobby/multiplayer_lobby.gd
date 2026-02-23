@@ -12,7 +12,7 @@ var multiplayer_peer: MultiplayerPeer
 @abstract func get_user_name() -> String
 
 ##
-@abstract func is_lobby_owner() -> bool
+@abstract func is_lobby_owner() -> bool											# TODO ALLOW QUERYING PEER_ID OF OWNER? IS IT ALWAYS 1 EVEN FOR STEAM?
 
 ## Start the connection to join / host a game, based on parameters from the [MultiplayerLobby] implementation. [br]
 ## Returns false if the parameters or other local step failed. True means you are attempting to host/join and

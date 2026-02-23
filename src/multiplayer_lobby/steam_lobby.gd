@@ -174,7 +174,7 @@ func _on_peer_connected(peer_id: int) -> void:
 	if Lobby.players.has(peer_id):
 		print_debug("in SteamMultiplayerLobby._on_peer_connected(%d), somehow already have the peer_id in the players[] dict" % peer_id)
 	else:
-		Lobby.add_new_player_info(peer_id)
+		Lobby.add_new_player_info(peer_id)		# NOTE just to hurry it up, since this is called before Lobby's own callback
 
 	var peer_info: PlayerInfo = Lobby.players.get(peer_id)
 	var steam_id: int = (multiplayer_peer as SteamMultiplayerPeer).get_steam_id_for_peer_id(peer_id)

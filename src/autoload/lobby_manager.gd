@@ -46,8 +46,12 @@ func _enter_tree() -> void:
 	multiplayer.peer_disconnected.connect(_on_peer_disconnected)
 	multiplayer.server_disconnected.connect(_on_server_disconnected)
 
+	# NOTE Steam.inviteUserToLobby() Tries to join via lobby id, connects to the below signal
 	Steam.join_requested.connect(_on_lobby_join_requested)
-	#Steam.join_game_requested													# TODO Consider this if above doesn't work
+	#Steam.lobby_joined
+
+	# NOTE Steam.inviteUserToGame() Tries to join via string arg, connects to the signal below
+	#Steam.join_game_requested
 
 
 func _ready() -> void:
@@ -121,10 +125,6 @@ func clear_player_info(id: int) -> bool:										# TODO RENAME TO "remove_playe
 
 ##
 func add_new_player_info(peer_id: int) -> bool:
-	#if not multiplayer.get_peers().has(peer_id) and peer_id != multiplayer.get_unique_id():		# NOTE When recieving this callback, the peer is not yet added to get_peers()!!!
-	#	print_debug("From peer_%d: add_new_player_info(%d) called when peer doesn't exist!" % [multiplayer.get_unique_id(), peer_id])
-	#	return false
-
 	if players.has(peer_id):
 		print_debug("From peer_%d: add_new_player_info(%d) called when peer info is already registered!" % [multiplayer.get_unique_id(), peer_id])
 		return false
