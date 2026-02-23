@@ -59,7 +59,16 @@ func _ready() -> void:
 	await get_tree().current_scene.ready
 	_check_launch_commands()
 
-
+func _notification(what: int) -> void:
+	match what:
+		NOTIFICATION_CRASH:
+			Log.pprint("Lobby Manager: NOTIFICATION_CRASH")
+			if multiplayer.has_multiplayer_peer():
+				leave_lobby("Game crashing!")
+		NOTIFICATION_WM_CLOSE_REQUEST:
+			Log.pprint("Lobby Manager: NOTIFICATION_WM_CLOSE_REQUEST")
+			if multiplayer.has_multiplayer_peer():
+				leave_lobby("Game closing!")
 #
 # ---- API ----
 #
