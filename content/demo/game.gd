@@ -53,7 +53,8 @@ func _on_lobby_entered() -> void:
 
 func _on_lobby_exiting(message: String) -> void:
 	Log.pprint("Quit level, message: %s" % message)
-	get_tree().change_scene_to_file(PATHS.MAIN_MENU)
+	if is_inside_tree():
+		get_tree().change_scene_to_file(PATHS.MAIN_MENU)
 
 
 func _on_peer_connected(peer_id: int) -> void:
