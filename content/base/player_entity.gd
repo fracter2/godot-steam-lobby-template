@@ -5,7 +5,6 @@ extends Node2D
 @export var peer_id: int = 1:
 	set(id):
 		peer_id = id
-		#local_client_syncronizer.set_multiplayer_authority(id)
 		for node in client_owned_nodes:
 			node.set_multiplayer_authority(id, false)
 		player_info = Lobby.players.get(id)
@@ -14,9 +13,6 @@ extends Node2D
 @export var camera_2d: Camera2D
 @export var name_label: Label
 @export var sprite_2d: Sprite2D
-
-## Syncronizes client-owned nodes
-#@export var local_client_syncronizer: LocalClientSyncronizer	# TODO REMOVE REF, UNUSED
 
 ## Nodes that should be set to this peers multiplayer authority. Does NOT propagate to children.
 @export var client_owned_nodes: Array[Node] = []
@@ -27,10 +23,6 @@ var player_info: PlayerInfo = null:
 		_disconnect_player_info(player_info)
 		player_info = info
 		_connect_player_info(info)
-
-	#get():	# NOTE This should still be proovided by default
-	#	return player_info
-
 
 
 #
@@ -81,6 +73,6 @@ func _connect_player_info(player: PlayerInfo) -> void:
 	if player != null:
 		player.display_name_set.connect(_on_name_set)
 		player.nickname_set.connect(_on_name_set)
-		player.avatar_small_set.connect(_on_avatar_set)
 		_on_name_set()
+		player.avatar_small_set.connect(_on_avatar_set)
 		_on_avatar_set()
