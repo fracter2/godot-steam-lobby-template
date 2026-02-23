@@ -105,7 +105,7 @@ func leave_lobby(message: String) -> void:
 
 	lobby_exiting.emit(message)
 
-	for id: int in multiplayer.get_peers():
+	for id: int in players.keys():
 		clear_player_info(id)
 
 	# NOTE Defer callback in case leave_lobby is called BY the lobby instance itself (happened when accepting invite in steam... dunnowhy)
