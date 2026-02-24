@@ -62,6 +62,11 @@ spawn_path = NodePath("../Players")
 
 [node name="Players" type="Node2D" parent="." unique_id=1300342717]
 
+[node name="EntitySpawner" type="MultiplayerSpawner" parent="." unique_id=80526416]
+spawn_path = NodePath("../NetworkedEntities")
+
+[node name="NetworkedEntities" type="Node2D" parent="." unique_id=1765918477]
+
 [node name="StaticMap" type="Node2D" parent="." unique_id=1296001154]
 z_index = -10
 

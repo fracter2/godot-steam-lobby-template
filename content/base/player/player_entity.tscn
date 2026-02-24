@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bd7v4xsokklmx"]
 
-[ext_resource type="Script" uid="uid://bt0aybcfio7f5" path="res://content/base/player_entity.gd" id="1_eengm"]
-[ext_resource type="Script" uid="uid://cewyemix0vhca" path="res://content/base/player_character.gd" id="2_5jhtk"]
+[ext_resource type="Script" uid="uid://bt0aybcfio7f5" path="res://content/base/player/scritps/player_entity.gd" id="1_eengm"]
+[ext_resource type="Script" uid="uid://cewyemix0vhca" path="res://content/base/player/scritps/player_character.gd" id="2_5jhtk"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_xtxcq"]
 properties/0/path = NodePath(".:peer_id")

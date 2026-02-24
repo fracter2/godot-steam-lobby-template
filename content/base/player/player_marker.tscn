@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dyplrd0wmx3gy"]
 
-[ext_resource type="Script" uid="uid://b0b4fau4qdmmd" path="res://content/base/player_marker.gd" id="1_uo7e1"]
+[ext_resource type="Script" uid="uid://b0b4fau4qdmmd" path="res://content/base/player/scritps/player_marker.gd" id="1_uo7e1"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_f06bx"]
 properties/0/path = NodePath(".:position")
