@@ -76,8 +76,6 @@ func _notification(what: int) -> void:
 func is_in_lobby() -> bool:
 	return lobby_instance != null
 
-#func is_lobby_owner() -> bool:
-#	return lobby_instance.owner_id == lobby_instance.get_user_id()
 
 ## Returns the result of the initiation [b]attempt[/b]. [signal lobby_entered] and [signal lobby_exited]
 ## emit when the result is granted (imagine it like waiting for the host / setup to respond) [br] [br]

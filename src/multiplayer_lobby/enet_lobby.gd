@@ -2,12 +2,11 @@ class_name EnetMultiplayerLobby
 extends MultiplayerLobby
 
 var username: String = "DefaultName"
+
 var init_as_host:bool
 var init_ip: String
 var init_port: int
-
 var max_clients: int = 1000	# NOTE limited by ENetMultiplayerPeer.create_server
-
 
 var backend: EnetLobbyBackend = null
 
@@ -78,13 +77,7 @@ func _initiate_as_client() -> bool:
 		return false
 
 	connected_as_client.emit()	# NOTE Lobby will here create a player_info for each peer
-	#(multiplayer_peer as ENetMultiplayerPeer).get_packet()
-	#(multiplayer_peer as ENetMultiplayerPeer).get_available_packet_count()
 	return true
-
-
-func _recieve_username(peer_username: String) -> void:							# TODO Create system for sending usernames... Add a child node for the lobby node?
-	pass
 
 
 func _create_multiplayer_peer() -> void:
