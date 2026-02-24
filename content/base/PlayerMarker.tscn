@@ -1,0 +1,33 @@
+[gd_scene format=3 uid="uid://dyplrd0wmx3gy"]
+
+[ext_resource type="Script" uid="uid://b0b4fau4qdmmd" path="res://content/base/player_marker.gd" id="1_uo7e1"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_f06bx"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+
+[sub_resource type="Gradient" id="Gradient_uo7e1"]
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0.24120234, 0.9479472, 0.99486804)
+colors = PackedColorArray(0.1567863, 0.2862445, 0.5566906, 1, 0.16069621, 0.3477875, 0.75157386, 1, 0.18384242, 0.36823338, 0.81152475, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_avnp1"]
+gradient = SubResource("Gradient_uo7e1")
+width = 32
+height = 32
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+metadata/_snap_enabled = true
+
+[node name="Marker" type="Node2D" unique_id=1050688885]
+script = ExtResource("1_uo7e1")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1681689441]
+replication_config = SubResource("SceneReplicationConfig_f06bx")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=304169295]
+z_index = -1
+texture_filter = 1
+texture = SubResource("GradientTexture2D_avnp1")
