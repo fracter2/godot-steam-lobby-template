@@ -14,5 +14,5 @@ extends Node
 
 const MAIN_MENU := "uid://bp3lhs80g85ky"
 const DEMO_GAME := "uid://dx0gencnp27xs"
-const PLAYER_ENTITY := "uid://bd7v4xsokklmx"
+const ENTITY_PLAYER := "uid://bd7v4xsokklmx"
 const ENTITY_MARKER := "uid://dyplrd0wmx3gy"

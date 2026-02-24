@@ -5,7 +5,7 @@ extends Node2D
 @onready var players: Node2D = $Players
 
 var main_menu_preload : PackedScene = preload(PATHS.MAIN_MENU)
-const PLAYER_ENTITY_PRELOAD = preload(PATHS.PLAYER_ENTITY)
+const ENTITY_PLAYER_PRELOAD = preload(PATHS.ENTITY_PLAYER)
 
 var player_nodes: Dictionary[int, PlayerEntity] = {}
 
@@ -100,7 +100,7 @@ func _spawn_player(id: int) -> void:
 	assert(multiplayer.is_server())
 	assert(not player_nodes.has(id), "in _spawn_player() Spawning a player that is already registered!")
 
-	var player_instance: PlayerEntity = PLAYER_ENTITY_PRELOAD.instantiate()
+	var player_instance: PlayerEntity = ENTITY_PLAYER_PRELOAD.instantiate()
 	player_instance.name = "player_peer_%d" % id
 	player_instance.peer_id = id
 	player_nodes[id] = player_instance											# NOTE player_nodes is kept synced on remote peers by the MultiplayerSpawner signal callbacks
