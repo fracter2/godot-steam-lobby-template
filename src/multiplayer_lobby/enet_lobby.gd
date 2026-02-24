@@ -9,6 +9,7 @@ var init_port: int
 var max_clients: int = 1000	# NOTE limited by ENetMultiplayerPeer.create_server
 
 
+var backend: EnetLobbyBackend = null
 
 #
 # ---- PROCEDURE ----
@@ -19,6 +20,17 @@ func _init(is_host: bool = false, ip: String = "127.0.0.1", port: int = 8080, us
 	username = username_
 	init_ip = ip
 	init_port = port
+
+
+func _notification(what: int) -> void:
+	match what:
+		NOTIFICATION_PREDELETE:
+			if not multiplayer_peer.get_connection_status() == multiplayer_peer.CONNECTION_DISCONNECTED:
+				multiplayer_peer.close()
+			if backend != null and not backend.is_queued_for_deletion():
+				backend.queue_free()
+				backend = null
+
 
 #
 # ---- API ----
@@ -36,6 +48,9 @@ func initiate_connection() -> bool:
 	# TODO Validate port and ip
 
 	_create_multiplayer_peer()
+	backend = EnetLobbyBackend.new(self)
+	Lobby.add_child(backend)
+
 	if init_as_host:
 		return _initiate_as_host()
 	else:
