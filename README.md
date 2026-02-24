@@ -14,21 +14,21 @@ TODO ADD LICENSE
 - [X] Add getting player avatars
 - [ ] Add joining by invite
 - [ ] Add joining by launch command
-- [ ] Add chat logic and callbacks
 
 ##### Enet Lobby
 - [X] Add joining and hosting through launch commands
 - [X] Add setting custom name
-- [ ] Add chat logic and callbacks
 
 ##### Lobby singleton API
 - [X] Add interface for player joining and player_info changes
 - [X] Add lobby-implementation interface (doesn't distinguish steam or enet lobby)
 - [ ] Add propper quit logic (instead of just timeout)
 - [ ] Add ability to kick players
-- [ ] Add chat interface and display
+- [ ] Add chat interface (sepparate or same autoload?) and display (add a prefab that loads / interfaces)
+	- [ ] Allow system messages with different color
+	- [ ] Allow whispers
+	- [ ] Colors should be inserted as BB. Rember to strip user input BB.
 - [ ] Add "tab menu" player list and lobby info (names, ping, steam user link?, public/private...)
-- [ ] Consider adding Steam-specific funcs for convenience (getting peer_id from steam_id)
 
 ##### Steam lobby browser?
 - [ ] Add finding open friend lobbies
