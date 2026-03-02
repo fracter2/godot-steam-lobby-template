@@ -5,9 +5,9 @@ extends Node2D
 @onready var players: Node2D = $Players
 
 var main_menu_preload : PackedScene = preload(PATHS.MAIN_MENU)
-const ENTITY_PLAYER_PRELOAD = preload(PATHS.ENTITY_PLAYER)
+const PLAYER_BRANCH = preload(PATHS.NETWORK_PLAYER_BRANCH)
 
-var player_nodes: Dictionary[int, PlayerEntity] = {}
+var player_nodes: Dictionary[int, PlayerBranch] = {}
 
 
 #
@@ -77,8 +77,8 @@ func _on_peer_disconnected(peer_id: int) -> void:
 ## Adds the node to [member player_nodes] if it is a [Player]
 func _check_if_player_spawned(node: Node) -> void:
 	assert(not multiplayer.is_server(), "_on_entity_spawned() should only be called by non-servers, as described in the MultiplayerSpawner signal description.")
-	if node is PlayerEntity:
-		var peer_id: int = (node as PlayerEntity).peer_id
+	if node is PlayerBranch:
+		var peer_id: int = (node as PlayerBranch).peer_id
 
 		assert(not player_nodes.has(peer_id), "in _on_entity_spawned(), a new player node shouldn't already be registered here. obviously.")
 		player_nodes[peer_id] = node
@@ -86,8 +86,8 @@ func _check_if_player_spawned(node: Node) -> void:
 ## Removes the node from [member player_nodes] if it is a [Player]
 func _check_if_player_despawned(node: Node) -> void:
 	assert(not multiplayer.is_server(), "_on_entity_despawned() should only be called by non-servers, as described in the MultiplayerSpawner signal description.")
-	if node is PlayerEntity:
-		var peer_id: int = (node as PlayerEntity).peer_id
+	if node is PlayerBranch:
+		var peer_id: int = (node as PlayerBranch).peer_id
 		assert(player_nodes.has(peer_id), "in _on_entity_despawned(), the deleted player should still be in the player_nodes dict!")
 		player_nodes.erase(peer_id)
 
@@ -100,7 +100,7 @@ func _spawn_player(id: int) -> void:
 	assert(multiplayer.is_server())
 	assert(not player_nodes.has(id), "in _spawn_player() Spawning a player that is already registered!")
 
-	var player_instance: PlayerEntity = ENTITY_PLAYER_PRELOAD.instantiate()
+	var player_instance: PlayerBranch = PLAYER_BRANCH.instantiate()
 	player_instance.name = "player_peer_%d" % id
 	player_instance.peer_id = id
 	player_nodes[id] = player_instance											# NOTE player_nodes is kept synced on remote peers by the MultiplayerSpawner signal callbacks

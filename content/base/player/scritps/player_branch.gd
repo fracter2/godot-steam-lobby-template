@@ -1,4 +1,4 @@
-class_name PlayerEntity															# TODO CONSIDER RENAMING TO PlayerMaster or PlayerBranch
+class_name PlayerBranch
 extends Node2D
 
 ## The multiplayer peer id assosiated with this player. Setting this also sets the multiplayer authority of
@@ -40,7 +40,7 @@ func _enter_tree() -> void:
 		push_warning("Player entity at %s is missing player_info on _enter_tree()!" % get_path())
 
 	if not Lobby.players.has(peer_id):
-		push_error("PlayerEntity at %s \n -> peer_id %d set but player_info not found!" % [get_path(), peer_id])
+		push_error("PlayerBranch at %s \n -> peer_id %d set but player_info not found!" % [get_path(), peer_id])
 
 
 func _ready() -> void:

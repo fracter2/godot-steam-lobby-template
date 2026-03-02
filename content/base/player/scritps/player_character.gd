@@ -6,7 +6,7 @@ extends Node2D
 @export var speed: float = 100
 
 @export_group("References")
-@export var player_entity: PlayerEntity
+@export var player_entity: PlayerBranch
 @export var markers: Node2D
 @onready var direction_pointer: Node2D = $Direction
 

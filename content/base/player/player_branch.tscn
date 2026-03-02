@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bd7v4xsokklmx"]
 
-[ext_resource type="Script" uid="uid://bt0aybcfio7f5" path="res://content/base/player/scritps/player_entity.gd" id="1_eengm"]
-[ext_resource type="Script" uid="uid://cewyemix0vhca" path="res://content/base/player/scritps/player_character.gd" id="2_5jhtk"]
+[ext_resource type="Script" uid="uid://bt0aybcfio7f5" path="res://content/base/player/scritps/player_branch.gd" id="1_5t87g"]
+[ext_resource type="Script" uid="uid://cewyemix0vhca" path="res://content/base/player/scritps/player_character.gd" id="2_k67vh"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_xtxcq"]
 properties/0/path = NodePath(".:peer_id")
@@ -44,7 +44,7 @@ fill_to = Vector2(1, 0.5)
 metadata/_snap_enabled = true
 
 [node name="Player" type="Node2D" unique_id=115763383 node_paths=PackedStringArray("player_owned_nodes", "camera_2d", "name_label", "sprite_2d")]
-script = ExtResource("1_eengm")
+script = ExtResource("1_5t87g")
 player_owned_nodes = [NodePath("PlayerOwnedSyncronizer"), NodePath("Character"), NodePath("PlayerOwnedSpawner"), NodePath("Markers"), NodePath("Character/Direction/DirectionArrow")]
 camera_2d = NodePath("Character/Camera2D")
 name_label = NodePath("Character/NameLabel")
@@ -59,7 +59,7 @@ root_path = NodePath("../Character")
 replication_config = SubResource("SceneReplicationConfig_sixnd")
 
 [node name="Character" type="Node2D" parent="." unique_id=1665914198 node_paths=PackedStringArray("player_entity", "markers")]
-script = ExtResource("2_5jhtk")
+script = ExtResource("2_k67vh")
 player_entity = NodePath("..")
 markers = NodePath("../Markers")
 
