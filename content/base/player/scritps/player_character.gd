@@ -2,15 +2,44 @@ class_name PlayerCharacter
 extends Node2D
 
 
+const marker_preload: PackedScene = preload(PATHS.ENTITY_MARKER)
 
 @export var speed: float = 100
 
 @export_group("References")
-@export var player_entity: PlayerBranch
-@export var markers: Node2D
+@export var camera_2d: Camera2D
+@export var name_label: Label
 @onready var direction_pointer: Node2D = $Direction
 
-const marker_preload: PackedScene = preload(PATHS.ENTITY_MARKER)
+
+var player_branch: PlayerBranch = null:
+	set(branch):
+		player_branch = branch
+		player_info = branch.player_info
+
+var player_info: PlayerInfo = null:
+	set(info):
+		_disconnect_player_info(player_info)
+		player_info = info
+		_connect_player_info(info)
+
+
+
+func _enter_tree() -> void:
+	player_branch = World.get_player_branch_of(self)
+	assert(player_branch != null )
+
+
+func _ready() -> void:
+	if player_branch.peer_id != get_multiplayer_authority():
+		push_error("PlayerCharacter authority not set correctly!")
+		return
+
+	player_info = Lobby.players[get_multiplayer_authority()]
+	if is_multiplayer_authority():
+		camera_2d.enabled = true
+		camera_2d.make_current()
+
 
 func _physics_process(delta: float) -> void:
 	if is_multiplayer_authority():
@@ -22,7 +51,43 @@ func _physics_process(delta: float) -> void:
 		if Input.is_action_just_pressed(&"spawn_marker"):
 			var new_marker : Node2D = marker_preload.instantiate()
 			new_marker.position = get_global_mouse_position()
-			markers.add_child(new_marker, true)
+
+			player_branch.spawn_node(new_marker)
 
 		# Direction arrow
 		direction_pointer.look_at(get_global_mouse_position())
+
+
+#
+# ---- SIGNAL CALLBACKS ----
+#
+
+func _on_name_set(_new_name: String = "") -> void:
+	if not player_info.nickname.is_empty(): 		name_label.text = player_info.nickname
+	elif not player_info.display_name.is_empty():	name_label.text = player_info.display_name
+	else: 											name_label.text = "DefaultName"
+
+
+func _on_avatar_set(_new_avatar: Image = null) -> void:
+	if not player_info.avatar_small == null:
+		# TODO SET AVATAR PIC
+		pass
+
+#
+# ---- INTERNALS
+#
+
+func _disconnect_player_info(player: PlayerInfo) -> void:
+	if player != null:
+		player.display_name_set.disconnect(_on_name_set)
+		player.nickname_set.disconnect(_on_name_set)
+		player.avatar_small_set.disconnect(_on_avatar_set)
+
+
+func _connect_player_info(player: PlayerInfo) -> void:
+	if player != null:
+		player.display_name_set.connect(_on_name_set)
+		player.nickname_set.connect(_on_name_set)
+		_on_name_set()
+		player.avatar_small_set.connect(_on_avatar_set)
+		_on_avatar_set()

@@ -1,0 +1,77 @@
+[gd_scene format=3 uid="uid://csibq2kr2xqji"]
+
+[ext_resource type="Script" uid="uid://cewyemix0vhca" path="res://content/base/player/scritps/player_character.gd" id="1_gig5a"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_gig5a"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("Direction:rotation")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
+[sub_resource type="Gradient" id="Gradient_eengm"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0.16495602, 0.6957478)
+colors = PackedColorArray(0.21748513, 0.21748516, 0.21748513, 0, 0.6345741, 0.6345737, 0.63457364, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_5jhtk"]
+gradient = SubResource("Gradient_eengm")
+width = 12
+height = 12
+fill = 2
+fill_from = Vector2(0, 1)
+metadata/_snap_enabled = true
+
+[sub_resource type="Gradient" id="Gradient_l14gi"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0.8277126, 0.9039589)
+colors = PackedColorArray(0.5622709, 0.5076099, 0.38192296, 1, 0.5668828, 0.51137, 0.38514262, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_xtxcq"]
+gradient = SubResource("Gradient_l14gi")
+width = 32
+height = 32
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+metadata/_snap_enabled = true
+
+[node name="Character" type="Node2D" unique_id=388113319 node_paths=PackedStringArray("camera_2d", "name_label") groups=["Player Owned", "Player Owned Recursive"]]
+script = ExtResource("1_gig5a")
+camera_2d = NodePath("Camera2D")
+name_label = NodePath("NameLabel")
+
+[node name="PlayerOwnedSyncronizer" type="MultiplayerSynchronizer" parent="." unique_id=1640370798 groups=["Player Owned"]]
+editor_description = "It is \"player owned\" because the multiplayer authority is set to this player."
+replication_config = SubResource("SceneReplicationConfig_gig5a")
+
+[node name="Direction" type="Node2D" parent="." unique_id=1035567952]
+
+[node name="DirectionArrow" type="Sprite2D" parent="Direction" unique_id=1612872675]
+texture_filter = 1
+position = Vector2(30.000004, 0)
+rotation = 0.7853982
+texture = SubResource("GradientTexture2D_5jhtk")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=882289101]
+texture_filter = 1
+texture = SubResource("GradientTexture2D_xtxcq")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=1661494178]
+enabled = false
+position_smoothing_enabled = true
+
+[node name="NameLabel" type="Label" parent="." unique_id=1616231679]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -28.5
+offset_top = -69.0
+offset_right = 28.5
+offset_bottom = -46.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Default"

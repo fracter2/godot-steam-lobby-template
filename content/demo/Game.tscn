@@ -5,10 +5,13 @@
 [ext_resource type="Script" uid="uid://cbaivxnsabs1o" path="res://src/ui/menus/pause_menu.gd" id="3_7ypjr"]
 [ext_resource type="PackedScene" uid="uid://7abbq726h0tk" path="res://src/ui/hud/lobby_player_list.tscn" id="4_bnljb"]
 
-[node name="Game" type="Node2D" unique_id=303895278 node_paths=PackedStringArray("player_spawner", "player_branches")]
+[node name="Game" type="Node2D" unique_id=303895278 node_paths=PackedStringArray("player_spawner", "player_branches", "entity_spawner", "networked_entities", "local_entities")]
 script = ExtResource("1_potkl")
 player_spawner = NodePath("PlayerSpawner")
 player_branches = NodePath("PlayerBranches")
+entity_spawner = NodePath("EntitySpawner")
+networked_entities = NodePath("NetworkedEntities")
+local_entities = NodePath("LocalEntities")
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=985557010]
 
@@ -68,6 +71,8 @@ spawn_path = NodePath("../PlayerBranches")
 spawn_path = NodePath("../NetworkedEntities")
 
 [node name="NetworkedEntities" type="Node2D" parent="." unique_id=1765918477]
+
+[node name="LocalEntities" type="Node2D" parent="." unique_id=290040515]
 
 [node name="StaticMap" type="Node2D" parent="." unique_id=1296001154]
 z_index = -10

@@ -1,100 +1,22 @@
 [gd_scene format=3 uid="uid://bd7v4xsokklmx"]
 
 [ext_resource type="Script" uid="uid://bt0aybcfio7f5" path="res://content/base/player/scritps/player_branch.gd" id="1_5t87g"]
-[ext_resource type="Script" uid="uid://cewyemix0vhca" path="res://content/base/player/scritps/player_character.gd" id="2_k67vh"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_xtxcq"]
 properties/0/path = NodePath(".:peer_id")
 properties/0/spawn = true
 properties/0/replication_mode = 0
 
-[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_sixnd"]
-properties/0/path = NodePath(".:position")
-properties/0/spawn = true
-properties/0/replication_mode = 1
-properties/1/path = NodePath("Direction:rotation")
-properties/1/spawn = true
-properties/1/replication_mode = 1
-
-[sub_resource type="Gradient" id="Gradient_eengm"]
-interpolation_mode = 1
-offsets = PackedFloat32Array(0.16495602, 0.6957478)
-colors = PackedColorArray(0.21748513, 0.21748516, 0.21748513, 0, 0.6345741, 0.6345737, 0.63457364, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_5jhtk"]
-gradient = SubResource("Gradient_eengm")
-width = 12
-height = 12
-fill = 2
-fill_from = Vector2(0, 1)
-metadata/_snap_enabled = true
-
-[sub_resource type="Gradient" id="Gradient_l14gi"]
-interpolation_mode = 1
-offsets = PackedFloat32Array(0.8277126, 0.9039589)
-colors = PackedColorArray(0.5622709, 0.5076099, 0.38192296, 1, 0.5668828, 0.51137, 0.38514262, 0)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_xtxcq"]
-gradient = SubResource("Gradient_l14gi")
-width = 32
-height = 32
-fill = 1
-fill_from = Vector2(0.5, 0.5)
-fill_to = Vector2(1, 0.5)
-metadata/_snap_enabled = true
-
-[node name="Player" type="Node2D" unique_id=115763383 node_paths=PackedStringArray("player_owned_nodes", "camera_2d", "name_label", "sprite_2d")]
+[node name="Player" type="Node2D" unique_id=115763383 node_paths=PackedStringArray("player_owned_spawner", "owned_entities")]
 script = ExtResource("1_5t87g")
-player_owned_nodes = [NodePath("PlayerOwnedSyncronizer"), NodePath("Character"), NodePath("PlayerOwnedSpawner"), NodePath("Markers"), NodePath("Character/Direction/DirectionArrow")]
-camera_2d = NodePath("Character/Camera2D")
-name_label = NodePath("Character/NameLabel")
-sprite_2d = NodePath("Character/Sprite2D")
+player_owned_spawner = NodePath("PlayerOwnedSpawner")
+owned_entities = NodePath("OwnedEntities")
 
 [node name="ServerOwnedSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=650418203]
 replication_config = SubResource("SceneReplicationConfig_xtxcq")
 
-[node name="PlayerOwnedSyncronizer" type="MultiplayerSynchronizer" parent="." unique_id=1417060263]
-editor_description = "It is \"player owned\" because the multiplayer authority is set to this player."
-root_path = NodePath("../Character")
-replication_config = SubResource("SceneReplicationConfig_sixnd")
-
-[node name="Character" type="Node2D" parent="." unique_id=1665914198 node_paths=PackedStringArray("player_entity", "markers")]
-script = ExtResource("2_k67vh")
-player_entity = NodePath("..")
-markers = NodePath("../Markers")
-
-[node name="Direction" type="Node2D" parent="Character" unique_id=2023343893]
-
-[node name="DirectionArrow" type="Sprite2D" parent="Character/Direction" unique_id=1789183630]
-texture_filter = 1
-position = Vector2(30.000004, 0)
-rotation = 0.7853982
-texture = SubResource("GradientTexture2D_5jhtk")
-
-[node name="Sprite2D" type="Sprite2D" parent="Character" unique_id=43171346]
-texture_filter = 1
-texture = SubResource("GradientTexture2D_xtxcq")
-
-[node name="Camera2D" type="Camera2D" parent="Character" unique_id=1690213867]
-enabled = false
-position_smoothing_enabled = true
-
-[node name="NameLabel" type="Label" parent="Character" unique_id=900350787]
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = -28.5
-offset_top = -69.0
-offset_right = 28.5
-offset_bottom = -46.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "Default"
-
 [node name="PlayerOwnedSpawner" type="MultiplayerSpawner" parent="." unique_id=1897794600]
-_spawnable_scenes = PackedStringArray("uid://dyplrd0wmx3gy", "uid://cp10fjfcrq0j6")
-spawn_path = NodePath("../Markers")
+_spawnable_scenes = PackedStringArray("uid://dyplrd0wmx3gy", "uid://cp10fjfcrq0j6", "uid://csibq2kr2xqji")
+spawn_path = NodePath("../OwnedEntities")
 
-[node name="Markers" type="Node2D" parent="." unique_id=128178567]
+[node name="OwnedEntities" type="Node2D" parent="." unique_id=128178567]
