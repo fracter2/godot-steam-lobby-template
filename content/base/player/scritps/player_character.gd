@@ -10,8 +10,7 @@ extends Node2D
 @export var markers: Node2D
 @onready var direction_pointer: Node2D = $Direction
 
-var marker_preload: PackedScene = preload(PATHS.ENTITY_MARKER)
-
+const marker_preload: PackedScene = preload(PATHS.ENTITY_MARKER)
 
 func _physics_process(delta: float) -> void:
 	if is_multiplayer_authority():
