@@ -29,13 +29,13 @@ fill = 2
 fill_from = Vector2(0, 1)
 metadata/_snap_enabled = true
 
-[sub_resource type="Gradient" id="Gradient_liscu"]
+[sub_resource type="Gradient" id="Gradient_l14gi"]
 interpolation_mode = 1
 offsets = PackedFloat32Array(0.8277126, 0.9039589)
 colors = PackedColorArray(0.5622709, 0.5076099, 0.38192296, 1, 0.5668828, 0.51137, 0.38514262, 0)
 
 [sub_resource type="GradientTexture2D" id="GradientTexture2D_xtxcq"]
-gradient = SubResource("Gradient_liscu")
+gradient = SubResource("Gradient_l14gi")
 width = 32
 height = 32
 fill = 1
@@ -94,7 +94,7 @@ grow_vertical = 2
 text = "Default"
 
 [node name="PlayerOwnedSpawner" type="MultiplayerSpawner" parent="." unique_id=1897794600]
-_spawnable_scenes = PackedStringArray("uid://dyplrd0wmx3gy")
+_spawnable_scenes = PackedStringArray("uid://dyplrd0wmx3gy", "uid://cp10fjfcrq0j6")
 spawn_path = NodePath("../Markers")
 
 [node name="Markers" type="Node2D" parent="." unique_id=128178567]

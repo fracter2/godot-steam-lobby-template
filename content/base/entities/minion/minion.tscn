@@ -1,0 +1,32 @@
+[gd_scene format=3 uid="uid://cp10fjfcrq0j6"]
+
+[ext_resource type="Script" uid="uid://cuqi4tdg15kmc" path="res://content/base/entities/minion/minion.gd" id="1_gqos7"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_gqos7"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 2
+
+[sub_resource type="Gradient" id="Gradient_gqos7"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0.77492666, 0.8335777, 0.9098241)
+colors = PackedColorArray(0.5622796, 0.48358613, 0.36855504, 1, 0.73779774, 0.65465677, 0.5341836, 1, 0.5668828, 0.51137, 0.38514262, 0)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_hjb0q"]
+gradient = SubResource("Gradient_gqos7")
+width = 24
+height = 24
+fill = 1
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+metadata/_snap_enabled = true
+
+[node name="Minion" type="Node2D" unique_id=687417749]
+script = ExtResource("1_gqos7")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1998851302]
+replication_config = SubResource("SceneReplicationConfig_gqos7")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=249986538]
+texture_filter = 1
+texture = SubResource("GradientTexture2D_hjb0q")
