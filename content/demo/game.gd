@@ -1,10 +1,10 @@
 extends Node2D
 
 
-@onready var player_spawner: MultiplayerSpawner = $PlayerSpawner
-@onready var players: Node2D = $Players
+@export_group("References")
+@export var player_spawner: MultiplayerSpawner
+@export var player_branches: Node2D
 
-var main_menu_preload : PackedScene = preload(PATHS.MAIN_MENU)
 const PLAYER_BRANCH = preload(PATHS.NETWORK_PLAYER_BRANCH)
 
 var player_nodes: Dictionary[int, PlayerBranch] = {}
@@ -104,4 +104,4 @@ func _spawn_player(id: int) -> void:
 	player_instance.name = "player_peer_%d" % id
 	player_instance.peer_id = id
 	player_nodes[id] = player_instance											# NOTE player_nodes is kept synced on remote peers by the MultiplayerSpawner signal callbacks
-	players.add_child(player_instance)
+	player_branches.add_child(player_instance)
