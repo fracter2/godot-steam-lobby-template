@@ -12,7 +12,7 @@ TODO ADD LICENSE
 - [X] Add joining by right-clicking friends in the steam overlay
 - [X] Add getting player usernames and nicknames
 - [X] Add getting player avatars
-- [ ] Add joining by invite
+- [ ] Add joining by invite (including UI helper)
 - [ ] Add joining by launch command
 
 ##### Enet Lobby
@@ -38,6 +38,8 @@ TODO ADD LICENSE
 - [ ] Add sorting
 - [ ] Add setting lobby password
 
+##### LAN Lobby browser?
+- [ ] Query broadcasts in LAN
 
 ### Convenience Goals
 
