@@ -1,0 +1,35 @@
+[gd_scene format=3 uid="uid://bbt53a6pdbkkg"]
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_l5uk2"]
+properties/0/path = NodePath("SpriteAlwaysSync:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+properties/1/path = NodePath("SpriteOnChangeSync:position")
+properties/1/spawn = true
+properties/1/replication_mode = 1
+
+[sub_resource type="Gradient" id="Gradient_l5uk2"]
+interpolation_mode = 1
+offsets = PackedFloat32Array(0, 0.79545456)
+colors = PackedColorArray(0.5034312, 0.44524276, 0.38724062, 1, 0.37093654, 0.33219182, 0.2938321, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_7ymby"]
+gradient = SubResource("Gradient_l5uk2")
+width = 24
+height = 24
+fill = 2
+fill_from = Vector2(0.5, 0.5)
+fill_to = Vector2(1, 0.5)
+metadata/_snap_enabled = true
+
+[node name="DragableBox" type="Node2D" unique_id=2145596170]
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=881368538]
+replication_config = SubResource("SceneReplicationConfig_l5uk2")
+
+[node name="SpriteOnChangeSync" type="Sprite2D" parent="." unique_id=2136058890]
+self_modulate = Color(0.42585397, 0.7253435, 0.913253, 1)
+texture = SubResource("GradientTexture2D_7ymby")
+
+[node name="SpriteAlwaysSync" type="Sprite2D" parent="." unique_id=1862076102]
+texture = SubResource("GradientTexture2D_7ymby")
