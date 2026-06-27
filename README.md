@@ -29,6 +29,9 @@ TODO ADD LICENSE
 	- [ ] Allow whispers
 	- [ ] Colors should be inserted as BB. Rember to strip user input BB.
 - [ ] Add "tab menu" player list and lobby info (names, ping, steam user link?, public/private...)
+- [ ] Auto-disable connections when lobby is full
+- [ ] Password select with peer authentication
+- [ ] Banlist (steam_id?)
 
 ##### Steam lobby browser?
 - [ ] Add finding open friend lobbies
@@ -50,6 +53,7 @@ TODO ADD LICENSE
 - [X] Make a dedicated autoload
 - [X] Add ability to differentiate commands from values
 - [X] Allow parsing both spaces and '=' as value sepparators
+- [ ] Allow providing a launch_preset.txt file via launch_preset={filepath OR ID} command.
 
 ##### Settings autoload
 - [ ] Make a dedicated autoload
@@ -76,7 +80,16 @@ TODO ADD LICENSE
 
 ##### Smarter MultiplayerSpawner
 To make it file-path renaming resistant, it should validate existing scene-paths on build, or add dynamically in runtime.
+- [ ] Add way of adding from list (like from a level config, or on-load node, or from level node, or world method)
 
+##### Standardized Spawning API
+- [ ] Networked Spawning (server only)
+- [ ] Client-Owned Spawning (client only)
+- [ ] Client-local Spawning (clientside)
+
+##### Standardized Level Loading
+- [ ] Add networked func, to load levels
+- [ ] Add sending save files of levels? world state? (Only level / non-replicated spawns and vars)
 
 ### Docs
 Ideally, lot's of demonstration scenes and test-tools should exists to provide examples of common use cases and pitfalls.
@@ -96,3 +109,7 @@ Cases that should be tested and covered:
 - [ ] Comparison with using rpc calls
 - [ ] Comparison when using packets
 - [ ] Possible comparison to using sockets directly
+
+##### SceneMultiplayer
+- [ ] Sending / recieveing raw bytes
+- [ ] Authenticating peers before accepting

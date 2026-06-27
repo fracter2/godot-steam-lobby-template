@@ -1,12 +1,16 @@
 extends Node
 
 
+
 ## This autoload is supposed to serve as a collection of ALL important constants in the project.
 ## Excluding constants from plugins, like Steam, or when closely linked to a class (like "const" vars)
 
 ## The primary use of this autoload is to store all FILE PATHS.
 ## Since these are often kept as string literals, they won't update or validate automatically (without UIDs).
 ## This script serves to make them strongly typed constants.
+
+# TODO MAKE INTO OBJECT LIKE groups.gd
+# TODO OR ADD TEST LOGIC OR TOOLS TO VERIFY EXISTANCE OF THESE PATHS, and make GROUPS like this too
 
 # TODO ADD EQUIVOLENT TO LAYER NAMES, GROUP NAMES and COMMON META_VARS.
 

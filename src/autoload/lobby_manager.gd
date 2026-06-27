@@ -21,7 +21,7 @@ var players : Dictionary[int, PlayerInfo] = {}
 ## Emits when a key in the player info dictionary is set.
 signal player_added				(player: PlayerInfo)
 signal player_removed			(player: PlayerInfo)
-signal player_name_set			(new_name: StringName, player: PlayerInfo)
+signal player_name_set			(new_name: StringName, player: PlayerInfo)		# TODO CONSIDER REMOVING THIS AND BELOW SIGNALS, enforce using player_info for clarity and simplicity?
 signal player_nickname_set		(new_name: StringName, player: PlayerInfo)
 signal player_steam_id_set		(steam_id: int, player: PlayerInfo)
 signal player_small_avatar_set	(avatar: Image, player: PlayerInfo)
@@ -148,13 +148,14 @@ func sync_username(username: StringName) -> void:								# TODO STANDARDIZE A WA
 	var sender_id: int = multiplayer.get_remote_sender_id()
 	assert(players.has(sender_id))
 	players[sender_id].display_name = username
+
+
 #
 # ---- INTERNAL ----
 #
 
 func _check_launch_commands() -> void:
-
-	##
+	##																			# TODO DELEGATE TO IT'S OWN FUNC
 	if LaunchArgs.has_command("-init-enet-lobby"):
 		var args: PackedStringArray = LaunchArgs.get_values("-init-enet-lobby")
 		Log.pprint("Attempting to join or host an enet-lobby.")
@@ -202,6 +203,7 @@ func _reset_lobby_instance(message: String) -> void:
 	multiplayer.multiplayer_peer = OfflineMultiplayerPeer.new()
 	lobby_exited.emit(message)
 	Log.pprint("Lobby Exited! Message: %s" % message)
+
 
 #
 # ---- SIGNAL CALLBACKS ----
@@ -275,7 +277,7 @@ func _on_disconnected(message: String) -> void:
 
 
 
-func _wrap_player_info_signals(player_info: PlayerInfo) -> void:
+func _wrap_player_info_signals(player_info: PlayerInfo) -> void:				# TODO REMOVE TO ENFORCE USING PlayerInfo (which encourages better checking)
 	# TODO CHECK IF IT IS ALREADY BOUND
 
 	player_info.display_name_set.connect(_on_player_name_set.bind(player_info))

@@ -74,7 +74,7 @@ func _on_avatar_set(_new_avatar: Image = null) -> void:
 		pass
 
 #
-# ---- INTERNALS
+# ---- INTERNALS ----
 #
 
 func _disconnect_player_info(player: PlayerInfo) -> void:
