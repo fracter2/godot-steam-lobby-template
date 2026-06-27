@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bd7v4xsokklmx"]
 
-[ext_resource type="Script" uid="uid://bt0aybcfio7f5" path="res://content/base/player/scritps/player_branch.gd" id="1_5t87g"]
+[ext_resource type="Script" uid="uid://bt0aybcfio7f5" path="res://src/world_sync/player_branch.gd" id="1_cneaa"]
 
 [sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_xtxcq"]
 properties/0/path = NodePath(".:peer_id")
@@ -8,7 +8,7 @@ properties/0/spawn = true
 properties/0/replication_mode = 0
 
 [node name="Player" type="Node2D" unique_id=115763383 node_paths=PackedStringArray("player_owned_spawner", "owned_entities")]
-script = ExtResource("1_5t87g")
+script = ExtResource("1_cneaa")
 player_owned_spawner = NodePath("PlayerOwnedSpawner")
 owned_entities = NodePath("OwnedEntities")
 
