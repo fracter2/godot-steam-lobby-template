@@ -3,15 +3,15 @@ extends Node2D
 
 
 @export_group("References")
-@export var player_spawner: MultiplayerSpawner									# TODO RENAME Player branch spawner
-@export var player_branches: Node2D
+@export var player_branch_spawner: MultiplayerSpawner
+@export var player_branch_root: Node2D
 @export var entity_spawner: MultiplayerSpawner									# TODO RENAME server spawner OR server branch spawner
 @export var networked_entities: Node2D											# TODO RENAME server entities OR server branch
 @export var local_entities: Node2D												# TODO RENAME local branch
 
 const PLAYER_BRANCH = preload(PATHS.NETWORK_PLAYER_BRANCH)
 
-var player_nodes: Dictionary[int, PlayerBranch] = {}
+var player_branches: Dictionary[int, PlayerBranch] = {}
 
 static var singleton: World = null
 
@@ -36,8 +36,8 @@ func _ready() -> void:
 	multiplayer.server_disconnected.connect(_on_lobby_exiting.bind("Server disconnected"))
 
 	# NOTE MultiplayerSpawner soawned and despawned signals only emit on remote peers... so non-server clients
-	player_spawner.spawned.connect(_check_if_player_spawned)
-	player_spawner.despawned.connect(_check_if_player_despawned)
+	player_branch_spawner.spawned.connect(_check_if_player_spawned)
+	player_branch_spawner.despawned.connect(_check_if_player_despawned)
 
 	if Lobby.is_in_lobby():
 		_on_lobby_entered()
@@ -59,8 +59,10 @@ func _exit_tree() -> void:
 # ---- API ----
 #
 
+## TODO CONSIDER MOVING ALL PLAYER BRANCH LOGIC TO PLAYER BRANCH SPAWNER NODE!!
+
 static func get_player_branch_of(node: Node) -> PlayerBranch:
-	assert(singleton.player_branches.is_ancestor_of(node))
+	assert(singleton.player_branch_root.is_ancestor_of(node))
 	var branch: Node = singleton._get_player_branch_of_unchecked(node)
 
 	if branch == null or not branch is PlayerBranch:
@@ -106,7 +108,7 @@ func _on_lobby_entered() -> void:
 	multiplayer.multiplayer_peer = Lobby.multiplayer.multiplayer_peer
 	assert(multiplayer.multiplayer_peer != null, "obviously this shoulda not be null")
 	if multiplayer.is_server():
-		_spawn_player(1)	# NOTE 1 is always the server peer_id
+		_spawn_player_branch(1)	# NOTE 1 is always the server peer_id
 
 
 func _on_lobby_exiting(message: String) -> void:
@@ -117,7 +119,7 @@ func _on_lobby_exiting(message: String) -> void:
 
 func _on_peer_connected(peer_id: int) -> void:
 	if multiplayer.is_server():
-		_spawn_player(peer_id)
+		_spawn_player_branch(peer_id)
 
 
 func _on_peer_disconnected(peer_id: int) -> void:
@@ -125,11 +127,11 @@ func _on_peer_disconnected(peer_id: int) -> void:
 	if multiplayer == null: return 		# NOTE When host disconnectes and the scene changes through _on_lobby_exiting(), this callback still remains, and multiplayer is set to null.
 	#Log.pprint("Peer_%d: calling _on_peer_disconnected() on peer_%d" % [multiplayer.get_unique_id(), peer_id])
 	if multiplayer.is_server():
-		if not player_nodes.has(peer_id):
+		if not player_branches.has(peer_id):
 			push_warning("Peer disconnected but was not added to player_info anyway...")
 			return
-		player_nodes[peer_id].queue_free()
-		player_nodes.erase(peer_id)												# NOTE player_nodes is kept synced on remote peers by the MultiplayerSpawner signal callbacks
+		player_branches[peer_id].queue_free()
+		player_branches.erase(peer_id)												# NOTE player_nodes is kept synced on remote peers by the MultiplayerSpawner signal callbacks
 
 
 ## Adds the node to [member player_nodes] if it is a [Player]
@@ -138,39 +140,39 @@ func _check_if_player_spawned(node: Node) -> void:
 	if node is PlayerBranch:
 		var peer_id: int = (node as PlayerBranch).peer_id
 
-		assert(not player_nodes.has(peer_id), "in _on_entity_spawned(), a new player node shouldn't already be registered here. obviously.")
-		player_nodes[peer_id] = node
+		assert(not player_branches.has(peer_id), "in _on_entity_spawned(), a new player node shouldn't already be registered here. obviously.")
+		player_branches[peer_id] = node
 
 ## Removes the node from [member player_nodes] if it is a [Player]
 func _check_if_player_despawned(node: Node) -> void:
 	assert(not multiplayer.is_server(), "_on_entity_despawned() should only be called by non-servers, as described in the MultiplayerSpawner signal description.")
 	if node is PlayerBranch:
 		var peer_id: int = (node as PlayerBranch).peer_id
-		assert(player_nodes.has(peer_id), "in _on_entity_despawned(), the deleted player should still be in the player_nodes dict!")
-		player_nodes.erase(peer_id)
+		assert(player_branches.has(peer_id), "in _on_entity_despawned(), the deleted player should still be in the player_nodes dict!")
+		player_branches.erase(peer_id)
 
 
 func _check_player_ownership(node: Node) -> void:
-	if node.is_in_group(GROUPS.PLAYER_OWNED_RECURSIVE) and player_branches.is_ancestor_of(node):
+	if node.is_in_group(GROUPS.PLAYER_OWNED_RECURSIVE) and player_branch_root.is_ancestor_of(node):
 		node.set_multiplayer_authority(_get_player_branch_of_unchecked(node).peer_id, true)
-	elif node.is_in_group(GROUPS.PLAYER_OWNED) and player_branches.is_ancestor_of(node):
+	elif node.is_in_group(GROUPS.PLAYER_OWNED) and player_branch_root.is_ancestor_of(node):
 		node.set_multiplayer_authority(_get_player_branch_of_unchecked(node).peer_id, false)
 
 #
 # ---- INTERNALS ----
 #
 
-func _spawn_player(id: int) -> void:
+func _spawn_player_branch(id: int) -> void:
 	assert(multiplayer.is_server())
-	assert(not player_nodes.has(id), "in _spawn_player() Spawning a player that is already registered!")
+	assert(not player_branches.has(id), "in _spawn_player_branch() Spawning a player that is already registered!")
 
 	var player_instance: PlayerBranch = PLAYER_BRANCH.instantiate()
 	player_instance.name = "player_peer_%d" % id
 	player_instance.peer_id = id
-	player_nodes[id] = player_instance											# NOTE player_nodes is kept synced on remote peers by the MultiplayerSpawner signal callbacks
-	player_branches.add_child(player_instance)
+	player_branches[id] = player_instance											# NOTE player_nodes is kept synced on remote peers by the MultiplayerSpawner signal callbacks
+	player_branch_root.add_child(player_instance)
 
 
 func _get_player_branch_of_unchecked(node: Node) -> PlayerBranch:
-	var branch_name: StringName = player_branches.get_path_to(node).get_name(0)
-	return player_branches.get_node_or_null(NodePath(branch_name))
+	var branch_name: StringName = player_branch_root.get_path_to(node).get_name(0)
+	return player_branch_root.get_node_or_null(NodePath(branch_name))
