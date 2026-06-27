@@ -2,9 +2,13 @@ extends Node
 
 ## The purpose of this is to provide a simple logg wrapper to help with local debugging using multiple running instances.
 
+@export var add_color_as_prefix: bool = true
+
 var color: Color = Color.WHITE
 var color_bb: String = "[color=WHITE]"
 const color_bb_end: String = "[/color]"
+
+var prefix: String = ""
 
 
 func _enter_tree() -> void:
@@ -23,6 +27,9 @@ func _enter_tree() -> void:
 
 	color_bb = "[color=%s]" % launch_color_name
 	color = launch_color
+	if add_color_as_prefix:
+		prefix = launch_color_name + ": "
+		# TODO CONSIDER SETTING SPECIFIC LENGTH using spaces before/after
 	pprint("Log: color set")
 
 
@@ -35,10 +42,10 @@ func _notification(what: int) -> void:
 
 ## Returns the values converted to string, with the color bb wrapped at the start and end. [br]
 ## Same conversion as [method pprint].
-func pwrap(...values: Array) -> String:
-	return (color_bb + str(values) + color_bb_end)
+func pwrap(txt: String) -> String:
+	return (color_bb + prefix + txt + color_bb_end)
 
 
 ## Prints text with color using print_rich().
-func pprint(...values: Array) -> void:
-	print_rich(color_bb + str(values) + color_bb_end)
+func pprint(txt: String) -> void:
+	print_rich(color_bb + prefix + txt + color_bb_end)
