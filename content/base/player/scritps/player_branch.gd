@@ -4,6 +4,9 @@ extends Node2D
 
 const player_character_preload: PackedScene = preload(PATHS.ENTITY_PLAYER_CHARACTER)
 
+## Emits when [member peer_id] is set, before or during _enter_tree().
+signal setting_peer_authority(peer_id: int)
+
 ## The multiplayer peer id assosiated with this player. Setting this also sets the multiplayer authority of
 ## all nodes in [member player_owned_nodes] on spawn, as well as emitting [signal setting_peer_authority].
 @export var peer_id: int = 1:
@@ -21,8 +24,7 @@ const player_character_preload: PackedScene = preload(PATHS.ENTITY_PLAYER_CHARAC
 var player_info: PlayerInfo = null
 
 
-## Emits when [member peer_id] is set, before or during _enter_tree().
-signal setting_peer_authority(peer_id: int)
+
 
 #
 # ---- PROCEDURE ----
@@ -39,17 +41,21 @@ func _ready() -> void:
 		push_error("Player entity at %s is missing player_info on _enter_tree()!" % get_path())
 
 	if owned_entities.is_multiplayer_authority():
-		var character: PlayerCharacter = player_character_preload.instantiate()			# TODO CONSIDER DELEGATING to level specific implementaiton...
+		var character: PlayerCharacter = player_character_preload.instantiate()			# TODO DELEGATE to level specific implementaiton...
 		spawn_node(character)
 
 #
 # ---- API ----
 #
 
+## Spawns a networked node that this player owns, rather than the server. As such it is removed when the player exits. [br]
+## Only use if you know this is exacly what you need. Prefer server-side spawning with prediction/reconsiliation, or local spawning (client-side only). [br]
+## Especially with physics nodes, as the network latency will be applied to collissions. Or any task in which you cannot trust the client (which is most things). [br]
+## Example uses may be markers on a map, or spectator ghost. Notice that most use-cases can be replaced with server-side spawning and prediction logic.
 func spawn_node(node: Node) -> void:
 	assert(owned_entities.is_multiplayer_authority())
 	owned_entities.add_child(node, true)
-
+	# TODO BUG IS THIS NOT AT RISK OF LETTING node BE SERVER AUTHORITY?
 
 
 #
