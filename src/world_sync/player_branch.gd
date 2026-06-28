@@ -2,8 +2,6 @@ class_name PlayerBranch
 extends Node2D
 
 
-const player_character_preload: PackedScene = preload(PATHS.ENTITY_PLAYER_CHARACTER)
-
 ## Emits when [member peer_id] is set, before or during _enter_tree().
 signal setting_peer_authority(peer_id: int)
 
@@ -40,9 +38,6 @@ func _ready() -> void:
 	if player_info == null:
 		push_error("Player entity at %s is missing player_info on _enter_tree()!" % get_path())
 
-	if owned_entities.is_multiplayer_authority():
-		var character: PlayerCharacter = player_character_preload.instantiate()			# TODO DELEGATE to level specific implementaiton...
-		spawn_node(character)
 
 #
 # ---- API ----
