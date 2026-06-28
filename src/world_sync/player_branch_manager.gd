@@ -65,7 +65,6 @@ func _remove_branch(peer_id: int) -> void:
 		push_warning("attempt to remove branch when multiplayer == null! Should disconnect signal here!!")	# TODO Replace with signal disconnect where it makes sense, or keep without warning
 		return
 
-	assert(multiplayer.is_server())
 	assert(branches.has(peer_id), "Peer disconnected but was not added to player_info anyway...")
 	branches[peer_id].queue_free()
 	branches.erase(peer_id)
