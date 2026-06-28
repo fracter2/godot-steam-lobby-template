@@ -22,8 +22,6 @@ signal setting_peer_authority(peer_id: int)
 var player_info: PlayerInfo = null
 
 
-
-
 #
 # ---- PROCEDURE ----
 #
@@ -31,7 +29,6 @@ var player_info: PlayerInfo = null
 func _enter_tree() -> void:
 	if not Lobby.players.has(peer_id):											# TODO Make lobby assure that this always gets made before signal callbacks
 		push_error("PlayerBranch at %s \n -> peer_id %d set but player_info not found!" % [get_path(), peer_id])
-
 
 
 func _ready() -> void:
@@ -43,14 +40,20 @@ func _ready() -> void:
 # ---- API ----
 #
 
-## Spawns a networked node that this player owns, rather than the server. As such it is removed when the player exits. [br]
-## Only use if you know this is exacly what you need. Prefer server-side spawning with prediction/reconsiliation, or local spawning (client-side only). [br]
+## Spawns a networked node on this player branch. [br]
+## It is intended to allow simple player-driven actions without having to manage prediction, at the cost of trusting the client. [br]
+## Prefer server-side spawning with prediction/reconsiliation, or local spawning (which is client-side only). [br]
 ## Especially with physics nodes, as the network latency will be applied to collissions. Or any task in which you cannot trust the client (which is most things). [br]
-## Example uses may be markers on a map, or spectator ghost. Notice that most use-cases can be replaced with server-side spawning and prediction logic.
+## Example uses may be markers on a map, or spectator ghost. Most use-cases can be replaced with server-side spawning and prediction logic.
 func spawn_node(node: Node) -> void:
 	assert(owned_entities.is_multiplayer_authority())
 	owned_entities.add_child(node, true)
+
 	# TODO BUG IS THIS NOT AT RISK OF LETTING node BE SERVER AUTHORITY?
+	# TEST IF SPAWNING SERVER NODES OK?
+	# TEST IF SETTING TO PLAYER AUTHORITY (recursively) IS OK
+	# TODO DOCUMENT RESULTS
+	# TODO DECIDE IF THAT IS INTENDED BEHAVIOUR, AND HOW TO MAKE SPECIFIC PARTS STILL BE SERVER-AUTHORITATIVE (group? require custom script?)
 
 
 #
