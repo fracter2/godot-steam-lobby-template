@@ -159,7 +159,7 @@ func _on_lobby_created(conn: int, created_lobby_id: int) -> String:				# TODO Us
 	if error != OK:
 		return "ERROR CREATING HOST CLIENT\nCODE: " + str(error)
 
-	var my_name: String = Util.limit_string_to_size(Steamworks.persona_name, 20)
+	var my_name: String = limit_string_to_size(Steamworks.persona_name, 20)
 	Steam.setLobbyData(lobby_id, "name", (my_name+"'s Lobby"))					# TODO Allow setting a lobby name
 	Steam.setLobbyJoinable(lobby_id, true)
 	Steam.allowP2PPacketRelay(true)												# TODO Remove, this should be redundant
@@ -216,3 +216,17 @@ func _get_fail_response_description(response: int) -> String:
 		11: return "A user you have blocked is in the lobby."
 
 	return "Uknown responde id: " + str(response)
+
+
+#
+# ---- Util ----
+#
+
+func limit_string_to_size(txt: String, size: int) -> String:
+	assert(size > 0)
+	if txt.length() > size:
+		if size-3 > 0:
+			txt = txt.substr(0, size-3) + '...'
+		else:
+			txt = txt.substr(0, size)
+	return txt
