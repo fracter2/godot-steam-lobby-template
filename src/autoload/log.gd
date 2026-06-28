@@ -3,6 +3,7 @@ extends Node
 ## The purpose of this is to provide a simple logg wrapper to help with local debugging using multiple running instances.
 
 @export var add_color_as_prefix: bool = true
+@export var add_color_to_window_title: bool = true
 
 var color: Color = Color.WHITE
 var color_bb: String = "[color=WHITE]"
@@ -31,6 +32,9 @@ func _enter_tree() -> void:
 		prefix = launch_color_name + ": "
 		# TODO CONSIDER SETTING SPECIFIC LENGTH using spaces before/after
 	pprint("Log: color set")
+
+	if add_color_to_window_title:
+		get_window().title = prefix + get_window().title
 
 
 func _notification(what: int) -> void:
