@@ -67,10 +67,12 @@ TODO ADD LICENSE
 - [ ] Add Launch commands to set window size / location
 
 ##### Constants Autoloads
-- [X] Add PATHS autoload to contain used file paths
-- [ ] Add GROUPS autoload to contain group names... if it isn't already a thing?
-- [ ] Add LAYERS autoload to contain layer names and bitmasks
-- [ ] Add META autoload to contain used meta names
+- [X] Add PATHS class to contain used file paths
+- [X] Add GROUPS class to contain group names... if it isn't already a thing?
+- [X] Add LAYERS class to contain layer names and bitmasks
+- [X] Add META class to contain used meta names
+- [ ] Add editor script to auto-fill LAYERS and GROUPS scripts from settings
+- [ ] Add editor script to validate PATHS constants
 
 ##### Log autoload
 - [X] Add Log autoload to provide an easy print() using with color coding for running multiple window tests
