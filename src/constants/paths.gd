@@ -4,9 +4,6 @@ extends Object
 ## This class is meant to contain all FILE PATHS used in the project.
 ## This script serves to make them strongly typed constants, for auto-completion and type-safety
 
-# TODO ADD A WAY TO VALIDATE
-
-
 const MAIN_MENU := "uid://bp3lhs80g85ky"
 const DEMO_GAME := "uid://dx0gencnp27xs"
 const NETWORK_PLAYER_BRANCH := "uid://bd7v4xsokklmx"

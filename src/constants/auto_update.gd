@@ -9,16 +9,33 @@ const type_stringname: String = ": StringName = &\""
 const type_int: String = ": int = "
 const suffix_endquotes: String = "\""
 
+
 #
-# ---- Common funcs ----
+# ---- Editor ----
 #
 
 func _run() -> void:
-	var toaster := EditorInterface.get_editor_toaster()
-	toaster.push_toast("auto_update.gd updating LAYERS...", EditorToaster.SEVERITY_INFO, "Hi i'm a toaster!")
+	print("")	# Line separator for visual clarity
+	_print_and_toast("auto_update.gd: updating LAYERS...")
 	_update_layers()
-	toaster.push_toast("auto_update.gd Done!", EditorToaster.SEVERITY_INFO, "Hi i'm a toaster!")
+	#_print_and_toast("auto_update.gd: updating GROUPS...")
 
+	_print_and_toast("auto_update.gd: validating PATHS")
+	_validate_paths()
+	_print_and_toast("auto_update.gd: Done!")
+
+
+func _print_and_toast(txt: String, severity: int = EditorToaster.SEVERITY_INFO, desc: String = "Hi i'm a toaster!") -> void:
+	EditorInterface.get_editor_toaster().push_toast(txt, severity, desc)
+	if severity == EditorToaster.SEVERITY_ERROR:
+		printerr(txt)
+	else:
+		print(txt)
+
+
+#
+# ---- Helper ----
+#
 
 func _replace_text_in_file(text: String, filepath: String) -> bool:
 	if not FileAccess.file_exists(filepath):
@@ -51,7 +68,6 @@ extends Object
 
 func _update_layers() -> void:
 	if not Engine.is_editor_hint(): return
-	print("Updating Layers in " + PATHS.SCRIPT_LAYERS)
 
 	var named_layers: Dictionary[String, int] = _get_all_named_layers()
 	var new_script: String = layers_script_header_ + autogen_disclaimer
@@ -102,7 +118,40 @@ func _get_named_layers_group(group: String, name_pref: String, max_layer: int) -
 # ---- PATHS SCRIPT ----
 #
 
-# TODO Validation (NOT UPDATE)
+func _validate_paths() -> void:
+	var timer_start: int = Time.get_ticks_usec()
+
+	var p: PATHS = PATHS.new()
+	var script: Script = p.get_script()
+	p.free()
+	if not script:
+		EditorInterface.get_editor_toaster().push_toast("PATHS VALIDATION FUNC BROKEN!!", EditorToaster.SEVERITY_INFO, "Hi i'm a toaster!")
+		printerr("PATHS VALIDATION FUNC BROKEN!!")
+		return
+
+	var good_consts: int = 0
+	var bad_consts: int = 0
+	var constants: Dictionary = script.get_script_constant_map()
+	for key: Variant in constants.keys():
+		var val: Variant = constants[key]
+		var err_msg: String = ""
+		if not val is String:
+			err_msg = "PATHS.%s has invalid type! value: %s" % [key, str(val)]
+		elif val == null:
+			err_msg = "PATHS.%s has null value!" % [key]
+			@warning_ignore("unsafe_call_argument")
+		elif not ResourceLoader.exists((val)):
+			#push_error("PATHS const has invalid path! value: " + val)
+			err_msg = "PATHS.%s has invalid path! path: %s" % [key, str(val)]
+
+		if err_msg:
+			bad_consts += 1
+			printerr(err_msg)
+			EditorInterface.get_editor_toaster().push_toast(err_msg, EditorToaster.SEVERITY_INFO, "Hi i'm a toaster!")
+		else:
+			good_consts += 1
+
+	print("PATHS.validate_paths() finished after %d usec, with %d good / %d bad consts" % [(Time.get_ticks_usec() - timer_start), good_consts, bad_consts])
 
 #
 # ---- META SCRIPT ----
