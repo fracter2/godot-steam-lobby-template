@@ -23,13 +23,14 @@ func get_player_branch_of_unchecked(node: Node) -> PlayerBranch:
 func _enter_tree() -> void:
 	_add_multiplayer_spawner()
 	get_tree().node_added.connect(_check_player_ownership)
-
-
-func _ready() -> void:
 	if Lobby.is_in_lobby():
 		_connect_signals()
 	else:
 		Lobby.lobby_entered.connect(_connect_signals, ConnectFlags.CONNECT_ONE_SHOT)				# Oneshot to clarify use-case
+
+
+func _ready() -> void:
+	pass
 
 
 #
@@ -47,24 +48,13 @@ func _add_multiplayer_spawner() -> void:
 
 func _connect_signals() -> void:
 	if multiplayer.is_server():
-		_spawn_player_branch(1)													# NOTE 1 is always the server peer_id
-		multiplayer.peer_connected.connect(_add_branch)
+		_create_branch(1)													# NOTE 1 is always the server peer_id
+		multiplayer.peer_connected.connect(_create_branch)
 		multiplayer.peer_disconnected.connect(_remove_branch)
 	else:
 		# NOTE MultiplayerSpawner soawned and despawned signals only emit on remote peers... so non-server clients
 		branch_spawner.spawned.connect(_add_branch_to_list)
 		branch_spawner.despawned.connect(_remove_branch_from_list)
-
-
-func _spawn_player_branch(id: int) -> void:
-	assert(multiplayer.is_server())
-	assert(not branches.has(id), "in _spawn_player_branch() Spawning a player that is already registered!")
-
-	var player_instance: PlayerBranch = PLAYER_BRANCH.instantiate()
-	player_instance.name = "player_peer_%d" % id
-	player_instance.peer_id = id
-	branches[id] = player_instance										# NOTE player_nodes is kept synced on remote peers by the MultiplayerSpawner signal callbacks
-	add_child(player_instance)
 
 
 func _check_player_ownership(node: Node) -> void:
@@ -85,9 +75,15 @@ func _check_player_ownership(node: Node) -> void:
 # ---- SERVER ONLY ----
 #
 
-func _add_branch(peer_id: int) -> void:
+func _create_branch(id: int) -> void:
 	assert(multiplayer.is_server())
-	_spawn_player_branch(peer_id)
+	assert(not branches.has(id), "in _spawn_player_branch() Spawning a player that is already registered!")
+
+	var player_instance: PlayerBranch = PLAYER_BRANCH.instantiate()
+	player_instance.name = "player_peer_%d" % id
+	player_instance.peer_id = id
+	branches[id] = player_instance										# NOTE player_nodes is kept synced on remote peers by the MultiplayerSpawner signal callbacks
+	add_child(player_instance)
 
 
 func _remove_branch(peer_id: int) -> void:
