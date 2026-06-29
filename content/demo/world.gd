@@ -16,8 +16,6 @@ extends Node2D
 @export var server_branch: Node2D
 @export var local_branch: Node2D
 
-const PLAYER_BRANCH = preload(PATHS.NETWORK_PLAYER_BRANCH)
-
 static var singleton: World = null
 
 
