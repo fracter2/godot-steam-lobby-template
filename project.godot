@@ -86,6 +86,11 @@ interact_secondary={
 ]
 }
 
+[layer_names]
+
+2d_physics/layer_1="Map"
+2d_physics/layer_2="Character"
+
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
