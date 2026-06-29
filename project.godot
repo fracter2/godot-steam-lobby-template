@@ -33,6 +33,10 @@ gdscript/warnings/unsafe_cast=1
 gdscript/warnings/unsafe_call_argument=1
 gdscript/warnings/missing_await=1
 
+[dotnet]
+
+project/assembly_name="Steam Lobby Wrapper"
+
 [global_group]
 
 "Player Owned"="When set, this node should have the multiplayer authority set to the player branch peer it spawned under. Non-recursive."
