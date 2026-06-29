@@ -24,10 +24,6 @@ TODO ADD LICENSE
 - [X] Add lobby-implementation interface (doesn't distinguish steam or enet lobby)
 - [ ] Add propper quit logic (instead of just timeout)
 - [ ] Add ability to kick players
-- [ ] Add chat interface (sepparate or same autoload?) and display (add a prefab that loads / interfaces)
-	- [ ] Allow system messages with different color
-	- [ ] Allow whispers
-	- [ ] Colors should be inserted as BB. Rember to strip user input BB.
 - [ ] Add "tab menu" player list and lobby info (names, ping, steam user link?, public/private...)
 - [ ] Auto-disable connections when lobby is full
 - [ ] Password select with peer authentication
@@ -71,14 +67,27 @@ TODO ADD LICENSE
 - [X] Add GROUPS class to contain group names... if it isn't already a thing?
 - [X] Add LAYERS class to contain layer names and bitmasks
 - [X] Add META class to contain used meta names
-- [ ] Add editor script to auto-fill LAYERS and GROUPS scripts from settings
-- [ ] Add editor script to validate PATHS constants
+- [X] Add editor script to auto-fill LAYERS and GROUPS scripts from settings
+- [X] Add editor script to validate PATHS constants
 
 ##### Log autoload
 - [X] Add Log autoload to provide an easy print() using with color coding for running multiple window tests
 
 ##### Smarter multi-window setup
 - [X] Add "WindowSpawnAligner" autoload to align windows via launch conmmands (to skip having to sepparate them every time you run)
+- [ ] Combine this and Log autoload
+- [ ] Add loading starting from config
+- [ ] Investigate starting sepparate windows AFTER START? (multi-windows without debug tab?)
+	- [ ] Maybe using Shell execution
+	- [ ] Potential for Tests
+
+##### Console Autoload
+- [ ] In-game console / terminal UI, in / out funcs and signals ()
+- [ ] Chat functionality with Lobby (/public command?)
+- [ ] Allow whispers (/whisper command?)
+- [ ] Allow system messages with different color
+	- [ ] Colors should be inserted as BB.
+	- [ ] Rember to strip user input BB.
 
 ##### Smarter MultiplayerSpawner
 To make it file-path renaming resistant, it should validate existing scene-paths on build, or add dynamically in runtime.
