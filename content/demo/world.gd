@@ -9,6 +9,8 @@ extends Node2D
 # TODO MAKE SO IT CAN LOAD SAVE FILES				# Or make separate node!
 # TODO MAKE SO SERVER SENDS STATIC WORLD STATE		# Or make separate node!
 
+@export var quit_on_lobby_disconnect: bool = true
+
 @export_group("References")
 @export var player_branch_manager: PlayerBranchManager
 @export var server_branch: Node2D
@@ -97,5 +99,5 @@ func _on_lobby_entered() -> void:
 
 func _on_lobby_exiting(message: String) -> void:
 	Log.pprint("Quit level, message: %s" % message)
-	if is_inside_tree():
+	if quit_on_lobby_disconnect and is_inside_tree():
 		get_tree().change_scene_to_file(PATHS.MAIN_MENU)
