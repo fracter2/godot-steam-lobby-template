@@ -51,5 +51,5 @@ func pwrap(txt: String) -> String:
 
 
 ## Prints text with color using print_rich().
-func pprint(txt: String) -> void:
+func pprint(txt: String) -> void:												# TODO RENAME TO info
 	print_rich(color_bb + prefix + txt + color_bb_end)

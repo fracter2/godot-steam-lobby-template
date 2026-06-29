@@ -25,11 +25,3 @@ var multiplayer_peer: MultiplayerPeer
 
 ## Disconnect as host / client, or failed lobby_entered attempt
 @warning_ignore("unused_signal") signal disconnected(message:String)
-
-## Emited when the multiplayer peer is set. Only useful during initialisation, to avoid missing any "peer_connected" signals
-#@warning_ignore("unused_signal") signal multiplayer_peer_set(peer: MultiplayerPeer)				# TODO CONSIDER REMOVING, UNUSED
-
-
-# TODO Chat messages, recieve and send signals...?
-# TODO Chat send func
-# TODO Chat history...?
