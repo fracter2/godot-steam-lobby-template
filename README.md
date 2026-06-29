@@ -33,9 +33,9 @@ TODO ADD LICENSE
 - [ ] Add finding open friend lobbies
 - [ ] Add player count display with player max
 - [ ] Add public lobby finding
-- [ ] Add setting lobby to private
-- [ ] Add sorting
+- [ ] Add setting lobby to invite-only
 - [ ] Add setting lobby password
+- [ ] Add meta info like level, gamemode, description, mods...
 
 ##### LAN Lobby browser?
 - [ ] Query broadcasts in LAN
@@ -72,10 +72,13 @@ TODO ADD LICENSE
 
 ##### Log autoload
 - [X] Add Log autoload to provide an easy print() using with color coding for running multiple window tests
+- [X] Add prefix support, and toggling auto_prefix_as_color
+- [ ] Add support funcs to changing prefix / color anytime
+- [ ] Add signals when logging
+	- [ ] Add support for simultanious push to in-game Console (Console-singleton)
 
 ##### Smarter multi-window setup
 - [X] Add "WindowSpawnAligner" autoload to align windows via launch conmmands (to skip having to sepparate them every time you run)
-- [ ] Combine this and Log autoload
 - [ ] Add loading starting from config
 - [ ] Investigate starting sepparate windows AFTER START? (multi-windows without debug tab?)
 	- [ ] Maybe using Shell execution
@@ -124,3 +127,15 @@ Cases that should be tested and covered:
 ##### SceneMultiplayer
 - [ ] Sending / recieveing raw bytes
 - [ ] Authenticating peers before accepting
+
+##### GDSteam
+- [ ] Steam.setLobbyData() and it's signal
+- [ ] Steam.setMemberLobbyData() purpose
+- [ ] Sending messages
+- [ ] Party and Beacon functionality
+- [ ] Hosting without lobby?
+
+##### Steam Integration
+- [ ] Find fun stuff, like:
+	- Interacting with steam music player
+	- steam player-to-player messaging
