@@ -70,7 +70,7 @@ static func get_player_branch_of(node: Node) -> PlayerBranch:
 
 ## Adds the node to the tree under [property server_branch], of course with server authority set.
 static func spawn_server_owned(node: Node) -> void:
-	singleton.server_branch.add_child(node)
+	singleton.server_branch.add_child(node, true)
 
 
 ## Adds the node to the tree under the local users [PlayerBranch], with it's own [MultiplayerSpawner].
