@@ -3,22 +3,30 @@ extends MultiplayerLobby
 
 var init_as_host: bool
 var init_id: int
+var lobby_type: Steam.LobbyType
+var player_max: int:
+	set(val):
+		player_max = clampi(val, 2, 250)
 
 ## Steam lobby id assosiated with this lobby resource.
 var lobby_id: int = 0
 var owner_steam_id: int = 0
 
+
 #
 # ---- Procedure ----
 #
 
-func _init(lobby_id_: int, as_host: bool) -> void:								# TODO REVERSE ORDER OF ARGS and CLARIFY LOBBY ID DOESN'T MATTER IF HOSTING
+## Note lobby_id is just for joining other lobbies, and is ignored when hosting.
+func _init(lobby_id_: int, as_host: bool, player_max_: int = 124, lobby_type_: Steam.LobbyType = Steam.LobbyType.LOBBY_TYPE_FRIENDS_ONLY) -> void:
 	if not Steamworks.steam_enabled:
 		print_debug("Cannot create SteamMultiplayerLobby when steam is not enabled and active!")
 		return
 
 	init_id = lobby_id_
 	init_as_host = as_host
+	player_max = player_max_
+	lobby_type = lobby_type_
 
 	Steam.lobby_created.connect(_on_lobby_created)
 	Steam.lobby_joined.connect(_on_lobby_joined)						# NOTE Called when YOU enter either your own or other's lobbies...
@@ -55,8 +63,8 @@ func initiate_connection() -> bool:
 		return false
 
 	if init_as_host:
-		Log.pprint("Attempting to host a lobby on steam! lobby type: %d, max player count: %d" % [Steam.LOBBY_TYPE_FRIENDS_ONLY, 4])
-		Steam.createLobby(Steam.LOBBY_TYPE_FRIENDS_ONLY, 4) # 4 player lobby					# TODO Clarify player limit and lobby type to a var
+		Log.pprint("Attempting to host a lobby on steam! lobby type: %d, max player count: %d" % [lobby_type, player_max])
+		Steam.createLobby(lobby_type, player_max)
 
 	elif Steam.isLobby(init_id):
 		Log.pprint("Attempting to join a lobby on steam! lobby id: %d" % init_id)
