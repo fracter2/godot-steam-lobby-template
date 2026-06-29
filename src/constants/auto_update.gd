@@ -5,8 +5,8 @@ extends EditorScript
 
 const autogen_disclaimer: String = "\n# Dis scrip is audogenewaded by auto_update tool button\n"
 const prefix_const: String = "\nconst "
-const type_stringname: String = ": StringName = &\""
-const type_int: String = ": int = "
+const prefix_stringname: String = ": StringName = &\""
+const prefix_int: String = ": int = "
 const suffix_endquotes: String = "\""
 
 
@@ -18,8 +18,8 @@ func _run() -> void:
 	print("")	# Line separator for visual clarity
 	_print_and_toast("auto_update.gd: updating LAYERS...")
 	_update_layers()
-	#_print_and_toast("auto_update.gd: updating GROUPS...")
-
+	_print_and_toast("auto_update.gd: updating GROUPS...")
+	_update_groups()
 	_print_and_toast("auto_update.gd: validating PATHS")
 	_validate_paths()
 	_print_and_toast("auto_update.gd: Done!")
@@ -55,7 +55,7 @@ func _replace_text_in_file(text: String, filepath: String) -> bool:
 	return true
 
 
-#
+#§
 # ---- LAYERS SCRIPT ----
 #
 
@@ -74,12 +74,11 @@ func _update_layers() -> void:
 	for l_name: String in named_layers.keys():
 		new_script += prefix_const
 		new_script += (l_name.to_snake_case()).to_upper()
-		new_script += type_int
+		new_script += prefix_int
 		new_script += str(named_layers[l_name])
 
 	if _replace_text_in_file(new_script, PATHS.SCRIPT_LAYERS):
 		EditorInterface.get_resource_filesystem().update_file(PATHS.SCRIPT_LAYERS)
-		#EditorInterface.get_resource_filesystem().scan()
 		EditorInterface.get_script_editor().reload_open_files()
 		EditorInterface.get_editor_toaster().push_toast("Successfully updated PATHS.SCRIPT_LAYERS! yay!", EditorToaster.SEVERITY_INFO, "Hi i'm a toaster!")
 	else:
@@ -112,7 +111,47 @@ func _get_named_layers_group(group: String, name_pref: String, max_layer: int) -
 # ---- GROUPS SCRIPT ----
 #
 
-# TODO auto-update
+const groups_script_header_: String = "class_name GROUPS
+extends Object
+
+## This class serves to list all GROUPS used in this project.
+## To make them strongly typed, StringName cached, and enable text auto-completion.
+"
+
+func _update_groups() -> void:
+	if not Engine.is_editor_hint(): return
+
+	var groups: Array[String] = _get_all_groups()
+	var new_script: String = groups_script_header_ + autogen_disclaimer
+	for gname: String in groups:
+		new_script += prefix_const
+		new_script += (gname.to_snake_case()).to_upper()
+		new_script += prefix_stringname
+		new_script += gname
+		new_script += suffix_endquotes
+
+	if _replace_text_in_file(new_script, PATHS.SCRIPT_GROUPS):
+		EditorInterface.get_resource_filesystem().update_file(PATHS.SCRIPT_GROUPS)
+		EditorInterface.get_script_editor().reload_open_files()
+		EditorInterface.get_editor_toaster().push_toast("Successfully updated PATHS.SCRIPT_GROUPS! yay!", EditorToaster.SEVERITY_INFO, "Hi i'm a toaster!")
+	else:
+		push_error("_update_groups func failed to write to file!")
+		EditorInterface.get_editor_toaster().push_toast("Failed to update PATHS.SCRIPT_GROUPS :(", EditorToaster.SEVERITY_ERROR, "Hi i'm a toaster!")
+
+
+func _get_all_groups() -> Array[String]:
+	var timer_start: int = Time.get_ticks_usec()
+	var check_counter: int = 0
+	var property_list := ProjectSettings.get_property_list()
+	var ret: Array[String] = []
+	for prop: Dictionary in property_list:
+		if (prop["name"] as String).begins_with("global_group/"):
+			ret.push_back((prop["name"] as String).trim_prefix("global_group/"))
+		check_counter += 1
+
+	print("auto_update.gd _update_groups() took %d usec, with %d groups found, %d total settings checked" % [(Time.get_ticks_usec() - timer_start), ret.size(), check_counter])
+	return ret
+
 
 #
 # ---- PATHS SCRIPT ----
@@ -151,10 +190,10 @@ func _validate_paths() -> void:
 		else:
 			good_consts += 1
 
-	print("PATHS.validate_paths() finished after %d usec, with %d good / %d bad consts" % [(Time.get_ticks_usec() - timer_start), good_consts, bad_consts])
+	print("validate_paths() finished after %d usec, with %d good / %d bad consts" % [(Time.get_ticks_usec() - timer_start), good_consts, bad_consts])
 
 #
 # ---- META SCRIPT ----
 #
 
-# TODO auto-update
+# TODO auto-update or verify
