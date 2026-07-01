@@ -3,10 +3,12 @@ extends Node
 
 
 
-var branches: Dictionary[int, PlayerBranch] = {}
 
 ## The root of all generated player branches. If left empty, will create one automaticallty as a sibling based on parent type (NOTE only Node2D, Node3D, and Node)
 @export var branch_root: Node
+var branches: Dictionary[int, PlayerBranch] = {}
+
+@export var spawnable_scenes: Spawnlist
 
 const auto_root_name: String = "PlayerBranches"
 
@@ -40,6 +42,8 @@ func _enter_tree() -> void:
 # ---- Internal ----
 #
 
+## The point of assigning Node2D / Node3D as appropriate is to not interrupt accending / inheriting hierarchies of properties, like visibility. [br]
+## Though I have not tested if it actually makes a difference in any meaningfull scenario.
 func _get_node_instance_from_type(from_node: Node) -> Node:
 	if from_node is Node2D: return Node2D.new()
 	if from_node is Node3D: return Node3D.new()
@@ -76,7 +80,7 @@ func _create_branch(id: int) -> void:
 	var new_branch_spawner: PlayerBranch = PlayerBranch.new()
 	new_branch_spawner.name = "PlayerOwnedSpawner"
 	new_branch_spawner.peer_id = id
-	#_set_spawnable_scenes(new_branch_spawner)	# TODO
+	_set_spawnable_scenes(new_branch_spawner)
 	branches[id] = new_branch_spawner
 	branches.sort()
 	new_branch.add_child(new_branch_spawner)
@@ -97,6 +101,6 @@ func _remove_branch(peer_id: int) -> void:
 	branches.erase(peer_id)
 
 
-#func _set_spawnable_scenes(spawner: PlayerBranch) -> void:
-	# TODO SET ALL SPAWNABLE SCENES BASED ON A RESOURCE ON THIS MANAGER NODE
-#	spawner.add_spawnable_scene()
+func _set_spawnable_scenes(spawner: PlayerBranch) -> void:
+	for path: String in spawnable_scenes.get_paths_without_invalid():
+		spawner.add_spawnable_scene(path)
