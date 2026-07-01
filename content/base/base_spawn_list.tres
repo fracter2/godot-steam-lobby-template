@@ -4,5 +4,5 @@
 
 [resource]
 script = ExtResource("1_b5mvl")
-list = PackedStringArray("")
+list = PackedStringArray("uid://dyplrd0wmx3gy", "uid://bbt53a6pdbkkg")
 metadata/_custom_type_script = "uid://cvg3k76h8j7xo"
