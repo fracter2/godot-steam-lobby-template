@@ -97,9 +97,21 @@ To make it file-path renaming resistant, it should validate existing scene-paths
 - [ ] Add way of adding from list (like from a level config, or on-load node, or from level node, or world method)
 
 ##### Standardized Spawning API
-- [ ] Networked Spawning (server only)
-- [ ] Client-Owned Spawning (client only)
-- [ ] Client-local Spawning (clientside)
+- [ ] ServerBranchManager
+	- [X] Support server-owned spawns (only callable by server, ofc) (TEST)
+- [ ] PlayerBranchManager
+	- [X] Support client-owned spawns via their own branch
+	- [ ] Auto-set authority on spawned nodes via group (TEST)
+- [ ] LocalBranchManager
+	- [X] Support local (client-side only) spawns
+- [ ] SpawnableScenesConfig Resource
+	- [ ] Simply lists spawnable scenes
+	- [ ] Tool btn to validify they still exist
+	- [ ] Can be set to any spawn managers via their inspector properties
+- [X] Make managers 2D/3D agnostic
+- [ ] Make managers accesable as static singleton
+	- [ ] Check for duplicate managers too
+- [ ] World or Spawn or SPAWN autoload, for convenience funcs to use spawn managers
 
 ##### Standardized Level Loading
 - [ ] Add networked func, to load levels
