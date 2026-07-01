@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="Spawnlist" format=3 uid="uid://bb2syr6eygato"]
+
+[ext_resource type="Script" uid="uid://cvg3k76h8j7xo" path="res://src/world_sync/spawn_list.gd" id="1_b5mvl"]
+
+[resource]
+script = ExtResource("1_b5mvl")
+list = PackedStringArray("")
+metadata/_custom_type_script = "uid://cvg3k76h8j7xo"
