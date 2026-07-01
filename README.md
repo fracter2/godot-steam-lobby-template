@@ -69,6 +69,7 @@ TODO ADD LICENSE
 - [X] Add META class to contain used meta names
 - [X] Add editor script to auto-fill LAYERS and GROUPS scripts from settings
 - [X] Add editor script to validate PATHS constants
+- [ ] Add singletons class + editor script to fill fron Engine.list_singletons()
 
 ##### Log autoload
 - [X] Add Log autoload to provide an easy print() using with color coding for running multiple window tests
