@@ -6,7 +6,6 @@ extends Object
 
 const MAIN_MENU := "uid://bp3lhs80g85ky"
 const DEMO_GAME := "uid://dx0gencnp27xs"
-const NETWORK_PLAYER_BRANCH := "uid://bd7v4xsokklmx"
 
 const ENTITY_MARKER := "uid://dyplrd0wmx3gy"
 const ENTITY_MINION := "uid://cp10fjfcrq0j6"
