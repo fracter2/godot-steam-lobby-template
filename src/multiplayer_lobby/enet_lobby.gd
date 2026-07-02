@@ -67,6 +67,7 @@ func _initiate_as_host() -> bool:
 		return false
 
 	connected_as_host.emit()
+	_fill_own_player_info()
 	return true
 
 
@@ -77,8 +78,15 @@ func _initiate_as_client() -> bool:
 		return false
 
 	connected_as_client.emit()	# NOTE Lobby will here create a player_info for each peer
+	_fill_own_player_info()
 	return true
 
 
 func _create_multiplayer_peer() -> void:
 	multiplayer_peer = ENetMultiplayerPeer.new()
+
+
+func _fill_own_player_info() -> void:
+	assert(Lobby.players.has(multiplayer_peer.get_unique_id()), "Users player info resource should have been created by now!")
+	var my_p_info: PlayerInfo = Lobby.players.get(multiplayer_peer.get_unique_id())
+	my_p_info.display_name = username
