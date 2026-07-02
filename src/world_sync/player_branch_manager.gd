@@ -31,11 +31,11 @@ func _enter_tree() -> void:
 	multiplayer.peer_disconnected.connect(_remove_branch)
 
 	if not branch_root:
-		_create_root(_get_node_instance_from_type(get_parent()))
+		_create_root.call_deferred(_get_node_instance_from_type(get_parent()))	# NOTE Deffered since cannot spawn during _enter_tree()
 
 	for id: int in multiplayer.get_peers():
-		_create_branch(id)
-	_create_branch(multiplayer.get_unique_id())
+		_create_branch.call_deferred(id)
+	_create_branch.call_deferred(multiplayer.get_unique_id())
 
 
 #
