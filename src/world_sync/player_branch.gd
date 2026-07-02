@@ -65,3 +65,16 @@ func _check_player_ownership(node: Node) -> void:
 	elif node.is_in_group(GROUPS.SET_PLAYER_AUTHORITY_NO_CHILDREN):	node.set_multiplayer_authority(peer_id, false)
 	elif node.is_in_group(GROUPS.SET_SERVER_AUTHORITY):				node.set_multiplayer_authority(1, true)
 	elif node.is_in_group(GROUPS.SET_SERVER_AUTHORITY_NO_CHILDREN):	node.set_multiplayer_authority(1, false)
+
+	# TODO TEST IF THIS ALSO RUNS FOR THE NODES CHILDREN
+	# IF NOT, GO THROUGH EACH
+
+	# ALTERNATIVELY, GO THROUGH ALL NODES IN GROUP,
+	# (Do this in PlayerbranchManager? can be done here... )
+	#
+	# CHECK THEM (ignore if they path to another branch... apply and remove if server_auth on non-branch...)
+	#
+	# SORT BY TREE DEPTH (close to root > leafs) (to let more-specific nodes override recursive sets from parents)
+	#
+	# THEN REMOVE FROM GROUP
+	#node.remove_from_group()

@@ -10,6 +10,7 @@ extends Node
 var branches: Dictionary[int, PlayerBranch] = {}
 
 @export var spawnable_scenes: Spawnlist
+# TODO WHEN SET, IF THERE ARE ALREADY BRANCHES SPAWNED (&& is server), RESET THEM WITH NEW SPAWNLIST
 
 const auto_root_name: String = "PlayerBranches"
 const auto_branch_name: String = "player_peer_%d"
@@ -24,6 +25,14 @@ func get_player_branch_of_unchecked(node: Node) -> PlayerBranch:
 		return null
 	var branch_name: StringName = branch_root.get_path_to(node).get_name(0)
 	return branch_root.get_node_or_null(NodePath(str(branch_name) + "/" + auto_branch_spawner_name))		# WARNING EXPECTS BRANCH SPAWNER TO HAVE CONSISTENT NAME, consider metadata instead
+
+
+#@rpc("authority", "call_local", "reliable")
+#func reset_branches_with_new_spawnlist(new_spawnlist: Spawnlist) -> void:
+	# TODO apply new spawnlist to PlayerBranchManager
+	# TODO remove existing spawnconfigs from branches
+	# TODO add new from spawnlist
+	# TODO remove all non-spawnable scenes on replicated peers (so, not from each clients own branch). TEST is this automatic when removing configs?
 
 
 #
@@ -86,7 +95,6 @@ func _create_branch(id: int) -> void:
 
 
 func _remove_branch(peer_id: int) -> void:
-	#Log.pprint("GAME: PEER %d DISCONNECTED" % peer_id)
 	if multiplayer == null:
 		push_warning("attempt to remove branch when multiplayer == null! Should disconnect signal here!!")	# TODO Replace with signal disconnect where it makes sense, or keep without warning
 		return
