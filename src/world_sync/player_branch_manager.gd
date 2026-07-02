@@ -12,6 +12,8 @@ var branches: Dictionary[int, PlayerBranch] = {}
 @export var spawnable_scenes: Spawnlist
 
 const auto_root_name: String = "PlayerBranches"
+const auto_branch_name: String = "player_peer_%d"
+const auto_branch_spawner_name: String = "PlayerOwnedSpawner"
 
 #
 # ---- API ----
@@ -65,19 +67,21 @@ func _create_branch(id: int) -> void:
 	assert(not branches.has(id), "in _spawn_player_branch() Spawning a player that is already registered!")
 
 	var new_branch: Node = _get_node_instance_from_type(branch_root)
-	new_branch.name = "player_peer_%d" % id
-	add_child(new_branch)
+	new_branch.name = auto_branch_name % id
+	branch_root.add_child(new_branch)
 
 	var new_branch_spawner: PlayerBranch = PlayerBranch.new()
-	new_branch_spawner.name = "PlayerOwnedSpawner"
+	new_branch_spawner.name = auto_branch_spawner_name
 	new_branch_spawner.peer_id = id
-	_set_spawnable_scenes(new_branch_spawner)
+	_set_spawnable_scenes(new_branch_spawner, spawnable_scenes.list)
 	branches[id] = new_branch_spawner
 	branches.sort()
 	new_branch.add_child(new_branch_spawner)
-	move_child(new_branch, branches.keys().bsearch(new_branch_spawner.peer_id))
 
-	# In case we ever delete branch, and forget to delete the actually player-owned nodes
+	branch_root.move_child(new_branch, branches.keys().bsearch(new_branch_spawner.peer_id))
+	assert(new_branch_spawner.name == auto_branch_spawner_name)										# NOTE used for finding spawner from path
+
+	# In case we ever delete branch spawner, and forget to delete the actuall root node
 	new_branch_spawner.tree_exited.connect(new_branch.queue_free)
 
 
@@ -92,6 +96,21 @@ func _remove_branch(peer_id: int) -> void:
 	branches.erase(peer_id)
 
 
-func _set_spawnable_scenes(spawner: PlayerBranch) -> void:
+func _set_spawnable_scenes(spawner: MultiplayerSpawner, new_spawnlist: PackedStringArray) -> void:
+	# compare with already set paths
+	if spawner.get_spawnable_scene_count():
+		assert(spawner.is_inside_tree())
+		var removed_scenes: PackedStringArray = []
+		for i: int in range(spawner.get_spawnable_scene_count()):
+			if not new_spawnlist.has(spawner.get_spawnable_scene(i)):
+				removed_scenes.push_back(spawner.get_spawnable_scene(i))
+
+		# Despawn nodes that were removed
+		for n:Node in get_node(spawner.spawn_path).get_children():
+			if removed_scenes.has(n.scene_file_path):
+				n.queue_free()
+
+	# Set new spawnable scenes
+	spawner.clear_spawnable_scenes()
 	for path: String in spawnable_scenes.get_paths_without_invalid():
 		spawner.add_spawnable_scene(path)
