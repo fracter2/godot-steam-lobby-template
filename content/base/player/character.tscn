@@ -37,12 +37,12 @@ fill_from = Vector2(0.5, 0.5)
 fill_to = Vector2(1, 0.5)
 metadata/_snap_enabled = true
 
-[node name="Character" type="Node2D" unique_id=388113319 node_paths=PackedStringArray("camera_2d", "name_label") groups=["Player Owned", "Player Owned Recursive"]]
+[node name="Character" type="Node2D" unique_id=388113319 node_paths=PackedStringArray("camera_2d", "name_label") groups=["Set Player Authority"]]
 script = ExtResource("1_gig5a")
 camera_2d = NodePath("Camera2D")
 name_label = NodePath("NameLabel")
 
-[node name="PlayerOwnedSyncronizer" type="MultiplayerSynchronizer" parent="." unique_id=1640370798 groups=["Player Owned"]]
+[node name="PlayerOwnedSyncronizer" type="MultiplayerSynchronizer" parent="." unique_id=1640370798 groups=["Set Player Authority"]]
 editor_description = "It is \"player owned\" because the multiplayer authority is set to this player."
 replication_config = SubResource("SceneReplicationConfig_gig5a")
 

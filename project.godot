@@ -39,8 +39,10 @@ project/assembly_name="Steam Lobby Wrapper"
 
 [global_group]
 
-"Player Owned"="When set, this node should have the multiplayer authority set to the player branch peer it spawned under. Non-recursive."
-"Player Owned Recursive"="When set, this node should have the multiplayer authority set to the player branch peer it spawned under. Recursively set child nodes."
+"Set Player Authority No Children"="Set to apply player multiplayer authority, if spawned via PlayerBranchManager. Not recursive."
+"Set Server Authority No Children"="Set to apply server multiplayer authority, if spawned via PlayerBranchManager or ServerBranchManager. Not Recusive."
+"Set Player Authority"="Set to apply player multiplayer authority, if spawned via PlayerBranchManager. Recursively applies to children."
+"Set Server Authority"="Set to apply server multiplayer authority, if spawned via PlayerBranchManager or ServerBranchManager. Recursively applies to children."
 
 [input]
 
