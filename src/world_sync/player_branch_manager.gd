@@ -1,8 +1,9 @@
 class_name PlayerBranchManager
 extends Node
 
-
-
+# TODO RENAME TO ClientSpawner OR ClientSpawnManager
+# TODO make singleton
+# TODO RENAME SOURCE FOLDER TO spawn_managers
 
 ## The root of all generated player branches. If left empty, will create one automaticallty as a sibling based on parent type (NOTE only Node2D, Node3D, and Node)
 @export var branch_root: Node

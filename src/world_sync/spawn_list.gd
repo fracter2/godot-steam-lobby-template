@@ -6,6 +6,7 @@ extends Resource
 
 
 ## Parses [member list] for invalid file paths
+@warning_ignore("unused_private_class_variable")
 @export_tool_button("Check Paths") var _check_paths_tool: Callable = _check_invalid_paths
 
 ## Export file list got using [method ResourceLoader.get_recognized_extensions_for_type] with [PackedScene] type.
@@ -49,13 +50,13 @@ func _check_invalid_paths() -> void:
 	invalid_path_indexes = _get_invalid_path_indexes(list)
 	notify_property_list_changed()	# To reveal / hide the cleanup tool button
 	if invalid_path_indexes.is_empty():
-		print("Check Paths: All Good!")
+		print("Check Paths: All Good!")											# TODO NOTIFY THROUGH TOAST
 	else:
-		printerr("Check Paths: %d Invalid" % invalid_path_indexes.size())
+		printerr("Check Paths: %d Invalid" % invalid_path_indexes.size())		# TODO NOTIFY THROUGH TOAST
 
 
 func _remove_invalid() -> void:
-	print("Removing invalid indexes...")
+	print("Removing invalid indexes...")										# TODO NOTIFY THROUGH TOAST
 	if Engine.is_editor_hint():
 		var undo_redo: EditorUndoRedoManager = EditorInterface.get_editor_undo_redo()
 		undo_redo.create_action("Remove invalid paths from Spawnlist")

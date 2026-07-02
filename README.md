@@ -69,7 +69,8 @@ TODO ADD LICENSE
 - [X] Add META class to contain used meta names
 - [X] Add editor script to auto-fill LAYERS and GROUPS scripts from settings
 - [X] Add editor script to validate PATHS constants
-- [ ] Add singletons class + editor script to fill fron Engine.list_singletons()
+- [ ] Add SINGLETONS class + editor script to fill fron Engine.list_singletons()
+- [ ] Add RPC_CHANNEL class + editor script to validate that no channels overlap
 
 ##### Log autoload
 - [X] Add Log autoload to provide an easy print() using with color coding for running multiple window tests
@@ -130,6 +131,8 @@ Cases that should be tested and covered:
 - [ ] Mooving nodes to/from MultiplayerSpawner root (vs just adding / removing)
 - [ ] Standard visibility behaviour
 - [ ] Visibility behaviour using multiple MultiplayerSyncronizers
+- [ ] Adding new spawnable scenes
+- [ ] Removing spawnable scenes that are already spawned
 
 ##### MultiplayerSyncronizer
 - [ ] Lag and bitrate differences between sync modes (Always/OnChange/Never)

@@ -4,12 +4,12 @@ extends Node2D
 ## This class is meant to be a general use world implementation that can be used as a basis for any kind of level.
 ## This would be customized or replaced in an actual game.
 
-# TODO MAKE LIGHTER
+# TODO MOVE AWAY FROM SCENE ROOT
 # TODO MAKE SO IT CAN LOAD LEVEL MAPS				# Or make separate node!
 # TODO MAKE SO IT CAN LOAD SAVE FILES				# Or make separate node!
 # TODO MAKE SO SERVER SENDS STATIC WORLD STATE		# Or make separate node!
 
-@export var quit_on_lobby_disconnect: bool = true
+@export var quit_on_lobby_disconnect: bool = true								# TODO SEPARATE TO DEDICATED NODE (consider having it instead PAUSE the world + ui prompt)
 
 @export_group("References")
 @export var player_branch_manager: PlayerBranchManager
@@ -52,36 +52,39 @@ func _exit_tree() -> void:
 # ---- API ----
 #
 
+
+# TODO REPLACE ALL WITH DEDICATED SINGLETONS AND FUNCS
+
 static func get_player_branch_manager() -> PlayerBranchManager:
 	return singleton.player_branch_manager
 
 
 ## Returns the local users [PlayerBranch].
-static func get_user_player_branch() -> PlayerBranch:
+static func get_user_player_branch() -> PlayerBranch:												# TODO REPLACE WITH SINGLETON EQUIVOLENT
 	return singleton.player_branch_manager.branches[singleton.multiplayer.get_unique_id()]
 
 
 ## Returns the owning branch or null, of [param node]. IT just looks at the node hierarchy.
-static func get_player_branch_of(node: Node) -> PlayerBranch:
+static func get_player_branch_of(node: Node) -> PlayerBranch:										# TODO REPLACE WITH SINGLETON EQUIVOLENT
 	return singleton.player_branch_manager.get_player_branch_of_unchecked(node)
 
 
 ## Adds the node to the tree under [property server_branch], of course with server authority set.
-static func spawn_server_owned(node: Node) -> void:
+static func spawn_server_owned(node: Node) -> void:													# TODO REPLACE WITH SINGLETON EQUIVOLENT
 	singleton.server_branch.add_child(node, true)
 
 
 ## Adds the node to the tree under the local users [PlayerBranch], with it's own [MultiplayerSpawner].
 ## This means They can have client multiplayer authority, like if [param node] has [constant GROUPS.PLAYER_OWNED] is set.
 ## If called by host, still uses host branch.
-static func spawn_client_owned(node: Node) -> void:
+static func spawn_client_owned(node: Node) -> void:													# TODO REPLACE WITH SINGLETON EQUIVOLENT
 	var branch: PlayerBranch = singleton.player_branch_manager.branches[singleton.multiplayer.get_unique_id()]
 	branch.spawn_node(node)
 
 
 ## Adds the node to the tree under [property local_entities]. Note that client-local (aka clientside or client-only) spawns don't
 ## have a [MultiplayerSpawner] atached, but still has the multiplayer authority set to default (server, id 1).
-static func spawn_client_local(node: Node) -> void:
+static func spawn_client_local(node: Node) -> void:													# TODO REPLACE WITH SINGLETON EQUIVOLENT
 	singleton.local_branch.add_child(node, true)
 
 
