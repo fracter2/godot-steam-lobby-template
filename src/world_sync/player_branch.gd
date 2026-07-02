@@ -6,16 +6,13 @@ extends MultiplayerSpawner
 ## all nodes in [member player_owned_nodes] on spawn, as well as emitting [signal setting_peer_authority].
 @export var peer_id: int = 1:
 	set(id):
+		assert(not is_inside_tree(), "PlayerBranch nodes are only meant to support one peer for it's lifetime, so not reassignable.")
 		if Lobby.players.has(id):	# TODO CONSIDER REMOVING, ALREADY CHECKED IN _enter_tree()
 			peer_id = id
 		else:
 			push_error("PlayerBranch set to non-existent peer id: " + str(id))
 			peer_id = 1
 		player_info = Lobby.players.get(peer_id)
-		if is_inside_tree():		# TODO Consider removing, redundant with _enter_tree()?
-			spawn_path_node = get_node_or_null(spawn_path)
-			if spawn_path_node != null:
-				get_node_or_null(spawn_path).set_multiplayer_authority(peer_id)
 
 
 var player_info: PlayerInfo = null
@@ -29,14 +26,10 @@ func _enter_tree() -> void:
 	if not Lobby.players.has(peer_id):											# TODO Make lobby assure that this always gets made before signal callbacks
 		push_error("PlayerBranch at %s \n -> peer_id %d set but player_info not found!" % [get_path(), peer_id])
 
-	if spawn_path.is_empty():
-		spawn_path = get_path_to(get_parent())
-		spawn_path_node = get_parent()
-
-	if spawn_path_node != null:
-		spawn_path_node.set_multiplayer_authority(peer_id)
-	else:
-		push_error("PlayerBranch at %s \n -> spawn_path %s set but node not found!" % [get_path(), spawn_path])
+	spawn_path = get_path_to(get_parent())
+	spawn_path_node = get_parent()
+	spawn_path_node.set_multiplayer_authority(peer_id)
+	assert(get_multiplayer_authority() == peer_id)
 
 	spawn_path_node.child_entered_tree.connect(_check_player_ownership)
 
