@@ -6,10 +6,11 @@
 [ext_resource type="PackedScene" uid="uid://7abbq726h0tk" path="res://src/ui/hud/lobby_player_list.tscn" id="4_kc4aq"]
 [ext_resource type="Script" uid="uid://daskj7jw23i43" path="res://src/world_sync/player_branch_manager.gd" id="5_8bjl0"]
 [ext_resource type="Script" uid="uid://bg3gwjih1xa22" path="res://content/base/player/scritps/player_character_spawner.gd" id="6_q2g3w"]
-[ext_resource type="Resource" uid="uid://bb2syr6eygato" path="res://content/base/base_spawn_list.tres" id="6_x7w7x"]
+[ext_resource type="Resource" uid="uid://bb2syr6eygato" path="res://content/base/spawnlist_client.tres" id="6_x7w7x"]
 
-[node name="World" type="Node2D" unique_id=303895278 node_paths=PackedStringArray("server_branch", "local_branch")]
+[node name="World" type="Node2D" unique_id=303895278 node_paths=PackedStringArray("player_branch_manager", "server_branch", "local_branch")]
 script = ExtResource("1_8bjl0")
+player_branch_manager = NodePath("PlayerBranchManager")
 server_branch = NodePath("ServerBranch")
 local_branch = NodePath("LocalBranch")
 
