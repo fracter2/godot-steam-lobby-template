@@ -18,8 +18,10 @@ const auto_root_name: String = "PlayerBranches"
 #
 
 func get_player_branch_of_unchecked(node: Node) -> PlayerBranch:
-	var branch_name: StringName = get_path_to(node).get_name(0)
-	return get_node_or_null(NodePath(branch_name))
+	if not branch_root.is_ancestor_of(node):
+		return null
+	var branch_name: StringName = branch_root.get_path_to(node).get_name(0)
+	return branch_root.get_node_or_null(NodePath(str(branch_name) + "/" + auto_branch_spawner_name))		# WARNING EXPECTS BRANCH SPAWNER TO HAVE CONSISTENT NAME, consider metadata instead
 
 
 #
