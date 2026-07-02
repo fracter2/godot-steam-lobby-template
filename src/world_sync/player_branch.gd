@@ -38,6 +38,7 @@ func _enter_tree() -> void:
 	else:
 		push_error("PlayerBranch at %s \n -> spawn_path %s set but node not found!" % [get_path(), spawn_path])
 
+	spawn_path_node.child_entered_tree.connect(_check_player_ownership)
 
 
 func _ready() -> void:
@@ -58,13 +59,16 @@ func spawn_node(node: Node) -> void:
 	assert(spawn_path_node.is_multiplayer_authority())
 	spawn_path_node.add_child(node, true)
 
-	# TODO BUG IS THIS NOT AT RISK OF LETTING node BE SERVER AUTHORITY?
-	# TEST IF SPAWNING SERVER NODES OK?
-	# TODO DECIDE IF THAT IS INTENDED BEHAVIOUR
-
-	# TODO CONSIDER PUSHING WARNING IF IT IS NOT PEER AUTHORITATIVE
+	# TEST IF IT CAN REPLICATE SERVER-OWNED NODES
+	# IF YES, LET SERVER-AUTH BE DEFAULT + GROUPS
 
 
 #
 # ---- INTERNAL ----
 #
+
+func _check_player_ownership(node: Node) -> void:
+	if node.is_in_group(GROUPS.SET_PLAYER_AUTHORITY):				node.set_multiplayer_authority(peer_id, true)
+	elif node.is_in_group(GROUPS.SET_PLAYER_AUTHORITY_NO_CHILDREN):	node.set_multiplayer_authority(peer_id, false)
+	elif node.is_in_group(GROUPS.SET_SERVER_AUTHORITY):				node.set_multiplayer_authority(1, true)
+	elif node.is_in_group(GROUPS.SET_SERVER_AUTHORITY_NO_CHILDREN):	node.set_multiplayer_authority(1, false)

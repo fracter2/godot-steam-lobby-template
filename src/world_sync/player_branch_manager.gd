@@ -27,7 +27,6 @@ func get_player_branch_of_unchecked(node: Node) -> PlayerBranch:
 #
 
 func _enter_tree() -> void:
-	get_tree().node_added.connect(_check_player_ownership)
 	multiplayer.peer_connected.connect(_create_branch)
 	multiplayer.peer_disconnected.connect(_remove_branch)
 
@@ -51,18 +50,7 @@ func _get_node_instance_from_type(from_node: Node) -> Node:
 	else: 					return Node.new()
 
 
-func _check_player_ownership(node: Node) -> void:
-	var is_player_owned: bool = false
-	var recursive: bool = false
 
-	if node.is_in_group(GROUPS.PLAYER_OWNED_RECURSIVE):
-		is_player_owned = true
-		recursive = true
-	elif node.is_in_group(GROUPS.PLAYER_OWNED):
-		is_player_owned = true
-
-	if is_player_owned and is_ancestor_of(node):
-		node.set_multiplayer_authority(get_player_branch_of_unchecked(node).peer_id, recursive)
 
 
 func _create_root(new_root: Node) -> void:
