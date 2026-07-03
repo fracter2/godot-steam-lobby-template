@@ -1,8 +1,6 @@
 class_name ClientSpawnerManager
 extends Node
 
-# TODO RENAME TO ClientSpawner OR ClientSpawnManager
-# TODO make singleton
 # TODO RENAME SOURCE FOLDER TO spawn_managers
 
 ## The root of all generated player branches. If left empty, will create one automaticallty as a sibling based on parent type (NOTE only Node2D, Node3D, and Node)
@@ -15,16 +13,41 @@ var branches: Dictionary[int, ClientSpawner] = {}
 const auto_root_name: String = "ClientSpawnerRoot"
 const auto_branch_name: String = "Peer_%d"
 const auto_branch_spawner_name: String = "ClientSpawner"
+static var singleton: ClientSpawnerManager = null
+
 
 #
 # ---- API ----
 #
 
-func get_player_branch_of_unchecked(node: Node) -> ClientSpawner:
-	if not branch_root.is_ancestor_of(node):
+static func is_available() -> bool:
+	return singleton != null
+
+
+static func get_singleton() -> ClientSpawnerManager:
+	return singleton
+
+
+## Returns the local users [ClientSpawner].
+static func get_user_spawner() -> ClientSpawner:
+	return singleton.branches[singleton.multiplayer.get_unique_id()]
+
+
+## Get's the [ClientSpawner] that spawned this node. Otherwise returns [code] null [/code].
+static func get_spawner_of(node: Node) -> ClientSpawner:
+	if not singleton.branch_root.is_ancestor_of(node):
 		return null
-	var branch_name: StringName = branch_root.get_path_to(node).get_name(0)
-	return branch_root.get_node_or_null(NodePath(str(branch_name) + "/" + auto_branch_spawner_name))		# WARNING EXPECTS BRANCH SPAWNER TO HAVE CONSISTENT NAME, consider metadata instead
+	var branch_name: StringName = singleton.branch_root.get_path_to(node).get_name(0)
+	return singleton.branch_root.get_node_or_null(NodePath(str(branch_name) + "/" + auto_branch_spawner_name))		# WARNING EXPECTS BRANCH SPAWNER TO HAVE CONSISTENT NAME, consider metadata instead
+
+
+## Adds the node to the tree under the local users [ClientSpawner].
+## This means They can have client multiplayer authority, like if [param node] has [constant GROUPS.SET_PLAYER_AUTHORITY] is set.
+## The host also has their own one, so all players can be treated the same.
+static func spawn(node: Node) -> void:
+	var branch: ClientSpawner = singleton.player_branch_manager.branches[singleton.multiplayer.get_unique_id()]
+	branch.spawn_node(node)
+
 
 
 #@rpc("authority", "call_local", "reliable")
@@ -40,6 +63,9 @@ func get_player_branch_of_unchecked(node: Node) -> ClientSpawner:
 #
 
 func _enter_tree() -> void:
+	assert(singleton == null)
+	singleton = self
+
 	multiplayer.peer_connected.connect(_create_branch)
 	multiplayer.peer_disconnected.connect(_remove_branch)
 
@@ -51,6 +77,9 @@ func _enter_tree() -> void:
 	_create_branch.call_deferred(multiplayer.get_unique_id())
 
 
+func _exit_tree() -> void:
+	singleton = null
+
 #
 # ---- Internal ----
 #
@@ -61,9 +90,6 @@ func _get_node_instance_from_type(from_node: Node) -> Node:
 	if from_node is Node2D: return Node2D.new()
 	if from_node is Node3D: return Node3D.new()
 	else: 					return Node.new()
-
-
-
 
 
 func _create_root(new_root: Node) -> void:

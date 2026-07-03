@@ -55,31 +55,10 @@ func _exit_tree() -> void:
 
 # TODO REPLACE ALL WITH DEDICATED SINGLETONS AND FUNCS
 
-static func get_player_branch_manager() -> ClientSpawnerManager:
-	return singleton.player_branch_manager
-
-
-## Returns the local users [ClientSpawner].
-static func get_user_player_branch() -> ClientSpawner:												# TODO REPLACE WITH SINGLETON EQUIVOLENT
-	return singleton.player_branch_manager.branches[singleton.multiplayer.get_unique_id()]
-
-
-## Returns the owning branch or null, of [param node]. IT just looks at the node hierarchy.
-static func get_player_branch_of(node: Node) -> ClientSpawner:										# TODO REPLACE WITH SINGLETON EQUIVOLENT
-	return singleton.player_branch_manager.get_player_branch_of_unchecked(node)
-
 
 ## Adds the node to the tree under [property server_branch], of course with server authority set.
 static func spawn_server_owned(node: Node) -> void:													# TODO REPLACE WITH SINGLETON EQUIVOLENT
 	singleton.server_branch.add_child(node, true)
-
-
-## Adds the node to the tree under the local users [ClientSpawner], with it's own [MultiplayerSpawner].
-## This means They can have client multiplayer authority, like if [param node] has [constant GROUPS.PLAYER_OWNED] is set.
-## If called by host, still uses host branch.
-static func spawn_client_owned(node: Node) -> void:													# TODO REPLACE WITH SINGLETON EQUIVOLENT
-	var branch: ClientSpawner = singleton.player_branch_manager.branches[singleton.multiplayer.get_unique_id()]
-	branch.spawn_node(node)
 
 
 ## Adds the node to the tree under [property local_entities]. Note that client-local (aka clientside or client-only) spawns don't

@@ -10,7 +10,6 @@
 
 [node name="World" type="Node2D" unique_id=303895278 node_paths=PackedStringArray("player_branch_manager", "server_branch", "local_branch")]
 script = ExtResource("1_8bjl0")
-quit_on_lobby_disconnect = null
 player_branch_manager = NodePath("ClientSpawnerManager")
 server_branch = NodePath("ServerBranch")
 local_branch = NodePath("LocalBranch")
