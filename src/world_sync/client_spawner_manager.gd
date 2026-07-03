@@ -45,8 +45,12 @@ static func get_spawner_of(node: Node) -> ClientSpawner:
 ## This means They can have client multiplayer authority, like if [param node] has [constant GROUPS.SET_PLAYER_AUTHORITY] is set.
 ## The host also has their own one, so all players can be treated the same.
 static func spawn(node: Node) -> void:
-	var branch: ClientSpawner = singleton.player_branch_manager.branches[singleton.multiplayer.get_unique_id()]
-	branch.spawn_node(node)
+	# TODO FIX, by adding convenience func to Spawnlist
+	#if OS.is_debug_build() and not singleton.spawnable_scenes.list.has(node.scene_file_path):
+	#	push_warning("Trying to spawn a node that is not in the spawnlist!! scenepath: " + str(node.scene_file_path) + "\nCallstack: " + str(get_stack()))
+
+	var spawner: ClientSpawner = singleton.branches[singleton.multiplayer.get_unique_id()]
+	spawner.spawn_node(node)
 
 
 
@@ -112,7 +116,7 @@ func _create_branch(id: int) -> void:
 	_set_spawnable_scenes(new_branch_spawner, spawnable_scenes.list)
 	branches[id] = new_branch_spawner
 	branches.sort()
-	new_branch.add_child(new_branch_spawner)
+	new_branch.add_child(new_branch_spawner)														# TODO PUT SPAWNERS DIRECTLY AS CHILD HERE (consice list, leaves client spawn paths clear!)
 
 	branch_root.move_child(new_branch, branches.keys().bsearch(new_branch_spawner.peer_id))
 	assert(new_branch_spawner.name == auto_branch_spawner_name)										# NOTE used for finding spawner from path

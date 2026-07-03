@@ -22,6 +22,10 @@ extends Resource
 const valid_filetypes: PackedStringArray = [".tscn", ".res", ".scn", ".dae", ".obj", ".escn", ".fbx", ".gltf", ".glb", ".blend", ".boobs"]
 
 
+# TODO CONSIDER A HASHSET (Dictionary) OF int->String for UID->PATH
+# to quicly compare if it contains x path... like when checking for valid spawns...
+
+
 #
 # ---- API ----
 #
