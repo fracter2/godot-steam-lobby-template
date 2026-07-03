@@ -1,4 +1,4 @@
-class_name PlayerBranchManager
+class_name ClientSpawnerManager
 extends Node
 
 # TODO RENAME TO ClientSpawner OR ClientSpawnManager
@@ -7,20 +7,20 @@ extends Node
 
 ## The root of all generated player branches. If left empty, will create one automaticallty as a sibling based on parent type (NOTE only Node2D, Node3D, and Node)
 @export var branch_root: Node
-var branches: Dictionary[int, PlayerBranch] = {}
+var branches: Dictionary[int, ClientSpawner] = {}
 
 @export var spawnable_scenes: Spawnlist
 # TODO WHEN SET, IF THERE ARE ALREADY BRANCHES SPAWNED (&& is server), RESET THEM WITH NEW SPAWNLIST
 
-const auto_root_name: String = "PlayerBranches"
-const auto_branch_name: String = "player_peer_%d"
-const auto_branch_spawner_name: String = "PlayerOwnedSpawner"
+const auto_root_name: String = "ClientSpawnerRoot"
+const auto_branch_name: String = "Peer_%d"
+const auto_branch_spawner_name: String = "ClientSpawner"
 
 #
 # ---- API ----
 #
 
-func get_player_branch_of_unchecked(node: Node) -> PlayerBranch:
+func get_player_branch_of_unchecked(node: Node) -> ClientSpawner:
 	if not branch_root.is_ancestor_of(node):
 		return null
 	var branch_name: StringName = branch_root.get_path_to(node).get_name(0)
@@ -29,7 +29,7 @@ func get_player_branch_of_unchecked(node: Node) -> PlayerBranch:
 
 #@rpc("authority", "call_local", "reliable")
 #func reset_branches_with_new_spawnlist(new_spawnlist: Spawnlist) -> void:
-	# TODO apply new spawnlist to PlayerBranchManager
+	# TODO apply new spawnlist to ClientSpawnerManager
 	# TODO remove existing spawnconfigs from branches
 	# TODO add new from spawnlist
 	# TODO remove all non-spawnable scenes on replicated peers (so, not from each clients own branch). TEST is this automatic when removing configs?
@@ -70,6 +70,7 @@ func _create_root(new_root: Node) -> void:
 	new_root.name = auto_root_name
 	add_sibling(new_root, true)
 	branch_root = new_root
+	assert(branch_root.is_inside_tree())
 
 
 func _create_branch(id: int) -> void:
@@ -79,7 +80,7 @@ func _create_branch(id: int) -> void:
 	new_branch.name = auto_branch_name % id
 	branch_root.add_child(new_branch)
 
-	var new_branch_spawner: PlayerBranch = PlayerBranch.new()
+	var new_branch_spawner: ClientSpawner = ClientSpawner.new()
 	new_branch_spawner.name = auto_branch_spawner_name
 	new_branch_spawner.peer_id = id
 	_set_spawnable_scenes(new_branch_spawner, spawnable_scenes.list)

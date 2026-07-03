@@ -12,7 +12,7 @@ extends Node2D
 @export var quit_on_lobby_disconnect: bool = true								# TODO SEPARATE TO DEDICATED NODE (consider having it instead PAUSE the world + ui prompt)
 
 @export_group("References")
-@export var player_branch_manager: PlayerBranchManager
+@export var player_branch_manager: ClientSpawnerManager
 @export var server_branch: Node2D
 @export var local_branch: Node2D
 
@@ -55,17 +55,17 @@ func _exit_tree() -> void:
 
 # TODO REPLACE ALL WITH DEDICATED SINGLETONS AND FUNCS
 
-static func get_player_branch_manager() -> PlayerBranchManager:
+static func get_player_branch_manager() -> ClientSpawnerManager:
 	return singleton.player_branch_manager
 
 
-## Returns the local users [PlayerBranch].
-static func get_user_player_branch() -> PlayerBranch:												# TODO REPLACE WITH SINGLETON EQUIVOLENT
+## Returns the local users [ClientSpawner].
+static func get_user_player_branch() -> ClientSpawner:												# TODO REPLACE WITH SINGLETON EQUIVOLENT
 	return singleton.player_branch_manager.branches[singleton.multiplayer.get_unique_id()]
 
 
 ## Returns the owning branch or null, of [param node]. IT just looks at the node hierarchy.
-static func get_player_branch_of(node: Node) -> PlayerBranch:										# TODO REPLACE WITH SINGLETON EQUIVOLENT
+static func get_player_branch_of(node: Node) -> ClientSpawner:										# TODO REPLACE WITH SINGLETON EQUIVOLENT
 	return singleton.player_branch_manager.get_player_branch_of_unchecked(node)
 
 
@@ -74,11 +74,11 @@ static func spawn_server_owned(node: Node) -> void:													# TODO REPLACE W
 	singleton.server_branch.add_child(node, true)
 
 
-## Adds the node to the tree under the local users [PlayerBranch], with it's own [MultiplayerSpawner].
+## Adds the node to the tree under the local users [ClientSpawner], with it's own [MultiplayerSpawner].
 ## This means They can have client multiplayer authority, like if [param node] has [constant GROUPS.PLAYER_OWNED] is set.
 ## If called by host, still uses host branch.
 static func spawn_client_owned(node: Node) -> void:													# TODO REPLACE WITH SINGLETON EQUIVOLENT
-	var branch: PlayerBranch = singleton.player_branch_manager.branches[singleton.multiplayer.get_unique_id()]
+	var branch: ClientSpawner = singleton.player_branch_manager.branches[singleton.multiplayer.get_unique_id()]
 	branch.spawn_node(node)
 
 

@@ -12,7 +12,7 @@ const marker_preload: PackedScene = preload(PATHS.ENTITY_MARKER)
 @onready var direction_pointer: Node2D = $Direction
 
 
-var player_branch: PlayerBranch = null:
+var player_branch: ClientSpawner = null:
 	set(branch):
 		player_branch = branch
 		player_info = branch.player_info
