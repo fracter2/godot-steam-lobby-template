@@ -12,8 +12,6 @@ extends Node2D
 @export var quit_on_lobby_disconnect: bool = true								# TODO SEPARATE TO DEDICATED NODE (consider having it instead PAUSE the world + ui prompt)
 
 @export_group("References")
-@export var player_branch_manager: ClientSpawnerManager
-@export var server_branch: Node2D
 @export var local_branch: Node2D
 
 static var singleton: World = null
@@ -54,11 +52,6 @@ func _exit_tree() -> void:
 
 
 # TODO REPLACE ALL WITH DEDICATED SINGLETONS AND FUNCS
-
-
-## Adds the node to the tree under [property server_branch], of course with server authority set.
-static func spawn_server_owned(node: Node) -> void:													# TODO REPLACE WITH SINGLETON EQUIVOLENT
-	singleton.server_branch.add_child(node, true)
 
 
 ## Adds the node to the tree under [property local_entities]. Note that client-local (aka clientside or client-only) spawns don't

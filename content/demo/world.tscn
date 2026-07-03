@@ -7,11 +7,16 @@
 [ext_resource type="Script" uid="uid://daskj7jw23i43" path="res://src/world_sync/client_spawner_manager.gd" id="5_8bjl0"]
 [ext_resource type="Script" uid="uid://bg3gwjih1xa22" path="res://content/base/player/scritps/player_character_spawner.gd" id="6_q2g3w"]
 [ext_resource type="Resource" uid="uid://bb2syr6eygato" path="res://content/base/spawnlist_client.tres" id="6_x7w7x"]
+[ext_resource type="Script" uid="uid://bkdv1qx0uqyvk" path="res://src/world_sync/server_spawner_manager.gd" id="7_kc4aq"]
+[ext_resource type="Script" uid="uid://cvg3k76h8j7xo" path="res://src/world_sync/spawn_list.gd" id="8_sm12v"]
 
-[node name="World" type="Node2D" unique_id=303895278 node_paths=PackedStringArray("player_branch_manager", "server_branch", "local_branch")]
+[sub_resource type="Resource" id="Resource_kc4aq"]
+script = ExtResource("8_sm12v")
+list = PackedStringArray("uid://bbt53a6pdbkkg")
+metadata/_custom_type_script = "uid://cvg3k76h8j7xo"
+
+[node name="World" type="Node2D" unique_id=303895278 node_paths=PackedStringArray("local_branch")]
 script = ExtResource("1_8bjl0")
-player_branch_manager = NodePath("ClientSpawnerManager")
-server_branch = NodePath("ServerBranch")
 local_branch = NodePath("LocalBranch")
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=985557010]
@@ -66,10 +71,10 @@ text = "Exit to Main menu"
 script = ExtResource("5_8bjl0")
 spawnable_scenes = ExtResource("6_x7w7x")
 
-[node name="ServerBranch" type="Node2D" parent="." unique_id=1765918477]
-
-[node name="EntitySpawner" type="MultiplayerSpawner" parent="ServerBranch" unique_id=80526416]
-spawn_path = NodePath("..")
+[node name="ServerSpawnerManager" type="Node" parent="." unique_id=1195387468]
+script = ExtResource("7_kc4aq")
+spawnable_scenes = SubResource("Resource_kc4aq")
+metadata/_custom_type_script = "uid://bkdv1qx0uqyvk"
 
 [node name="LocalBranch" type="Node2D" parent="." unique_id=290040515]
 
