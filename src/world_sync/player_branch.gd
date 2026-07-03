@@ -31,10 +31,10 @@ func _enter_tree() -> void:
 	spawn_path_node.set_multiplayer_authority(peer_id)
 	assert(get_multiplayer_authority() == peer_id)
 
-	spawn_path_node.child_entered_tree.connect(_check_player_ownership)
-
 
 func _ready() -> void:
+	spawn_path_node.child_entered_tree.connect(_search_when_ready)
+
 	if player_info == null:
 		push_error("Player entity at %s is missing player_info on _enter_tree()!" % get_path())
 
@@ -60,21 +60,63 @@ func spawn_node(node: Node) -> void:
 # ---- INTERNAL ----
 #
 
-func _check_player_ownership(node: Node) -> void:
-	if node.is_in_group(GROUPS.SET_PLAYER_AUTHORITY):				node.set_multiplayer_authority(peer_id, true)
-	elif node.is_in_group(GROUPS.SET_PLAYER_AUTHORITY_NO_CHILDREN):	node.set_multiplayer_authority(peer_id, false)
-	elif node.is_in_group(GROUPS.SET_SERVER_AUTHORITY):				node.set_multiplayer_authority(1, true)
-	elif node.is_in_group(GROUPS.SET_SERVER_AUTHORITY_NO_CHILDREN):	node.set_multiplayer_authority(1, false)
+## We wait for the very last node in this group to emit [method _enter_tree], as it is JUST BEFORE they start being [method _ready].
+## This let's the nodes scripts reliably check multiplayer authority in their [method _ready] funcs.
+## This also let's us simplify the group-checks as all children will be added to the [method get_tree().get_nodes_in_group]
+func _search_when_ready(new_child: Node) -> void:
+	var deepest_node: Node = new_child
+	while deepest_node.get_child_count() != 0:
+		deepest_node = deepest_node.get_child(-1)
+	deepest_node.tree_entered.connect(_search_all_in_groups, CONNECT_ONE_SHOT)
 
-	# TODO TEST IF THIS ALSO RUNS FOR THE NODES CHILDREN
-	# IF NOT, GO THROUGH EACH
 
-	# ALTERNATIVELY, GO THROUGH ALL NODES IN GROUP,
-	# (Do this in PlayerbranchManager? can be done here... )
-	#
-	# CHECK THEM (ignore if they path to another branch... apply and remove if server_auth on non-branch...)
-	#
-	# SORT BY TREE DEPTH (close to root > leafs) (to let more-specific nodes override recursive sets from parents)
-	#
-	# THEN REMOVE FROM GROUP
-	#node.remove_from_group()
+func _search_all_in_groups() -> void:
+	var groups_nodes: Array[Node] = get_tree().get_nodes_in_group(GROUPS.SET_PLAYER_AUTHORITY)
+	groups_nodes.append_array(get_tree().get_nodes_in_group(GROUPS.SET_SERVER_AUTHORITY))
+	groups_nodes.append_array(get_tree().get_nodes_in_group(GROUPS.SET_PLAYER_AUTHORITY_NO_CHILDREN))
+	groups_nodes.append_array(get_tree().get_nodes_in_group(GROUPS.SET_SERVER_AUTHORITY_NO_CHILDREN))
+
+	# CHECK THEM (ignore if they path to another branch... just remove if server_auth on non-branch...)
+	var branch_nodes: Array[Node] = []
+	var irrelevant_nodes: Array[Node] = []
+	for n: Node in groups_nodes:
+		if spawn_path_node.is_ancestor_of(n):
+			branch_nodes.push_back(n)
+		elif not spawn_path_node.get_parent().is_ancestor_of(n):
+			irrelevant_nodes.push_back(n)
+
+	# Strip groups from all nodes not in player branches (they serve no purpose)
+	for n: Node in irrelevant_nodes:
+		n.remove_from_group(GROUPS.SET_PLAYER_AUTHORITY)
+		n.remove_from_group(GROUPS.SET_SERVER_AUTHORITY)
+		n.remove_from_group(GROUPS.SET_PLAYER_AUTHORITY_NO_CHILDREN)
+		n.remove_from_group(GROUPS.SET_SERVER_AUTHORITY_NO_CHILDREN)
+
+	# Apply and remove groups, according to tree hierarchy (to let child-nodes to override recursive parents)
+	branch_nodes.sort_custom(_search_algorithm)
+	for n: Node in branch_nodes:
+		_check_and_apply_authority_groups(n)
+
+
+## Short node paths come first
+func _search_algorithm(a: Node, b: Node) -> bool:
+	return a.get_path().get_name_count() < b.get_path().get_name_count()
+
+
+##
+func _check_and_apply_authority_groups(node: Node) -> void:
+	if node.is_in_group		  (GROUPS.SET_PLAYER_AUTHORITY):
+		node.remove_from_group(GROUPS.SET_PLAYER_AUTHORITY)
+		node.set_multiplayer_authority(peer_id, true)
+
+	if node.is_in_group		  (GROUPS.SET_SERVER_AUTHORITY):
+		node.remove_from_group(GROUPS.SET_SERVER_AUTHORITY)
+		node.set_multiplayer_authority(1, true)
+
+	if node.is_in_group		  (GROUPS.SET_PLAYER_AUTHORITY_NO_CHILDREN):
+		node.remove_from_group(GROUPS.SET_PLAYER_AUTHORITY_NO_CHILDREN)
+		node.set_multiplayer_authority(peer_id, false)
+
+	if node.is_in_group		  (GROUPS.SET_SERVER_AUTHORITY_NO_CHILDREN):
+		node.remove_from_group(GROUPS.SET_SERVER_AUTHORITY_NO_CHILDREN)
+		node.set_multiplayer_authority(1, false)
