@@ -49,10 +49,11 @@ func _notification(what: int) -> void:
 
 func is_in_lobby() -> bool: return lobby_id != 0
 
+
 ## Returns Steam.getPersonaName()
 func get_user_name() -> String: return Steam.getPersonaName()
 
-##
+
 func is_lobby_owner() -> bool:
 	return owner_steam_id == Steamworks.steam_id
 
@@ -74,6 +75,7 @@ func initiate_connection() -> bool:
 		return false
 
 	return true
+
 
 #
 # ---- Signals ----
