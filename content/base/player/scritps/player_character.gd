@@ -12,10 +12,10 @@ const marker_preload: PackedScene = preload(PATHS.ENTITY_MARKER)
 @onready var direction_pointer: Node2D = $Direction
 
 
-var player_branch: ClientSpawner = null:
-	set(branch):
-		player_branch = branch
-		player_info = branch.player_info
+var player_spawner: ClientSpawner = null:
+	set(new_spawner):
+		player_spawner = new_spawner
+		player_info = new_spawner.player_info
 
 var player_info: PlayerInfo = null:
 	set(info):
@@ -23,15 +23,17 @@ var player_info: PlayerInfo = null:
 		player_info = info
 		_connect_player_info(info)
 
-
+#
+# ---- Procedure ----
+#
 
 func _enter_tree() -> void:
-	player_branch = World.get_player_branch_of(self)
-	assert(player_branch != null )
+	player_spawner = ClientSpawnerManager.get_spawner_of(self)
+	assert(player_spawner != null )
 
 
 func _ready() -> void:
-	if player_branch.peer_id != get_multiplayer_authority():
+	if player_spawner.peer_id != get_multiplayer_authority():
 		push_error("PlayerCharacter authority not set correctly!")
 		return
 
@@ -52,7 +54,7 @@ func _physics_process(delta: float) -> void:
 			var new_marker : Node2D = marker_preload.instantiate()
 			new_marker.position = get_global_mouse_position()
 
-			player_branch.spawn_node(new_marker)
+			player_spawner.spawn_node(new_marker)
 
 		# Direction arrow
 		direction_pointer.look_at(get_global_mouse_position())
