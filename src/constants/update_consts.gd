@@ -3,7 +3,7 @@ extends EditorScript
 
 
 
-const autogen_disclaimer: String = "\n# Dis scrip is audogenewaded by auto_update tool button\n"
+const autogen_disclaimer: String = "\n# Dis scrip is audogenewaded by update_consts tool button\n"
 const prefix_const: String = "\nconst "
 const prefix_stringname: String = ": StringName = &\""
 const prefix_int: String = ": int = "
@@ -16,13 +16,13 @@ const suffix_endquotes: String = "\""
 
 func _run() -> void:
 	print("")	# Line separator for visual clarity
-	_print_and_toast("auto_update.gd: updating LAYERS...")
+	_print_and_toast("update_consts.gd: updating LAYERS...")
 	_update_layers()
-	_print_and_toast("auto_update.gd: updating GROUPS...")
+	_print_and_toast("update_consts.gd: updating GROUPS...")
 	_update_groups()
-	_print_and_toast("auto_update.gd: validating PATHS")
+	_print_and_toast("update_consts.gd: validating PATHS")
 	_validate_paths()
-	_print_and_toast("auto_update.gd: Done!")
+	_print_and_toast("update_consts.gd: Done!")
 
 
 func _print_and_toast(txt: String, severity: int = EditorToaster.SEVERITY_INFO, desc: String = "Hi i'm a toaster!") -> void:
@@ -149,7 +149,7 @@ func _get_all_groups() -> Array[String]:
 			ret.push_back((prop["name"] as String).trim_prefix("global_group/"))
 		check_counter += 1
 
-	print("auto_update.gd _update_groups() took %d usec, with %d groups found, %d total settings checked" % [(Time.get_ticks_usec() - timer_start), ret.size(), check_counter])
+	print("update_consts.gd _update_groups() took %d usec, with %d groups found, %d total settings checked" % [(Time.get_ticks_usec() - timer_start), ret.size(), check_counter])
 	return ret
 
 
