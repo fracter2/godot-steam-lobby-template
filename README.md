@@ -19,7 +19,7 @@ TODO ADD LICENSE
 - [X] Add joining and hosting through launch commands
 - [X] Add setting custom name
 
-##### Lobby singleton API
+##### Lobby Singleton API
 - [X] Add interface for player joining and player_info changes
 - [X] Add lobby-implementation interface (doesn't distinguish steam or enet lobby)
 - [ ] Add propper quit logic (instead of just timeout)
@@ -29,7 +29,7 @@ TODO ADD LICENSE
 - [ ] Password select with peer authentication
 - [ ] Banlist (steam_id?)
 
-##### Steam lobby browser?
+##### Steam Lobby Browser?
 - [ ] Add finding open friend lobbies
 - [ ] Add player count display with player max
 - [ ] Add public lobby finding
@@ -37,8 +37,16 @@ TODO ADD LICENSE
 - [ ] Add setting lobby password
 - [ ] Add meta info like level, gamemode, description, mods...
 
-##### LAN Lobby browser?
+##### LAN Lobby Browser?
 - [ ] Query broadcasts in LAN
+
+##### Pre-Game Lobby
+- [ ] Display players, names, latency
+- [ ] Level select with preloading
+- [ ] Ready-system (and force-start)
+
+##### In-game Lobby Info Display
+- [ ] Like a typical scoreboard
 
 ### Convenience Goals
 
@@ -51,7 +59,7 @@ TODO ADD LICENSE
 - [X] Allow parsing both spaces and '=' as value sepparators
 - [ ] Allow providing a launch_preset.txt file via launch_preset={filepath OR ID} command.
 
-##### Settings autoload
+##### Settings Autoload
 - [ ] Make a dedicated autoload
 - [ ] Add dev-mode toggle
 - [ ] Add basic input mapping
@@ -72,14 +80,14 @@ TODO ADD LICENSE
 - [ ] Add SINGLETONS class + editor script to fill fron Engine.list_singletons()
 - [ ] Add RPC_CHANNEL class + editor script to validate that no channels overlap
 
-##### Log autoload
+##### Log Autoload
 - [X] Add Log autoload to provide an easy print() using with color coding for running multiple window tests
 - [X] Add prefix support, and toggling auto_prefix_as_color
 - [ ] Add support funcs to changing prefix / color anytime
 - [ ] Add signals when logging
 	- [ ] Add support for simultanious push to in-game Console (Console-singleton)
 
-##### Smarter multi-window setup
+##### Smarter Multi-Window Setup
 - [X] Add "WindowSpawnAligner" autoload to align windows via launch conmmands (to skip having to sepparate them every time you run)
 - [ ] Add loading starting from config
 - [ ] Investigate starting sepparate windows AFTER START? (multi-windows without debug tab?)
@@ -96,24 +104,24 @@ TODO ADD LICENSE
 
 ##### Smarter MultiplayerSpawner
 To make it file-path renaming resistant, it should validate existing scene-paths on build, or add dynamically in runtime.
-- [ ] Add way of adding from list (like from a level config, or on-load node, or from level node, or world method)
+- [X] Add way of adding from list (like from a level config, or on-load node, or from level node, or world method)
 
 ##### Standardized Spawning API
-- [ ] ServerBranchManager
-	- [X] Support server-owned spawns (only callable by server, ofc) (TEST)
-- [ ] PlayerBranchManager
+- [X] ServerSpawnManager
+	- [X] Support server-owned spawns (only callable by server, ofc)
+- [X] ClientSpawnManager
 	- [X] Support client-owned spawns via their own branch
-	- [ ] Auto-set authority on spawned nodes via group (TEST)
-- [ ] LocalBranchManager
+	- [X] Set's authority based on Node Groups "Set Client Authority" and "Set Server Authority"
+- [X] LocalSpawnManager
 	- [X] Support local (client-side only) spawns
-- [ ] SpawnableScenesConfig Resource
-	- [ ] Simply lists spawnable scenes
-	- [ ] Tool btn to validify they still exist
-	- [ ] Can be set to any spawn managers via their inspector properties
+- [X] Spawnlist Resource
+	- [X] Lists spawnable scenes
+	- [X] Tool btn to validify they still exist
+	- [X] Can be set to any spawn managers via their inspector properties
 - [X] Make managers 2D/3D agnostic
-- [ ] Make managers accesable as static singleton
+- [X] Make managers accesable as static singleton
 	- [ ] Check for duplicate managers too
-- [ ] World or Spawn or SPAWN autoload, for convenience funcs to use spawn managers
+- [ ] Make SpawnManagers validate existing spawned nodes when Spawnlist is changed
 
 ##### Standardized Level Loading
 - [ ] Add networked func, to load levels
