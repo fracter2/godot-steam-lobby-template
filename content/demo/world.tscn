@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dx0gencnp27xs"]
 
-[ext_resource type="Script" uid="uid://ho3n3j0rxror" path="res://content/demo/world.gd" id="1_8bjl0"]
+[ext_resource type="Script" uid="uid://ho3n3j0rxror" path="res://src/multiplayer_lobby/lobby_connecter.gd" id="1_nukgi"]
 [ext_resource type="Script" uid="uid://vv32jnu32d2q" path="res://src/ui/debug/steam_info_labels.gd" id="2_q2g3w"]
 [ext_resource type="Script" uid="uid://cbaivxnsabs1o" path="res://src/ui/menus/pause_menu.gd" id="3_x7w7x"]
 [ext_resource type="PackedScene" uid="uid://7abbq726h0tk" path="res://src/ui/hud/lobby_player_list.tscn" id="4_kc4aq"]
@@ -20,9 +20,11 @@ uid_paths = Dictionary[int, String]({
 SCENE_PATHS = PackedStringArray("uid://bbt53a6pdbkkg", "uid://cp10fjfcrq0j6")
 metadata/_custom_type_script = "uid://cvg3k76h8j7xo"
 
-[node name="World" type="Node2D" unique_id=303895278 node_paths=PackedStringArray("local_branch")]
-script = ExtResource("1_8bjl0")
-local_branch = NodePath("LocalBranch")
+[node name="World" type="Node2D" unique_id=303895278]
+
+[node name="LobbyConnecter" type="Node" parent="." unique_id=602769234]
+script = ExtResource("1_nukgi")
+metadata/_custom_type_script = "uid://ho3n3j0rxror"
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=985557010]
 
@@ -83,8 +85,6 @@ spawnable_scenes = SubResource("Resource_kc4aq")
 [node name="LocalSpawnerManager" type="Node" parent="." unique_id=1914194803]
 script = ExtResource("9_nukgi")
 metadata/_custom_type_script = "uid://38sojrpq56xh"
-
-[node name="LocalBranch" type="Node2D" parent="." unique_id=290040515]
 
 [node name="StaticMap" type="Node2D" parent="." unique_id=1296001154]
 z_index = -10
