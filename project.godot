@@ -38,6 +38,10 @@ gdscript/warnings/missing_await=1
 
 project/assembly_name="Steam Lobby Wrapper"
 
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/backgroundloader/plugin.cfg")
+
 [global_group]
 
 "ClientSpawner Set Client Authority"="Set to apply client multiplayer authority, if spawned under a ClientSpawner. Recursively applies to children."
