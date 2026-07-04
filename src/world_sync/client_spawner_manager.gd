@@ -41,13 +41,13 @@ static func get_spawner_of(node: Node) -> ClientSpawner:
 	return singleton.branch_root.get_node_or_null(NodePath(str(branch_name) + "/" + auto_branch_spawner_name))		# WARNING EXPECTS BRANCH SPAWNER TO HAVE CONSISTENT NAME, consider metadata instead
 
 
-## Adds the node to the tree under the local users [ClientSpawner].
+## Spawns the node with the local users [ClientSpawner] as a synced multiplayer object. [br]
+## Not to be confused with TODO CLIENTSIDE SPAWN MANAGER [BR]
 ## This means They can have client multiplayer authority, like if [param node] has [constant GROUPS.SET_PLAYER_AUTHORITY] is set.
 ## The host also has their own one, so all players can be treated the same.
 static func spawn(node: Node) -> void:
-	# TODO FIX, by adding convenience func to Spawnlist
-	#if OS.is_debug_build() and not singleton.spawnable_scenes.list.has(node.scene_file_path):
-	#	push_warning("Trying to spawn a node that is not in the spawnlist!! scenepath: " + str(node.scene_file_path) + "\nCallstack: " + str(get_stack()))
+	if OS.is_debug_build() and ((not node.scene_file_path) or not singleton.spawnable_scenes.has_path(node.scene_file_path)):
+		push_warning("Trying to spawn a node that is not in the spawnlist!! scenepath: " + str(node.scene_file_path) + "\nCallstack: " + str(get_stack()))
 
 	var spawner: ClientSpawner = singleton.branches[singleton.multiplayer.get_unique_id()]
 	spawner.spawn_node(node)
@@ -56,10 +56,10 @@ static func spawn(node: Node) -> void:
 
 #@rpc("authority", "call_local", "reliable")
 #func reset_branches_with_new_spawnlist(new_spawnlist: Spawnlist) -> void:
-	# TODO apply new spawnlist to ClientSpawnerManager
-	# TODO remove existing spawnconfigs from branches
-	# TODO add new from spawnlist
-	# TODO remove all non-spawnable scenes on replicated peers (so, not from each clients own branch). TEST is this automatic when removing configs?
+	# TODO MAKE ONLY CCALLABLE BY SERVER, EVEN LOCALLY
+	# TODO apply new spawnlist to ClientSpawnerManager for server and all peers
+	# TODO use _set_spawnable_scenes on local branch
+	# TODO TEST Let other's peer branches be untouched, let the branches call their own de-spawn... TODO CONSIDER MANUAL RPC FROM EACH
 
 
 #
@@ -113,7 +113,7 @@ func _create_branch(id: int) -> void:
 	var new_branch_spawner: ClientSpawner = ClientSpawner.new()
 	new_branch_spawner.name = auto_branch_spawner_name
 	new_branch_spawner.peer_id = id
-	_set_spawnable_scenes(new_branch_spawner, spawnable_scenes.list)
+	_set_spawnable_scenes(new_branch_spawner, spawnable_scenes)
 	branches[id] = new_branch_spawner
 	branches.sort()
 	new_branch.add_child(new_branch_spawner)														# TODO PUT SPAWNERS DIRECTLY AS CHILD HERE (consice list, leaves client spawn paths clear!)
@@ -135,13 +135,13 @@ func _remove_branch(peer_id: int) -> void:
 	branches.erase(peer_id)
 
 
-func _set_spawnable_scenes(spawner: MultiplayerSpawner, new_spawnlist: PackedStringArray) -> void:
+func _set_spawnable_scenes(spawner: MultiplayerSpawner, new_spawnlist: Spawnlist) -> void:
 	# compare with already set paths
 	if spawner.get_spawnable_scene_count():
 		assert(spawner.is_inside_tree())
 		var removed_scenes: PackedStringArray = []
 		for i: int in range(spawner.get_spawnable_scene_count()):
-			if not new_spawnlist.has(spawner.get_spawnable_scene(i)):
+			if not new_spawnlist.has_path(spawner.get_spawnable_scene(i)):
 				removed_scenes.push_back(spawner.get_spawnable_scene(i))
 
 		# Despawn nodes that were removed
@@ -151,5 +151,5 @@ func _set_spawnable_scenes(spawner: MultiplayerSpawner, new_spawnlist: PackedStr
 
 	# Set new spawnable scenes
 	spawner.clear_spawnable_scenes()
-	for path: String in spawnable_scenes.get_paths_without_invalid():
+	for path: String in spawnable_scenes.get_valid_paths():
 		spawner.add_spawnable_scene(path)

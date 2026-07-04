@@ -1,19 +1,17 @@
 class_name ServerSpawnerManager
 extends Node
 
-# TODO make singleton
-
-## The root of all generated player branches. If left empty, will create one automaticallty as a sibling based on parent type (NOTE only Node2D, Node3D, and Node)
-@export var spawn_root: Node
-
-# TODO WHEN SET, IF THERE ARE ALREADY BRANCHES SPAWNED (&& is server), RESET THEM WITH NEW SPAWNLIST
-@export var spawnable_scenes: Spawnlist
 
 const auto_root_name: String = "ServerBranch"
 const auto_spawner_name: String = "ServerBranchSpawner"
 static var singleton: ServerSpawnerManager = null
 
-var spawner: MultiplayerSpawner
+## The root of all generated player branches. If left empty, will create one automaticallty as a sibling based on parent type (NOTE only Node2D, Node3D, and Node)
+@export var spawn_root: Node
+
+@export var spawnable_scenes: Spawnlist																# TODO WHEN SET, IF THERE ARE ALREADY BRANCHES SPAWNED (&& is server), RESET THEM WITH NEW SPAWNLIST
+
+var server_spawner: MultiplayerSpawner
 
 
 #
@@ -27,9 +25,8 @@ static func spawn(node: Node) -> void:
 		breakpoint
 		return
 
-	# TODO FIX, by adding convenience func to Spawnlist
-	#if OS.is_debug_build() and not singleton.spawnable_scenes.list.has(node.scene_file_path):
-	#	push_warning("Trying to spawn a node that is not in the spawnlist!! scenepath: " + str(node.scene_file_path) + "\nCallstack: " + str(get_stack()))
+	if OS.is_debug_build() and ((not node.scene_file_path) or not singleton.spawnable_scenes.has_path(node.scene_file_path)):
+		push_warning("Trying to spawn a node that is not in the spawnlist!! scenepath: " + str(node.scene_file_path) + "\nCallstack: " + str(get_stack()))
 
 	singleton.spawn_root.add_child(node, true)
 
@@ -70,9 +67,29 @@ func _create_root(new_root: Node) -> void:
 	spawn_root.name = auto_root_name
 	add_sibling(spawn_root, true)
 
-	assert(spawner == null)
-	spawner = MultiplayerSpawner.new()
-	spawner.name = auto_spawner_name
-	for path: String in spawnable_scenes.get_paths_without_invalid():
+	assert(server_spawner == null)
+	server_spawner = MultiplayerSpawner.new()
+	server_spawner.name = auto_spawner_name
+	for path: String in spawnable_scenes.get_path():
+		server_spawner.add_spawnable_scene(path)
+	add_child(server_spawner, true)
+
+
+func _set_spawnable_scenes_and_clean_children(spawner: MultiplayerSpawner, new_spawnlist: Spawnlist) -> void:
+	# compare with already set paths
+	if spawner.get_spawnable_scene_count():
+		assert(spawner.is_inside_tree())
+		var removed_scenes: PackedStringArray = []
+		for i: int in range(spawner.get_spawnable_scene_count()):
+			if not new_spawnlist.has_path(spawner.get_spawnable_scene(i)):
+				removed_scenes.push_back(spawner.get_spawnable_scene(i))
+
+		# Despawn nodes that were removed
+		for n:Node in get_node(spawner.spawn_path).get_children():
+			if removed_scenes.has(n.scene_file_path):
+				n.queue_free()
+
+	# Set new spawnable scenes
+	spawner.clear_spawnable_scenes()
+	for path: String in spawnable_scenes.get_valid_paths():
 		spawner.add_spawnable_scene(path)
-	add_child(spawner, true)
