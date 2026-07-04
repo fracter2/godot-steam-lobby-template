@@ -6,7 +6,7 @@ const auto_root_name: String = "ServerBranch"
 const auto_spawner_name: String = "ServerBranchSpawner"
 static var singleton: ServerSpawnerManager = null
 
-## The root of all generated player branches. If left empty, will create one automaticallty as a sibling based on parent type (NOTE only Node2D, Node3D, and Node)
+## The root of all generated client spawners. If left empty, will create one automaticallty as a sibling, based on parent type (NOTE only Node2D, Node3D, and Node)
 @export var spawn_root: Node
 
 @export var spawnable_scenes: Spawnlist																# TODO WHEN SET, IF THERE ARE ALREADY BRANCHES SPAWNED (&& is server), RESET THEM WITH NEW SPAWNLIST

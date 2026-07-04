@@ -85,7 +85,7 @@ func _search_all_in_groups() -> void:
 		elif not spawn_path_node.get_parent().is_ancestor_of(n):
 			irrelevant_nodes.push_back(n)
 
-	# Strip groups from all nodes not in player branches (they serve no purpose)
+	# Strip groups from all nodes not under a ClientSpawner (they serve no other purpose)
 	for n: Node in irrelevant_nodes:
 		n.remove_from_group(GROUPS.SET_PLAYER_AUTHORITY)
 		n.remove_from_group(GROUPS.SET_SERVER_AUTHORITY)
