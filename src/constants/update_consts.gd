@@ -1,7 +1,7 @@
 @tool
 extends EditorScript
 
-
+# TODO IF MADE INTO PLUGIN, MAKE TOOL SCRIPT, OR RUN ON BUILD
 
 const autogen_disclaimer: String = "\n# Dis scrip is audogenewaded by update_consts tool button\n"
 const prefix_const: String = "\nconst "

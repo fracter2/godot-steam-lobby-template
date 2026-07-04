@@ -1,5 +1,7 @@
 extends Node
 
+# TODO MAKE INTO A PLUGIN
+
 const screen_margin: Vector2i = Vector2i(32, 32)	## Offset from top-left corner of the screen
 
 func _enter_tree() -> void:

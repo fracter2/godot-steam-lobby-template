@@ -1,5 +1,7 @@
 extends Node
 
+# TODO MOVE TO INDUVIDUAL PLUGIN FOLDER WITH FRIEND-SCRIPTS (+ SPAWNMANAGERS AS SUB-PLUGIN)
+
 var lobby_instance: MultiplayerLobby = null
 
 ## A non-recoverable issue has occured and the [MultiplayerLobby] has been destroyed.

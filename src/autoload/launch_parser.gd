@@ -1,5 +1,7 @@
 extends Node
 
+# TODO MAKE INTO PLUGIN
+
 # This is a standalone utility script (meant as an autoload) to make it easier to
 # parse commandline args. "has_command()" and "get_values()" are the primary intended uses.
 #

@@ -1,6 +1,7 @@
 extends Node
-
 ## The purpose of this is to provide a simple logg wrapper to help with local debugging using multiple running instances.
+
+# TODO MAKE INTO PLUGIN
 
 @export var add_color_as_prefix: bool = true
 @export var add_color_to_window_title: bool = true
