@@ -23,6 +23,7 @@ const propertyname_invalid_paths: StringName = &"invalid_paths"
 # ---- API ----
 #
 
+## Checks if it has the provided path, not checking with invalid paths. To include invalid paths, use [/code].invalid_paths.has(path)[code] in combination with this func.
 func has_path(path: String) -> bool:
 	var uid: int = ResourceUID.text_to_id(path)
 	if uid != ResourceUID.INVALID_ID:
@@ -69,7 +70,9 @@ func _re_check_paths() -> void:
 
 func _remove_invalid() -> void:													# TODO TEST IF THIS CRASHES IN BUILD, since EditorInterface doesn't exists...
 	if invalid_paths.is_empty():
-		EditorInterface.get_editor_toaster().push_toast("No invalid spawn paths!")
+		print("Invalid paths already empty!")
+		if Engine.is_editor_hint():
+			EditorInterface.get_editor_toaster().push_toast("No invalid spawn paths!")
 		return
 
 	if Engine.is_editor_hint():
@@ -158,10 +161,12 @@ func _parse_new_list(paths: PackedStringArray) -> void:
 	notify_property_list_changed()	# To reveal / hide the cleanup tool button
 	if invalid_paths.is_empty():
 		print("Check Paths: All Good!")
-		EditorInterface.get_editor_toaster().push_toast("SpawnList Successfully Set!")
+		if Engine.is_editor_hint():
+			EditorInterface.get_editor_toaster().push_toast("SpawnList Successfully Set!")
 	else:
 		printerr("Check Paths: %d Invalid" % invalid_paths.size())
-		EditorInterface.get_editor_toaster().push_toast("Check Paths: %d Invalid" % invalid_paths.size(), EditorToaster.SEVERITY_ERROR, "You prob input an empty path or misspelled one")
+		if Engine.is_editor_hint():
+			EditorInterface.get_editor_toaster().push_toast("Check Paths: %d Invalid" % invalid_paths.size(), EditorToaster.SEVERITY_ERROR, "You prob input an empty path or misspelled one")
 
 
 func _get_invalid_path_indexes(paths: PackedStringArray) -> PackedInt32Array:
