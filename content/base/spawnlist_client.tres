@@ -4,5 +4,9 @@
 
 [resource]
 script = ExtResource("1_vhih7")
-list = PackedStringArray("uid://dyplrd0wmx3gy", "uid://csibq2kr2xqji")
+uid_paths = Dictionary[int, String]({
+6052846298986412162: "res://content/base/player/character.tscn",
+8875458407326504140: "res://content/base/player/player_marker.tscn"
+})
+SCENE_PATHS = PackedStringArray("uid://csibq2kr2xqji", "uid://dyplrd0wmx3gy")
 metadata/_custom_type_script = "uid://cvg3k76h8j7xo"
