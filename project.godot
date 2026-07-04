@@ -17,7 +17,7 @@ config/icon="res://icon.svg"
 
 [autoload]
 
-LaunchArgs="*res://src/autoload/launch_parser.gd"
+LaunchArgs="*uid://bdmt4tt1xe6wb"
 Log="*uid://b1e50a8osrmsi"
 Settings="*res://src/autoload/settings.gd"
 Steamworks="*res://src/autoload/steamworks.gd"
@@ -40,7 +40,7 @@ project/assembly_name="Steam Lobby Wrapper"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/backgroundloader/plugin.cfg")
+enabled=PackedStringArray("res://addons/backgroundloader/plugin.cfg", "res://addons/launch_parser/plugin.cfg")
 
 [global_group]
 
