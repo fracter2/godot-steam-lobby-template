@@ -71,10 +71,10 @@ func _search_when_ready(new_child: Node) -> void:
 
 
 func _search_all_in_groups() -> void:
-	var groups_nodes: Array[Node] = get_tree().get_nodes_in_group(GROUPS.SET_PLAYER_AUTHORITY)
-	groups_nodes.append_array(get_tree().get_nodes_in_group(GROUPS.SET_SERVER_AUTHORITY))
-	groups_nodes.append_array(get_tree().get_nodes_in_group(GROUPS.SET_PLAYER_AUTHORITY_NO_CHILDREN))
-	groups_nodes.append_array(get_tree().get_nodes_in_group(GROUPS.SET_SERVER_AUTHORITY_NO_CHILDREN))
+	var groups_nodes: Array[Node] = get_tree().get_nodes_in_group(GROUPS.CLIENT_SPAWNER_SET_CLIENT_AUTHORITY)
+	groups_nodes.append_array(get_tree().get_nodes_in_group(GROUPS.CLIENT_SPAWNER_SET_SERVER_AUTHORITY))
+	groups_nodes.append_array(get_tree().get_nodes_in_group(GROUPS.CLIENT_SPAWNER_SET_PLAYER_AUTHORITY_NO_CHILDREN))
+	groups_nodes.append_array(get_tree().get_nodes_in_group(GROUPS.CLIENT_SPAWNER_SET_SERVER_AUTHORITY_NO_CHILDREN))
 
 	# CHECK THEM (ignore if they path to another branch... just remove if server_auth on non-branch...)
 	var branch_nodes: Array[Node] = []
@@ -87,10 +87,10 @@ func _search_all_in_groups() -> void:
 
 	# Strip groups from all nodes not under a ClientSpawner (they serve no other purpose)
 	for n: Node in irrelevant_nodes:
-		n.remove_from_group(GROUPS.SET_PLAYER_AUTHORITY)
-		n.remove_from_group(GROUPS.SET_SERVER_AUTHORITY)
-		n.remove_from_group(GROUPS.SET_PLAYER_AUTHORITY_NO_CHILDREN)
-		n.remove_from_group(GROUPS.SET_SERVER_AUTHORITY_NO_CHILDREN)
+		n.remove_from_group(GROUPS.CLIENT_SPAWNER_SET_CLIENT_AUTHORITY)
+		n.remove_from_group(GROUPS.CLIENT_SPAWNER_SET_SERVER_AUTHORITY)
+		n.remove_from_group(GROUPS.CLIENT_SPAWNER_SET_PLAYER_AUTHORITY_NO_CHILDREN)
+		n.remove_from_group(GROUPS.CLIENT_SPAWNER_SET_SERVER_AUTHORITY_NO_CHILDREN)
 
 	# Apply and remove groups, according to tree hierarchy (to let child-nodes to override recursive parents)
 	branch_nodes.sort_custom(_search_algorithm)
@@ -105,18 +105,18 @@ func _search_algorithm(a: Node, b: Node) -> bool:
 
 ##
 func _check_and_apply_authority_groups(node: Node) -> void:
-	if node.is_in_group		  (GROUPS.SET_PLAYER_AUTHORITY):
-		node.remove_from_group(GROUPS.SET_PLAYER_AUTHORITY)
+	if node.is_in_group		  (GROUPS.CLIENT_SPAWNER_SET_CLIENT_AUTHORITY):
+		node.remove_from_group(GROUPS.CLIENT_SPAWNER_SET_CLIENT_AUTHORITY)
 		node.set_multiplayer_authority(peer_id, true)
 
-	if node.is_in_group		  (GROUPS.SET_SERVER_AUTHORITY):
-		node.remove_from_group(GROUPS.SET_SERVER_AUTHORITY)
+	if node.is_in_group		  (GROUPS.CLIENT_SPAWNER_SET_SERVER_AUTHORITY):
+		node.remove_from_group(GROUPS.CLIENT_SPAWNER_SET_SERVER_AUTHORITY)
 		node.set_multiplayer_authority(1, true)
 
-	if node.is_in_group		  (GROUPS.SET_PLAYER_AUTHORITY_NO_CHILDREN):
-		node.remove_from_group(GROUPS.SET_PLAYER_AUTHORITY_NO_CHILDREN)
+	if node.is_in_group		  (GROUPS.CLIENT_SPAWNER_SET_PLAYER_AUTHORITY_NO_CHILDREN):
+		node.remove_from_group(GROUPS.CLIENT_SPAWNER_SET_PLAYER_AUTHORITY_NO_CHILDREN)
 		node.set_multiplayer_authority(peer_id, false)
 
-	if node.is_in_group		  (GROUPS.SET_SERVER_AUTHORITY_NO_CHILDREN):
-		node.remove_from_group(GROUPS.SET_SERVER_AUTHORITY_NO_CHILDREN)
+	if node.is_in_group		  (GROUPS.CLIENT_SPAWNER_SET_SERVER_AUTHORITY_NO_CHILDREN):
+		node.remove_from_group(GROUPS.CLIENT_SPAWNER_SET_SERVER_AUTHORITY_NO_CHILDREN)
 		node.set_multiplayer_authority(1, false)

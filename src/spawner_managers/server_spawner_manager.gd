@@ -2,8 +2,8 @@ class_name ServerSpawnerManager
 extends Node
 
 
-const auto_root_name: String = "ServerBranch"
-const auto_spawner_name: String = "ServerBranchSpawner"
+const default_root_name: String = "ServerSpawnerRoot"
+const default_spawner_name: String = "ServerSpawner"
 static var singleton: ServerSpawnerManager = null
 
 ## The root of all generated client spawners. If left empty, will create one automaticallty as a sibling, based on parent type (NOTE only Node2D, Node3D, and Node)
@@ -64,12 +64,12 @@ func _get_node_instance_from_type(from_node: Node) -> Node:
 func _create_root(new_root: Node) -> void:
 	assert(spawn_root == null)
 	spawn_root = new_root
-	spawn_root.name = auto_root_name
+	spawn_root.name = default_root_name
 	add_sibling(spawn_root, true)
 
 	assert(server_spawner == null)
 	server_spawner = MultiplayerSpawner.new()
-	server_spawner.name = auto_spawner_name
+	server_spawner.name = default_spawner_name
 	for path: String in spawnable_scenes.get_path():
 		server_spawner.add_spawnable_scene(path)
 	add_child(server_spawner, true)

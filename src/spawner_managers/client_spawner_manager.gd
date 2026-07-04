@@ -2,9 +2,9 @@ class_name ClientSpawnerManager
 extends Node
 
 
-const auto_root_name: String = "ClientSpawnerRoot"
-const auto_branch_name: String = "Peer_%d"
-const auto_branch_spawner_name: String = "ClientSpawner"
+const default_root_name: String = "ClientSpawnerRoot"
+const default_branch_name: String = "Peer_%d"
+const default_branch_spawner_name: String = "ClientSpawner"
 static var singleton: ClientSpawnerManager = null
 
 ## The root of all generated [ClientSpawner]s. If left empty, will create one automaticallty as a sibling based on parent type (NOTE only Node2D, Node3D, and Node)
@@ -38,12 +38,12 @@ static func get_spawner_of(node: Node) -> ClientSpawner:
 	if not singleton.spawn_root.is_ancestor_of(node):
 		return null
 	var branch_name: StringName = singleton.spawn_root.get_path_to(node).get_name(0)
-	return singleton.spawn_root.get_node_or_null(NodePath(str(branch_name) + "/" + auto_branch_spawner_name))		# WARNING EXPECTS CLIENT SPAWNER TO HAVE CONSISTENT NAME, consider metadata instead
+	return singleton.spawn_root.get_node_or_null(NodePath(str(branch_name) + "/" + default_branch_spawner_name))		# WARNING EXPECTS CLIENT SPAWNER TO HAVE CONSISTENT NAME, consider metadata instead
 
 
 ## Spawns the node with the local users [ClientSpawner] as a synced multiplayer object. [br]
 ## Not to be confused with [LocalSpawnerManager], that handles client-side spawning. [BR]
-## This means They can have client multiplayer authority, like if [param node] has [constant GROUPS.SET_PLAYER_AUTHORITY] is set.
+## This means They can have client multiplayer authority, like if [param node] has [constant GROUPS.CLIENT_SPAWNER_SET_CLIENT_AUTHORITY] is set.
 ## The host also has their own one, so all players can be treated the same.
 static func spawn(node: Node) -> void:
 	if OS.is_debug_build() and ((not node.scene_file_path) or not singleton.spawnable_scenes.has_path(node.scene_file_path)):
@@ -97,7 +97,7 @@ func _get_node_instance_from_type(from_node: Node) -> Node:
 
 
 func _create_root(new_root: Node) -> void:
-	new_root.name = auto_root_name
+	new_root.name = default_root_name
 	add_sibling(new_root, true)
 	spawn_root = new_root
 	assert(spawn_root.is_inside_tree())
@@ -107,11 +107,11 @@ func _create_branch(id: int) -> void:
 	assert(not client_spawners.has(id), "in _spawn_player_branch() Spawning a player that is already registered!")
 
 	var new_branch: Node = _get_node_instance_from_type(spawn_root)
-	new_branch.name = auto_branch_name % id
+	new_branch.name = default_branch_name % id
 	spawn_root.add_child(new_branch)
 
 	var new_branch_spawner: ClientSpawner = ClientSpawner.new()
-	new_branch_spawner.name = auto_branch_spawner_name
+	new_branch_spawner.name = default_branch_spawner_name
 	new_branch_spawner.peer_id = id
 	_set_spawnable_scenes(new_branch_spawner, spawnable_scenes)
 	client_spawners[id] = new_branch_spawner
@@ -119,7 +119,7 @@ func _create_branch(id: int) -> void:
 	new_branch.add_child(new_branch_spawner)														# TODO PUT SPAWNERS DIRECTLY AS CHILD HERE (consice list, leaves client spawn paths clear!)
 
 	spawn_root.move_child(new_branch, client_spawners.keys().bsearch(new_branch_spawner.peer_id))
-	assert(new_branch_spawner.name == auto_branch_spawner_name)										# NOTE used for finding spawner from path
+	assert(new_branch_spawner.name == default_branch_spawner_name)										# NOTE used for finding spawner from path
 
 	# In case we ever delete branch spawner, and forget to delete the actuall root node
 	new_branch_spawner.tree_exited.connect(new_branch.queue_free)

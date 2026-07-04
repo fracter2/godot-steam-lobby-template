@@ -39,10 +39,10 @@ project/assembly_name="Steam Lobby Wrapper"
 
 [global_group]
 
-"Set Player Authority No Children"="Set to apply player multiplayer authority, if spawned via PlayerBranchManager. Not recursive."
-"Set Server Authority No Children"="Set to apply server multiplayer authority, if spawned via PlayerBranchManager or ServerBranchManager. Not Recusive."
-"Set Player Authority"="Set to apply player multiplayer authority, if spawned via PlayerBranchManager. Recursively applies to children."
-"Set Server Authority"="Set to apply server multiplayer authority, if spawned via PlayerBranchManager or ServerBranchManager. Recursively applies to children."
+"ClientSpawner Set Client Authority"="Set to apply client multiplayer authority, if spawned under a ClientSpawner. Recursively applies to children."
+"ClientSpawner Set Player Authority No Children"="Set to apply client  multiplayer authority, if spawned under a ClientSpawner. Not recursive."
+"ClientSpawner Set Server Authority"="Set to apply server multiplayer authority, if spawned under a ClientSpawner. Recursively applies to children."
+"ClientSpawner Set Server Authority No Children"="Set to apply server multiplayer authority, if spawned under a ClientSpawner. Not Recusive."
 
 [input]
 
