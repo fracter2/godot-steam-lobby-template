@@ -1,8 +1,8 @@
-class_name LocalSpawnerManager
+class_name LocalSpawnManager
 extends Node
 
-const default_root_name: String = "LocalSpawnerRoot"
-static var singleton: LocalSpawnerManager = null
+const default_root_name: String = "LocalSpawnRoot"
+static var singleton: LocalSpawnManager = null
 
 ## The root of all spawned nodes. If left empty, will create one automaticallty as a sibling based on parent type (NOTE only Node2D, Node3D, and Node)
 @export var spawn_root: Node
@@ -16,7 +16,7 @@ static func is_available() -> bool:
 	return singleton != null
 
 
-static func get_singleton() -> LocalSpawnerManager:
+static func get_singleton() -> LocalSpawnManager:
 	return singleton
 
 

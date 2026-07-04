@@ -9,4 +9,4 @@ func _ready() -> void:
 
 func _spawn_player() -> void:
 	var character: PlayerCharacter = player_character_preload.instantiate()
-	ClientSpawnerManager.spawn(character)
+	ClientSpawnManager.spawn(character)

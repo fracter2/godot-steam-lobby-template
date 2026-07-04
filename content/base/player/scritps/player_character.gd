@@ -28,7 +28,7 @@ var player_info: PlayerInfo = null:
 #
 
 func _enter_tree() -> void:
-	player_spawner = ClientSpawnerManager.get_spawner_of(self)
+	player_spawner = ClientSpawnManager.get_spawner_of(self)
 	assert(player_spawner != null )
 
 

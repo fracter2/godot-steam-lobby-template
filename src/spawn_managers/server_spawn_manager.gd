@@ -1,10 +1,10 @@
-class_name ServerSpawnerManager
+class_name ServerSpawnManager
 extends Node
 
 
-const default_root_name: String = "ServerSpawnerRoot"
+const default_root_name: String = "ServerSpawnRoot"
 const default_spawner_name: String = "ServerSpawner"
-static var singleton: ServerSpawnerManager = null
+static var singleton: ServerSpawnManager = null
 
 ## The root of all generated client spawners. If left empty, will create one automaticallty as a sibling, based on parent type (NOTE only Node2D, Node3D, and Node)
 @export var spawn_root: Node
@@ -39,7 +39,7 @@ func _enter_tree() -> void:
 	assert(singleton == null)
 	singleton = self
 
-	assert(spawnable_scenes != null, "ServerSpawnerManager is missing a Spawnlist!")
+	assert(spawnable_scenes != null, "ServerSpawnManager is missing a Spawnlist!")
 
 	if not spawn_root:
 		_create_root.call_deferred(_get_node_instance_from_type(get_parent()))

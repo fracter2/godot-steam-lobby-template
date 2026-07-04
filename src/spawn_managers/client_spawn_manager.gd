@@ -1,11 +1,11 @@
-class_name ClientSpawnerManager
+class_name ClientSpawnManager
 extends Node
 
 
-const default_root_name: String = "ClientSpawnerRoot"
+const default_root_name: String = "ClientSpawnRoot"
 const default_branch_name: String = "Peer_%d"
 const default_branch_spawner_name: String = "ClientSpawner"
-static var singleton: ClientSpawnerManager = null
+static var singleton: ClientSpawnManager = null
 
 ## The root of all generated [ClientSpawner]s. If left empty, will create one automaticallty as a sibling based on parent type (NOTE only Node2D, Node3D, and Node)
 @export var spawn_root: Node
@@ -24,7 +24,7 @@ static func is_available() -> bool:
 	return singleton != null
 
 
-static func get_singleton() -> ClientSpawnerManager:
+static func get_singleton() -> ClientSpawnManager:
 	return singleton
 
 
@@ -42,7 +42,7 @@ static func get_spawner_of(node: Node) -> ClientSpawner:
 
 
 ## Spawns the node with the local users [ClientSpawner] as a synced multiplayer object. [br]
-## Not to be confused with [LocalSpawnerManager], that handles client-side spawning. [BR]
+## Not to be confused with [LocalSpawnManager], that handles client-side spawning. [BR]
 ## This means They can have client multiplayer authority, like if [param node] has [constant GROUPS.CLIENT_SPAWNER_SET_CLIENT_AUTHORITY] is set.
 ## The host also has their own one, so all players can be treated the same.
 static func spawn(node: Node) -> void:
@@ -57,7 +57,7 @@ static func spawn(node: Node) -> void:
 #@rpc("authority", "call_local", "reliable")
 #func reset_branches_with_new_spawnlist(new_spawnlist: Spawnlist) -> void:
 	# TODO MAKE ONLY CCALLABLE BY SERVER, EVEN LOCALLY
-	# TODO apply new spawnlist to ClientSpawnerManager for server and all peers
+	# TODO apply new spawnlist to ClientSpawnManager for server and all peers
 	# TODO use _set_spawnable_scenes on local branch
 	# TODO TEST Let other's peer branches be untouched, let the branches call their own de-spawn... TODO CONSIDER MANUAL RPC FROM EACH
 

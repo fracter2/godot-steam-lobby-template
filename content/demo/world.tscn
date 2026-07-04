@@ -4,12 +4,12 @@
 [ext_resource type="Script" uid="uid://vv32jnu32d2q" path="res://src/ui/debug/steam_info_labels.gd" id="2_q2g3w"]
 [ext_resource type="Script" uid="uid://cbaivxnsabs1o" path="res://src/ui/menus/pause_menu.gd" id="3_x7w7x"]
 [ext_resource type="PackedScene" uid="uid://7abbq726h0tk" path="res://src/ui/hud/lobby_player_list.tscn" id="4_kc4aq"]
-[ext_resource type="Script" uid="uid://daskj7jw23i43" path="res://src/spawner_managers/client_spawner_manager.gd" id="5_8bjl0"]
+[ext_resource type="Script" uid="uid://daskj7jw23i43" path="res://src/spawn_managers/client_spawn_manager.gd" id="5_8bjl0"]
 [ext_resource type="Script" uid="uid://bg3gwjih1xa22" path="res://content/base/player/scritps/player_character_spawner.gd" id="6_q2g3w"]
 [ext_resource type="Resource" uid="uid://bb2syr6eygato" path="res://content/base/spawnlist_client.tres" id="6_x7w7x"]
-[ext_resource type="Script" uid="uid://bkdv1qx0uqyvk" path="res://src/spawner_managers/server_spawner_manager.gd" id="7_kc4aq"]
-[ext_resource type="Script" uid="uid://cvg3k76h8j7xo" path="res://src/spawner_managers/spawn_list.gd" id="8_sm12v"]
-[ext_resource type="Script" uid="uid://38sojrpq56xh" path="res://src/spawner_managers/local_spawner_manager.gd" id="9_nukgi"]
+[ext_resource type="Script" uid="uid://bkdv1qx0uqyvk" path="res://src/spawn_managers/server_spawn_manager.gd" id="7_kc4aq"]
+[ext_resource type="Script" uid="uid://cvg3k76h8j7xo" path="res://src/spawn_managers/spawn_list.gd" id="8_sm12v"]
+[ext_resource type="Script" uid="uid://38sojrpq56xh" path="res://src/spawn_managers/local_spawn_manager.gd" id="9_nukgi"]
 
 [sub_resource type="Resource" id="Resource_kc4aq"]
 script = ExtResource("8_sm12v")
@@ -74,17 +74,16 @@ text = "Exit to Main menu"
 
 [node name="PlayerList" parent="UI" unique_id=1639136409 instance=ExtResource("4_kc4aq")]
 
-[node name="ClientSpawnerManager" type="Node" parent="." unique_id=831832205]
+[node name="ClientSpawnManager" type="Node" parent="." unique_id=831832205]
 script = ExtResource("5_8bjl0")
 spawnable_scenes = ExtResource("6_x7w7x")
 
-[node name="ServerSpawnerManager" type="Node" parent="." unique_id=1195387468]
+[node name="ServerSpawnManager" type="Node" parent="." unique_id=1195387468]
 script = ExtResource("7_kc4aq")
 spawnable_scenes = SubResource("Resource_kc4aq")
 
-[node name="LocalSpawnerManager" type="Node" parent="." unique_id=1914194803]
+[node name="LocalSpawnManager" type="Node" parent="." unique_id=1914194803]
 script = ExtResource("9_nukgi")
-metadata/_custom_type_script = "uid://38sojrpq56xh"
 
 [node name="StaticMap" type="Node2D" parent="." unique_id=1296001154]
 z_index = -10

@@ -1,6 +1,6 @@
 [gd_resource type="Resource" script_class="Spawnlist" format=3 uid="uid://bb2syr6eygato"]
 
-[ext_resource type="Script" uid="uid://cvg3k76h8j7xo" path="res://src/spawner_managers/spawn_list.gd" id="1_vhih7"]
+[ext_resource type="Script" uid="uid://cvg3k76h8j7xo" path="res://src/spawn_managers/spawn_list.gd" id="1_vhih7"]
 
 [resource]
 script = ExtResource("1_vhih7")
