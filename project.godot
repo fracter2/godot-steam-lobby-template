@@ -23,6 +23,7 @@ Settings="*res://src/autoload/settings.gd"
 Steamworks="*res://src/autoload/steamworks.gd"
 Lobby="*res://src/autoload/lobby_manager.gd"
 WindowSpawnAligner="*uid://co6vrmvokbfln"
+BackgroundLoader="*uid://nc3u1dukk35c"
 
 [debug]
 
