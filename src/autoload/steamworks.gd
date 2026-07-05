@@ -27,16 +27,9 @@ func is_online() -> bool:
 	return steam_enabled and Steam.getPersonaState() != Steam.PERSONA_STATE_OFFLINE
 
 
-
 #
 # ---- Procedure ----
 #
-
-func _init() -> void:
-	process_mode = Node.PROCESS_MODE_ALWAYS
-	process_priority = -1
-	process_physics_priority = -1
-
 
 func _enter_tree() -> void:
 	assert(ProjectSettings.get_setting("steam/initialization/embed_callbacks") == false, "Don't embedd steam callbacks! Should be handled by Steamworks node!!")
@@ -46,6 +39,9 @@ func _enter_tree() -> void:
 		print("Launch arg no-steam set. Skipping Steamworks init.")
 		return
 
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	get_tree().process_frame.connect(_handle_steam_callbacks)
+
 	OS.set_environment("SteamAppID", str(app_id))
 	OS.set_environment("SteamGameID", str(app_id))								# TODO Clarify difference between AppID and GameID
 
@@ -53,11 +49,6 @@ func _enter_tree() -> void:
 	if steam_enabled:
 		steam_id = Steam.getSteamID()
 		persona_name = Steam.getPersonaName()
-
-
-func _process(_d:float) -> void:												# TODO MOVE TO get_tree().process.connect()
-	if steam_enabled:
-		Steam.run_callbacks()
 
 
 #
@@ -73,3 +64,8 @@ func _initialize_steam() -> void:
 		steam_enabled = false
 	else:
 		steam_enabled = true
+
+
+func _handle_steam_callbacks() -> void:
+	if steam_enabled:
+		Steam.run_callbacks()
