@@ -40,7 +40,7 @@ func _init() -> void:
 
 func _enter_tree() -> void:
 	if LaunchArgs.has_command("--no-steam"):									# TODO TRY MAKING INDEPENDENT FROM LaunchArgs
-		Log.pprint("Launch arg no-steam set. Skipping Steamworks init.")		# TODO MAKE INDEPENDENT FROM Log.pprint
+		print("Launch arg no-steam set. Skipping Steamworks init.")
 		return
 
 	OS.set_environment("SteamAppID", str(app_id))
@@ -63,7 +63,7 @@ func _process(_d:float) -> void:												# TODO MOVE TO get_tree().process.co
 
 func _initialize_steam() -> void:
 	var initialize_response: Dictionary = Steam.steamInitEx(app_id, false)
-	Log.pprint("Did Steam initialize?: %s" % initialize_response)
+	print("Did Steam initialize?: %s" % initialize_response)
 
 	if initialize_response['status'] > Steam.STEAM_API_INIT_RESULT_OK:
 		push_error("Failed to initialize Steam, shutting down: %s" % initialize_response)
