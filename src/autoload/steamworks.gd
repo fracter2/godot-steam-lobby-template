@@ -1,4 +1,5 @@
 extends Node
+## Convenience GodotSteam wrapper that initializes the app propperly, stores common values (like steam_enabled or player's steam_id), and keeps control of Steam callback cycle.
 
 var steam_enabled: bool = false
 var steam_id: int = 0															## Local user steam_id
