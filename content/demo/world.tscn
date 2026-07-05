@@ -134,3 +134,5 @@ polygon = PackedVector2Array(-60, -56, 77, -61, 73, 69, -63, 70)
 position = Vector2(-633, 505)
 color = Color(0.2231029, 0.2231029, 0.22310287, 1)
 polygon = PackedVector2Array(-50, -72, 77, -61, 73, 69, -63, 70)
+
+[connection signal="tree_entered" from="." to="LobbyConnecter" method="_try_set_multiplayer"]
