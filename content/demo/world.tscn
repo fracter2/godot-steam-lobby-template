@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dx0gencnp27xs"]
 
-[ext_resource type="Script" uid="uid://ho3n3j0rxror" path="res://src/multiplayer_lobby/lobby_connecter.gd" id="1_nukgi"]
+[ext_resource type="Script" uid="uid://ho3n3j0rxror" path="res://addons/multiplayerlobby/util/lobby_connecter.gd" id="1_nukgi"]
 [ext_resource type="Script" uid="uid://vv32jnu32d2q" path="res://src/ui/debug/steam_info_labels.gd" id="2_q2g3w"]
 [ext_resource type="Script" uid="uid://cbaivxnsabs1o" path="res://src/ui/menus/pause_menu.gd" id="3_x7w7x"]
 [ext_resource type="PackedScene" uid="uid://7abbq726h0tk" path="res://src/ui/hud/lobby_player_list.tscn" id="4_kc4aq"]
