@@ -1,14 +1,23 @@
 extends Node
 ## Convenience GodotSteam wrapper that initializes the app propperly, stores common values (like steam_enabled or player's steam_id), and keeps control of Steam callback cycle.
 
-var steam_enabled: bool = false
-var steam_id: int = 0															## Local user steam_id
-var persona_name: String = "default_name"
 
 const default_app_id: int = 480 												# NOTE This is SpaceWars.
-const app_id: int = default_app_id												# NOTE Replace this when you get your app id!	# TODO ENSURE A SYSTEM TO MAKE IT PROJECT-SPECIFIC... steam_id.txt? project settings?
 
+var steam_enabled: bool = false:
+	set(value):
+		if is_node_ready():
+			push_error("Steamworks.steam_enabled cannot be set after _enter_tree()! Because why would you??")
+			breakpoint
+		else:
+			steam_enabled = value
 
+var steam_id: int = 0															## Local user steam_id
+var app_id: int = default_app_id:
+	set(new_id):
+		app_id = new_id if new_id > 0 else default_app_id
+
+var persona_name: String = "default_name"
 
 #
 # ---- API ----
