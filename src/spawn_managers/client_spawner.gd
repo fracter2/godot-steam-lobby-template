@@ -7,15 +7,10 @@ extends MultiplayerSpawner
 @export var peer_id: int = 1:
 	set(id):
 		assert(not is_inside_tree(), "ClientSpawner nodes are only meant to support one peer for it's lifetime, so not reassignable.")
-		if Lobby.players.has(id):	# TODO CONSIDER REMOVING, ALREADY CHECKED IN _enter_tree()
-			peer_id = id
-		else:
-			push_error("ClientSpawner set to non-existent peer id: " + str(id))
-			peer_id = 1
-		player_info = Lobby.players.get(peer_id)
+		assert(_is_valid_peer_id(id), "ClientSpawner has non-existent peer id! id: %d" % id)
+		peer_id = id
 
-
-var player_info: PlayerInfo = null
+## The node where nodes are spawned to.
 var spawn_path_node: Node
 
 #
@@ -23,10 +18,7 @@ var spawn_path_node: Node
 #
 
 func _enter_tree() -> void:
-	if not Lobby.players.has(peer_id):											# TODO Make lobby assure that this always gets made before signal callbacks
-		push_error("ClientSpawner at %s \n -> peer_id %d set but player_info not found!" % [get_path(), peer_id])
-
-	spawn_path = get_path_to(get_parent())
+	spawn_path = get_path_to(get_parent())										# TODO MOVE TO MAKE THIS SPAWNER SPAWN UDER ClientSpawnManager.
 	spawn_path_node = get_parent()
 	spawn_path_node.set_multiplayer_authority(peer_id)
 	assert(get_multiplayer_authority() == peer_id)
@@ -34,9 +26,6 @@ func _enter_tree() -> void:
 
 func _ready() -> void:
 	spawn_path_node.child_entered_tree.connect(_search_when_ready)
-
-	if player_info == null:
-		push_error("Player entity at %s is missing player_info on _enter_tree()!" % get_path())
 
 
 #
@@ -59,6 +48,10 @@ func spawn_node(node: Node) -> void:
 #
 # ---- INTERNAL ----
 #
+
+func _is_valid_peer_id(id: int) -> bool:
+	return ClientSpawnManager.singleton.multiplayer.get_unique_id() == id or ClientSpawnManager.singleton.multiplayer.get_peers().has(id)
+
 
 ## We wait for the very last node in this group to emit [method _enter_tree], as it is JUST BEFORE they start being [method _ready].
 ## This let's the nodes scripts reliably check multiplayer authority in their [method _ready] funcs.

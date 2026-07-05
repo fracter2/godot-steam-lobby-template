@@ -15,7 +15,6 @@ const marker_preload: PackedScene = preload(PATHS.ENTITY_MARKER)
 var player_spawner: ClientSpawner = null:
 	set(new_spawner):
 		player_spawner = new_spawner
-		player_info = new_spawner.player_info
 
 var player_info: PlayerInfo = null:
 	set(info):
