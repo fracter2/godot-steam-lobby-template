@@ -42,6 +42,7 @@ func _enter_tree() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	get_tree().process_frame.connect(_handle_steam_callbacks)
 
+	app_id = ProjectSettings.get_setting("steam/initialization/app_id", default_app_id)
 	OS.set_environment("SteamAppID", str(app_id))
 	OS.set_environment("SteamGameID", str(app_id))								# TODO Clarify difference between AppID and GameID
 
