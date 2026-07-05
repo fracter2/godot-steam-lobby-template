@@ -39,6 +39,9 @@ func _init() -> void:
 
 
 func _enter_tree() -> void:
+	assert(ProjectSettings.get_setting("steam/initialization/embed_callbacks") == false, "Don't embedd steam callbacks! Should be handled by Steamworks node!!")
+	assert(ProjectSettings.get_setting("steam/initialization/initialize_on_startup") == false, "Don't set steam initialize_on_startup! This should be handled by Steamworks node!!")
+
 	if LaunchArgs.has_command("--no-steam"):									# TODO TRY MAKING INDEPENDENT FROM LaunchArgs
 		print("Launch arg no-steam set. Skipping Steamworks init.")
 		return
