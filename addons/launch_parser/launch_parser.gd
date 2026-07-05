@@ -15,13 +15,14 @@ var user_commands: Dictionary[String, PackedStringArray] = {}
 # ---- API ----
 #
 
-## Returns if euther main or user commands contain this (only one may have it).[br]
-## Any word begining with [code]-[/code] or [code]+[/code] are considered keys.[br]
+## Returns if either [member main_commands] or [member user_commands] contain this (only one may have it).[br]
+## Any word begining with [code]-[/code] or [code]+[/code] are considered commands.[br]
 ## Ex: [codeblock lang=text]-key1 --key2 +key3 ++key4 --+-key5 [/codeblock][br]
-## NOTE Sanitizes the input key with sanitize_key().
+## NOTE Sanitizes the input key with [method sanitize_key].
 func has_command(key: String) -> bool:
 	var sanitized_key: String = sanitize_key(key)
 	return main_commands.has(sanitized_key) or user_commands.has(sanitized_key)
+
 
 ## Returns the [PackedStringArray] values of the corresponding [param key].[br]
 ## [br]
@@ -43,6 +44,7 @@ func get_values(key: String) -> PackedStringArray:
 		return user_commands[sanitized_key]
 	else:
 		return []
+
 
 ## Conforms the input string to a valid key.[br]
 ## NOTE result is the same as: [codeblock lang=gdscript] key.to_lower().remove_chars(":/?*\"|\\%<>").strip_escapes().remove_chars("-+"). [/codeblock]

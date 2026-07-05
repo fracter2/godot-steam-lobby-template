@@ -5,7 +5,7 @@ var steam_id: int = 0															## Local user steam_id
 var persona_name: String = "default_name"
 
 const default_app_id: int = 480 												# NOTE This is SpaceWars.
-const app_id: int = default_app_id												# NOTE Replace this when you get your app id!
+const app_id: int = default_app_id												# NOTE Replace this when you get your app id!	# TODO ENSURE A SYSTEM TO MAKE IT PROJECT-SPECIFIC... steam_id.txt? project settings?
 
 
 
@@ -24,12 +24,13 @@ func is_online() -> bool:
 
 func _init() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
-	process_priority = -1														# TODO Consider global constants CONST autoload
+	process_priority = -1
 	process_physics_priority = -1
 
+
 func _enter_tree() -> void:
-	if LaunchArgs.has_command("--no-steam"):
-		Log.pprint("Launch arg no-steam set. Skipping Steamworks init.")
+	if LaunchArgs.has_command("--no-steam"):									# TODO TRY MAKING INDEPENDENT FROM LaunchArgs
+		Log.pprint("Launch arg no-steam set. Skipping Steamworks init.")		# TODO MAKE INDEPENDENT FROM Log.pprint
 		return
 
 	OS.set_environment("SteamAppID", str(app_id))
@@ -41,7 +42,7 @@ func _enter_tree() -> void:
 		persona_name = Steam.getPersonaName()
 
 
-func _process(_d:float) -> void:
+func _process(_d:float) -> void:												# TODO MOVE TO get_tree().process.connect()
 	if steam_enabled:
 		Steam.run_callbacks()
 
