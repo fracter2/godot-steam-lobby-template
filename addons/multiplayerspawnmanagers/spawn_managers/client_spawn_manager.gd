@@ -8,7 +8,7 @@ extends Node
 
 const default_root_name: String = "ClientSpawnRoot"
 const default_branch_name: String = "Peer_%d"
-const default_branch_spawner_name: String = "ClientSpawner"
+const default_branch_spawner_name: String = "ClientSpawner_%d"
 static var singleton: ClientSpawnManager = null
 
 ## The root of all generated [ClientSpawner]s. If left empty, will create one automaticallty as a sibling based on parent type (NOTE only Node2D, Node3D, and Node)
@@ -115,21 +115,27 @@ func _create_branch(id: int) -> void:
 
 	var new_branch: Node = _get_node_instance_from_type(spawn_root)
 	new_branch.name = default_branch_name % id
-	spawn_root.add_child(new_branch)
+	spawn_root.add_child(new_branch, true)
+	assert(new_branch.name == default_branch_name % id, "ClientSpawner root name changed after spawn!! Causes replication to fail...")
 
 	var new_branch_spawner: ClientSpawner = ClientSpawner.new()
-	new_branch_spawner.name = default_branch_spawner_name
+	new_branch_spawner.name = default_branch_spawner_name % id
 	new_branch_spawner.peer_id = id
+	new_branch_spawner.spawn_path_node = new_branch
 	_set_spawnable_scenes(new_branch_spawner, spawnable_scenes)
+	add_child(new_branch_spawner, true)
+	assert(new_branch_spawner.name == default_branch_spawner_name % id, "ClientSpawner name changed after spawn!! Causes replication to fail...")
+
+	# Sort placement of client root, so that any script or rendering logic is sorted the same across peers
 	client_spawners[id] = new_branch_spawner
 	client_spawners.sort()
-	new_branch.add_child(new_branch_spawner)														# TODO PUT SPAWNERS DIRECTLY AS CHILD HERE (consice list, leaves client spawn paths clear!)
-
-	spawn_root.move_child(new_branch, client_spawners.keys().bsearch(new_branch_spawner.peer_id))
-	assert(new_branch_spawner.name == default_branch_spawner_name)										# NOTE used for finding spawner from path
+	var client_index: int = client_spawners.keys().bsearch(new_branch_spawner.peer_id)
+	spawn_root.move_child(new_branch, client_index)
+	move_child(new_branch_spawner, client_index)
 
 	# In case we ever delete branch spawner, and forget to delete the actuall root node
 	new_branch_spawner.tree_exited.connect(new_branch.queue_free)
+	new_branch.tree_exited.connect(new_branch_spawner.queue_free)
 
 
 func _remove_branch(peer_id: int) -> void:
