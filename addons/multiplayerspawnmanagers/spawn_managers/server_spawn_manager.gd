@@ -70,7 +70,7 @@ func _create_root(new_root: Node) -> void:
 	assert(server_spawner == null)
 	server_spawner = MultiplayerSpawner.new()
 	server_spawner.name = default_spawner_name
-	for path: String in spawnable_scenes.get_path():
+	for path: String in spawnable_scenes.get_valid_paths():
 		server_spawner.add_spawnable_scene(path)
 	add_child(server_spawner, true)
 
