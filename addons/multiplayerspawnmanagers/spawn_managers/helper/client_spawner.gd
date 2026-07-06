@@ -23,10 +23,14 @@ var spawn_path_node: Node
 #
 
 func _enter_tree() -> void:
-	spawn_path = get_path_to(get_parent())										# TODO MOVE TO MAKE THIS SPAWNER SPAWN UDER ClientSpawnManager.
-	spawn_path_node = get_parent()
+	assert(spawn_path_node or spawn_path)
+	if spawn_path_node and not spawn_path:
+		spawn_path = get_path_to(spawn_path_node)										# TODO MOVE TO MAKE THIS SPAWNER SPAWN UDER ClientSpawnManager.
+	elif not spawn_path_node and spawn_path:
+		spawn_path_node = get_node(spawn_path)
+
+	set_multiplayer_authority(peer_id)
 	spawn_path_node.set_multiplayer_authority(peer_id)
-	assert(get_multiplayer_authority() == peer_id)
 
 
 func _ready() -> void:
