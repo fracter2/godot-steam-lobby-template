@@ -42,7 +42,8 @@ static func get_spawner_of(node: Node) -> ClientSpawner:
 	if not singleton.spawn_root.is_ancestor_of(node):
 		return null
 	var branch_name: StringName = singleton.spawn_root.get_path_to(node).get_name(0)
-	return singleton.spawn_root.get_node_or_null(NodePath(str(branch_name) + "/" + default_branch_spawner_name))		# WARNING EXPECTS CLIENT SPAWNER TO HAVE CONSISTENT NAME, consider metadata instead
+	var branch_id: int = singleton.spawn_root.get_node(NodePath(branch_name)).get_multiplayer_authority()
+	return singleton.client_spawners[branch_id]
 
 
 ## Spawns the node with the local users [ClientSpawner] as a synced multiplayer object. [br]
