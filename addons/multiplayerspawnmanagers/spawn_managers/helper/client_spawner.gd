@@ -1,6 +1,11 @@
 class_name ClientSpawner
 extends MultiplayerSpawner
-
+## This is a helper-class, not meant to be instantianted by anything besides [ClientSpawnManager]. Do not place manually. [br]
+##
+## Provides player-owned spawning using [method spawn_node], for one peer, decided by [member peer_id].
+## MultiplayerAuthority is not set for spawned nodes automatically, unless they are in any of the [member GROUPS.CLIENT_SPAWNER_SET_CLIENT_AUTHORITY],
+## [member GROUPS.CLIENT_SPAWNER_SET_SERVER_AUTHORITY], or their "NO_CHILDREN" variants. If set, they simply apply authority to the node as their name implies,
+## right after the spawned node's [signal tree_entered] callback. The groups are removed after spawn. The groups are useless outside of ClientSpawner, and may also be removed, without any affect.
 
 ## The multiplayer peer id assosiated with this player. Setting this also sets the multiplayer authority of
 ## all nodes in [member player_owned_nodes] on spawn, as well as emitting [signal setting_peer_authority].

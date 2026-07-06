@@ -1,6 +1,10 @@
 class_name ClientSpawnManager
 extends Node
-
+## Manages client-owned spawning by spawning a unique [ClientSpawner] for each multiplayerpeer connected, that they have authority on. [br]
+##
+## Authority is not set for spawned entities automatically, unless they are in any of the 4 ClientSpawn Groups.
+## The most important functions are [method get_user_spawner], [method get_spawner_of], and [method spawn].
+## All spawns are validated through [member spawnable_scenes].
 
 const default_root_name: String = "ClientSpawnRoot"
 const default_branch_name: String = "Peer_%d"

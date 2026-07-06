@@ -2,8 +2,9 @@
 class_name Spawnlist
 extends Resource
 ## This is meant to serve as a saveable list of node-scene filepaths that MultiplayerSpawner's can add to their spawn list. [br]
-## As such it should only contain valid node-scenes. If there are invalid paths, a button will appear that can auto-remove.
-
+##
+## As such it should only contain valid node-scenes. If there are invalid paths, a button will appear that can auto-remove, and getter funcs will automatically ignore them.
+## The most significant funcs are [method get_valid_paths], [method has_path] and [method add_path].
 
 ## The filetypes that [ResourceLoader] recognizes as [PackedScene]. Got using [method ResourceLoader.get_recognized_extensions_for_type].
 const valid_filetypes: PackedStringArray = [".tscn", ".res", ".scn", ".dae", ".obj", ".escn", ".fbx", ".gltf", ".glb", ".blend", ".boobs"]
@@ -89,7 +90,7 @@ func _remove_invalid() -> void:													# TODO TEST IF THIS CRASHES IN BUILD
 
 
 
-func _get_property_list() ->  Array[Dictionary]:
+func _get_property_list() -> Array[Dictionary]:
 	var properties: Array[Dictionary] = []
 
 	properties.append({

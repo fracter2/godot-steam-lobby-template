@@ -40,7 +40,7 @@ project/assembly_name="Steam Lobby Wrapper"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/backgroundloader/plugin.cfg", "res://addons/launch_parser/plugin.cfg", "res://addons/multiplayerlobby/plugin.cfg", "res://addons/steamworks/plugin.cfg")
+enabled=PackedStringArray("res://addons/backgroundloader/plugin.cfg", "res://addons/launch_parser/plugin.cfg", "res://addons/multiplayerlobby/plugin.cfg", "res://addons/multiplayerspawnmanagers/plugin.cfg", "res://addons/steamworks/plugin.cfg")
 
 [global_group]
 
