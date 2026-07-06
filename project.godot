@@ -20,7 +20,7 @@ config/icon="res://icon.svg"
 LaunchArgs="*uid://bdmt4tt1xe6wb"
 Log="*uid://b1e50a8osrmsi"
 Settings="*res://src/autoload/settings.gd"
-Steamworks="*res://src/autoload/steamworks.gd"
+Steamworks="*uid://calyoeobje78k"
 Lobby="*uid://bhlt1470osavt"
 WindowSpawnAligner="*uid://co6vrmvokbfln"
 BackgroundLoader="*uid://nc3u1dukk35c"
@@ -40,7 +40,7 @@ project/assembly_name="Steam Lobby Wrapper"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/backgroundloader/plugin.cfg", "res://addons/launch_parser/plugin.cfg", "res://addons/multiplayerlobby/plugin.cfg")
+enabled=PackedStringArray("res://addons/backgroundloader/plugin.cfg", "res://addons/launch_parser/plugin.cfg", "res://addons/multiplayerlobby/plugin.cfg", "res://addons/steamworks/plugin.cfg")
 
 [global_group]
 
@@ -109,7 +109,7 @@ renderer/rendering_method.mobile="gl_compatibility"
 
 [steam]
 
-initialization/app_id=0
 initialization/initialize_on_startup=false
 initialization/embed_callbacks=false
 multiplayer_peer/max_channels=4
+initialization/app_id=0
