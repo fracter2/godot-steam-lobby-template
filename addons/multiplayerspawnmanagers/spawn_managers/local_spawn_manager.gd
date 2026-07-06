@@ -37,7 +37,7 @@ func _enter_tree() -> void:
 	singleton = self
 
 	if not spawn_root:
-		_create_root.call_deferred(_get_node_instance_from_type(get_parent()))	# NOTE Deffered since cannot spawn during _enter_tree()
+		get_parent().ready.connect(_create_root.bind(_get_node_instance_from_type(get_parent())), CONNECT_ONE_SHOT)
 
 
 func _exit_tree() -> void:

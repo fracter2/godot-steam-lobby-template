@@ -40,9 +40,8 @@ func _enter_tree() -> void:
 	singleton = self
 
 	assert(spawnable_scenes != null, "ServerSpawnManager is missing a Spawnlist!")
-
 	if not spawn_root:
-		_create_root.call_deferred(_get_node_instance_from_type(get_parent()))
+		get_parent().ready.connect(_create_root.bind(_get_node_instance_from_type(get_parent())), CONNECT_ONE_SHOT)
 
 
 func _exit_tree() -> void:

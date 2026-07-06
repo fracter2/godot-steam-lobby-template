@@ -75,15 +75,17 @@ func _enter_tree() -> void:
 	assert(singleton == null)
 	singleton = self
 
+	get_parent().ready.connect(_create_branches, CONNECT_ONE_SHOT)
+
+
+func _create_branches() -> void:
 	multiplayer.peer_connected.connect(_create_branch)
 	multiplayer.peer_disconnected.connect(_remove_branch)
-
 	if not spawn_root:
-		_create_root.call_deferred(_get_node_instance_from_type(get_parent()))	# NOTE Deffered since cannot spawn during _enter_tree()
-
+		_create_root(_get_node_instance_from_type(get_parent()))
 	for id: int in multiplayer.get_peers():
-		_create_branch.call_deferred(id)
-	_create_branch.call_deferred(multiplayer.get_unique_id())
+		_create_branch(id)
+	_create_branch(multiplayer.get_unique_id())
 
 
 func _exit_tree() -> void:
