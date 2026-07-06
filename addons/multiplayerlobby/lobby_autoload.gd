@@ -7,7 +7,7 @@ var lobby_instance: MultiplayerLobby = null
 ## A non-recoverable issue has occured and the [MultiplayerLobby] has been destroyed.
 signal critical_error(message:String)
 
-## Successfully hosted or joined as client
+## Successfully hosted or joined as client. Clients recieve this as simultaniously as [signal multiplayer.connected_to_server] (or technically, [signal lobby_entered] triggers as a response, meaning it will finish emiting first)
 signal lobby_entered
 
 ## Disconnect as host / client, or failed lobby_entered attempt
@@ -258,6 +258,10 @@ func _on_connected_as_client() -> void:
 		else:
 			add_new_player_info(peer_id)
 
+	multiplayer.connected_to_server.connect(_on_connected_to_server, CONNECT_ONE_SHOT)
+
+
+func _on_connected_to_server() -> void:
 	lobby_entered.emit()
 
 
