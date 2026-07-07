@@ -25,6 +25,7 @@ metadata/_snap_enabled = true
 script = ExtResource("1_gqos7")
 
 [node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="." unique_id=1998851302]
+delta_interval = 0.1
 replication_config = SubResource("SceneReplicationConfig_gqos7")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=249986538]

@@ -147,6 +147,7 @@ Cases that should be tested and covered:
 - [ ] Comparison with using rpc calls
 - [ ] Comparison when using packets
 - [ ] Possible comparison to using sockets directly
+- [ ] If / how to change replication settings in-game
 
 ##### SceneMultiplayer
 - [ ] Sending / recieveing raw bytes

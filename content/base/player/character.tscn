@@ -44,6 +44,7 @@ name_label = NodePath("NameLabel")
 
 [node name="PlayerOwnedSyncronizer" type="MultiplayerSynchronizer" parent="." unique_id=1640370798 groups=["ClientSpawner Set Client Authority"]]
 editor_description = "It is \"player owned\" because the multiplayer authority is set to this player."
+replication_interval = 0.04
 replication_config = SubResource("SceneReplicationConfig_gig5a")
 
 [node name="Direction" type="Node2D" parent="." unique_id=1035567952]
