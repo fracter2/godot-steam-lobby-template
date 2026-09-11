@@ -3,7 +3,7 @@ extends EditorScript
 
 # TODO MAKE INTO PLUGIN, MAKE TOOL SCRIPT, OR RUN ON BUILD
 
-const autogen_disclaimer: String = "\n# Dis scrip is audogenewaded by update_consts tool button\n"
+const autogen_disclaimer: String = "\n# WARNING Dis scrip is audogenewaded by update_consts.gd EditorScript (right click and run). Do not touchy.\n"
 const prefix_const: String = "\nconst "
 const prefix_stringname: String = ": StringName = &\""
 const prefix_int: String = ": int = "
@@ -55,7 +55,7 @@ func _replace_text_in_file(text: String, filepath: String) -> bool:
 	return true
 
 
-#§
+#
 # ---- LAYERS SCRIPT ----
 #
 
@@ -160,9 +160,11 @@ func _get_all_groups() -> Array[String]:
 func _validate_paths() -> void:
 	var timer_start: int = Time.get_ticks_usec()
 
+	# TODO DELEGATE TO SUB-FUNC, returning only "script.get_script_constant_map()" or null, or other fail (dictionary wrapper?)
 	var p: PATHS = PATHS.new()
 	var script: Script = p.get_script()
 	p.free()
+	#
 	if not script:
 		EditorInterface.get_editor_toaster().push_toast("PATHS VALIDATION FUNC BROKEN!!", EditorToaster.SEVERITY_INFO, "Hi i'm a toaster!")
 		printerr("PATHS VALIDATION FUNC BROKEN!!")
