@@ -17,6 +17,9 @@ var user_commands: Dictionary[String, PackedStringArray] = {}
 # ---- API ----
 #
 
+# TODO ADD FUNC SEPPARATE RUNNABLE SCRIPT FILE OR TOOL BTN THAT FINDS ALL USED ARGS
+# like all code that goes "LaunchArgs.has_command("blabla")" and list all them
+
 ## Returns if either [member main_commands] or [member user_commands] contain this (only one may have it).[br]
 ## Any word begining with [code]-[/code] or [code]+[/code] are considered commands.[br]
 ## Ex: [codeblock lang=text]-key1 --key2 +key3 ++key4 --+-key5 [/codeblock][br]
