@@ -1,12 +1,14 @@
 extends Node
 
-# TODO MAKE INTO PLUGIN
-
 # This is a standalone utility script (meant as an autoload) to make it easier to
 # parse commandline args. "has_command()" and "get_values()" are the primary intended uses.
 #
-# This script removes prefixes (usually -- but can also be any combination of - or +) and
-# parses values with what i call "space" style values and '=' style values.
+# This script auto-strips prefixes (usually -- but can also be any combination of - or +) off
+# of commands. Command-values are appended to commands using either '=' or ' ' (space) as
+# sepparators.
+#
+# Examples of valid commands and args: "-WindowPosition 1920 1080" or "--borders=false"
+# Can be retrieved with: has_command()
 
 var main_commands: Dictionary[String, PackedStringArray] = {}
 var user_commands: Dictionary[String, PackedStringArray] = {}
@@ -78,6 +80,7 @@ func _init() -> void:
 	for key: String in user_commands.keys():
 		print("\t--%s: %s" % [key, user_commands[key]])
 	print("----")
+
 
 #
 # ---- Internal logic ----
