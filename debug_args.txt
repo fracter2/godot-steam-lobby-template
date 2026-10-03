@@ -1,0 +1,7 @@
+
+Typical arg list
+-nosteam -init-enet-lobby=true==8080=iamhost -logcolor=AQUAMARINE  -winpos-tile=0 --this-is-an-extra-launch-arg=value -- --this-is-a-user-arg
+-nosteam -init-enet-lobby=client=127.0.0.1=8080=client1 -logcolor=YELLOW_GREEN -winpos-tile=1
+-nosteam -init-enet-lobby=client=127.0.0.1=8080=client2 -logcolor=PALE_GOLDENROD -winpos-tile=2
+-nosteam -init-enet-lobby=client=127.0.0.1=8080=client3 -logcolor=PINK -winpos-tile=3
+-nosteam -init-enet-lobby=client=127.0.0.1=8080=client4 -logcolor=LIGHT_SALMON -winpos-tile=4
