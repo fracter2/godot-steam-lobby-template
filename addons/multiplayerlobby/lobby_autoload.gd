@@ -169,7 +169,7 @@ func _check_launch_commands() -> void:
 						ishost can be either true/false. The ip can be anything (it's ignored) for hosts")
 			return
 
-		var ishost: bool = true if args[0] == "true" else false
+		var ishost: bool = true if (args[0] == "true" or args[0] == "host") else false
 		var ip: String = args[1]
 		var port: int = args[2].to_int()
 		var username: String = args[3]
