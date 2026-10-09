@@ -5,6 +5,9 @@ extends Node
 const screen_margin: Vector2i = Vector2i(32, 32)	## Offset from top-left corner of the screen
 
 func _enter_tree() -> void:
+	if LaunchArgs.has_command("-winpos-scale"):
+		_parse_scale()
+
 	if LaunchArgs.has_command("-winpos-tile"):
 		_parse_multi_window()
 
@@ -47,3 +50,16 @@ func _parse_winpos() -> void:
 		monitor_index = clampi(monitor_index, -4, DisplayServer.get_screen_count() - 1)
 
 	get_window().position = Vector2i(ax, ay) + DisplayServer.screen_get_position(monitor_index)
+
+
+func _parse_scale() -> void:
+	var values: PackedStringArray = LaunchArgs.get_values("-winpos-scale")
+	if values.size() < 1:
+		push_warning("window_spawn_aligner -winpos-scale: AINT ENOUGH ARGS. Should be -winpos-scale=procent or -winpos-scale=procent_width=procent_height.")
+		return
+
+	var procent_x: int = values[0].to_int()
+	var procent_y: int = values[1].to_int() if values.size() >= 2 else procent_x
+	var scale: Vector2 = Vector2((procent_x/100.0),(procent_y/100.0))
+	var size: Vector2i = get_window().size
+	get_window().size = Vector2i(int(size.x * scale.x), int(size.y * scale.y))
