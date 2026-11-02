@@ -1,0 +1,258 @@
+[gd_scene format=3 uid="uid://bc4rcgpxoxkq4"]
+
+[ext_resource type="Script" uid="uid://ho3n3j0rxror" path="res://addons/multiplayerlobby/util/lobby_connecter.gd" id="1_dd4v0"]
+[ext_resource type="Script" uid="uid://cbaivxnsabs1o" path="res://src/ui/menus/pause_menu.gd" id="2_blpdg"]
+[ext_resource type="PackedScene" uid="uid://7abbq726h0tk" path="res://src/ui/hud/lobby_player_list.tscn" id="3_ywaah"]
+[ext_resource type="Script" uid="uid://daskj7jw23i43" path="res://addons/multiplayerspawnmanagers/spawn_managers/client_spawn_manager.gd" id="4_kxq31"]
+[ext_resource type="Resource" uid="uid://bb2syr6eygato" path="res://content/base/spawnlist_client.tres" id="5_en6s8"]
+[ext_resource type="Script" uid="uid://bkdv1qx0uqyvk" path="res://addons/multiplayerspawnmanagers/spawn_managers/server_spawn_manager.gd" id="6_mk6wv"]
+[ext_resource type="Script" uid="uid://cvg3k76h8j7xo" path="res://addons/multiplayerspawnmanagers/resource/spawn_list.gd" id="7_q1v7m"]
+[ext_resource type="Script" uid="uid://38sojrpq56xh" path="res://addons/multiplayerspawnmanagers/spawn_managers/local_spawn_manager.gd" id="8_vaxsn"]
+
+[sub_resource type="Environment" id="Environment_1wqjs"]
+tonemap_mode = 4
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_6ioai"]
+
+[sub_resource type="Resource" id="Resource_b5wbc"]
+script = ExtResource("7_q1v7m")
+uid_paths = Dictionary[int, String]({
+2497704265245128666: "res://content/base/entities/dragable_box.tscn",
+5880875177899348165: "res://content/base/entities/minion/minion.tscn"
+})
+SCENE_PATHS = PackedStringArray("uid://bbt53a6pdbkkg", "uid://cp10fjfcrq0j6")
+metadata/_custom_type_script = "uid://cvg3k76h8j7xo"
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_kxq31"]
+data = PackedVector3Array(100, 0, 100, -100, 0, 100, 100, 0, -100, -100, 0, 100, -100, 0, -100, 100, 0, -100)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_1wqjs"]
+size = Vector2(200, 200)
+
+[sub_resource type="BoxMesh" id="BoxMesh_1wqjs"]
+size = Vector3(10, 3, 15)
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_en6s8"]
+data = PackedVector3Array(-5, 1.5, 7.5, 5, 1.5, 7.5, -5, -1.5, 7.5, 5, 1.5, 7.5, 5, -1.5, 7.5, -5, -1.5, 7.5, 5, 1.5, -7.5, -5, 1.5, -7.5, 5, -1.5, -7.5, -5, 1.5, -7.5, -5, -1.5, -7.5, 5, -1.5, -7.5, 5, 1.5, 7.5, 5, 1.5, -7.5, 5, -1.5, 7.5, 5, 1.5, -7.5, 5, -1.5, -7.5, 5, -1.5, 7.5, -5, 1.5, -7.5, -5, 1.5, 7.5, -5, -1.5, -7.5, -5, 1.5, 7.5, -5, -1.5, 7.5, -5, -1.5, -7.5, 5, 1.5, 7.5, -5, 1.5, 7.5, 5, 1.5, -7.5, -5, 1.5, 7.5, -5, 1.5, -7.5, 5, 1.5, -7.5, -5, -1.5, 7.5, 5, -1.5, 7.5, -5, -1.5, -7.5, 5, -1.5, 7.5, 5, -1.5, -7.5, -5, -1.5, -7.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_d8bms"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_mk6wv"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_qxckc"]
+size = Vector3(4, 60, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_q1v7m"]
+size = Vector3(4, 60, 4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_chpbv"]
+size = Vector3(8, 1, 8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_m87vb"]
+size = Vector3(3, 3, 4.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vaxsn"]
+size = Vector3(3, 3, 4.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_6ioai"]
+size = Vector3(2.5, 2.5, 60)
+
+[sub_resource type="PrismMesh" id="PrismMesh_1wqjs"]
+size = Vector3(2.5, 7.5, 2.285)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_qxckc"]
+top_radius = 0.18652344
+bottom_radius = 0.18652344
+height = 32.48755
+radial_segments = 6
+rings = 2
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_b5wbc"]
+top_radius = 0.18652344
+bottom_radius = 0.18652344
+height = 17.042145
+radial_segments = 6
+rings = 2
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_m87vb"]
+top_radius = 1.1669922
+bottom_radius = 1.1669922
+height = 0.2636528
+
+[sub_resource type="BoxMesh" id="BoxMesh_bjst1"]
+size = Vector3(3, 2, 4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_sxdwf"]
+size = Vector3(1.54, 1, 1.986)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_1wqjs"]
+top_radius = 0.36132813
+bottom_radius = 0.36132813
+radial_segments = 6
+rings = 2
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_6ioai"]
+top_radius = 0.20654297
+bottom_radius = 0.20654297
+height = 4.2382813
+radial_segments = 6
+
+[sub_resource type="BoxMesh" id="BoxMesh_fxeok"]
+size = Vector3(1, 0.3696289, 1)
+
+[node name="World" type="Node3D" unique_id=1180640138]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=19273825]
+environment = SubResource("Environment_1wqjs")
+camera_attributes = SubResource("CameraAttributesPractical_6ioai")
+
+[node name="UI" type="CanvasLayer" parent="." unique_id=2136630871]
+
+[node name="PauseMenu" type="Panel" parent="UI" unique_id=1476931423]
+visible = false
+offset_left = 474.0
+offset_top = 215.0
+offset_right = 676.0
+offset_bottom = 389.0
+script = ExtResource("2_blpdg")
+
+[node name="Label" type="Label" parent="UI/PauseMenu" unique_id=1882633976]
+layout_mode = 0
+offset_left = 25.0
+offset_top = 32.0
+offset_right = 173.0
+offset_bottom = 55.0
+text = "This is pause menu"
+
+[node name="Button" type="Button" parent="UI/PauseMenu" unique_id=1689765673]
+layout_mode = 0
+offset_left = 16.0
+offset_top = 120.0
+offset_right = 178.0
+offset_bottom = 151.0
+text = "Exit to Main menu"
+
+[node name="PlayerList" parent="UI" unique_id=1639136409 instance=ExtResource("3_ywaah")]
+
+[node name="LobbyConnecter" type="Node" parent="." unique_id=1817858200]
+script = ExtResource("1_dd4v0")
+metadata/_custom_type_script = "uid://ho3n3j0rxror"
+
+[node name="ClientSpawnManager" type="Node" parent="." unique_id=1257783984]
+script = ExtResource("4_kxq31")
+spawnable_scenes = ExtResource("5_en6s8")
+
+[node name="ServerSpawnManager" type="Node" parent="." unique_id=1177000291]
+script = ExtResource("6_mk6wv")
+spawnable_scenes = SubResource("Resource_b5wbc")
+
+[node name="LocalSpawnManager" type="Node" parent="." unique_id=1608268172]
+script = ExtResource("8_vaxsn")
+
+[node name="StaticMap" type="Node3D" parent="." unique_id=466405861]
+
+[node name="Ground" type="StaticBody3D" parent="StaticMap" unique_id=892493936]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticMap/Ground" unique_id=1469788486]
+shape = SubResource("ConcavePolygonShape3D_kxq31")
+
+[node name="Mesh" type="MeshInstance3D" parent="StaticMap/Ground" unique_id=2034723317]
+mesh = SubResource("PlaneMesh_1wqjs")
+
+[node name="Building" type="StaticBody3D" parent="StaticMap" unique_id=2019993040]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.585133, 1.4181466, 6.33871)
+
+[node name="Mesh" type="MeshInstance3D" parent="StaticMap/Building" unique_id=1943528915]
+mesh = SubResource("BoxMesh_1wqjs")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticMap/Building" unique_id=1332990318]
+shape = SubResource("ConcavePolygonShape3D_en6s8")
+
+[node name="Crate" type="RigidBody3D" parent="StaticMap" unique_id=732444542]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.1115398, 0.5972382, -4.8145447)
+metadata/_edit_group_ = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticMap/Crate" unique_id=961900711]
+mesh = SubResource("BoxMesh_d8bms")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticMap/Crate" unique_id=1254805987]
+shape = SubResource("BoxShape3D_mk6wv")
+
+[node name="Crane" type="Node3D" parent="StaticMap" unique_id=1088126938]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.610947, 34.86753, 9.382345)
+
+[node name="Mast" type="StaticBody3D" parent="StaticMap/Crane" unique_id=361726536]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.2850113, 0)
+metadata/_edit_group_ = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticMap/Crane/Mast" unique_id=93351645]
+mesh = SubResource("BoxMesh_qxckc")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticMap/Crane/Mast" unique_id=559956934]
+shape = SubResource("BoxShape3D_q1v7m")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="StaticMap/Crane/Mast" unique_id=688368137]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -30.358889, 0)
+mesh = SubResource("BoxMesh_chpbv")
+
+[node name="Top Section" type="Node3D" parent="StaticMap/Crane" unique_id=2047428614]
+
+[node name="Cabin" type="StaticBody3D" parent="StaticMap/Crane/Top Section" unique_id=1262985825]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.769352, 27.18695, 0)
+metadata/_edit_group_ = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticMap/Crane/Top Section/Cabin" unique_id=304366771]
+mesh = SubResource("BoxMesh_m87vb")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticMap/Crane/Top Section/Cabin" unique_id=902274079]
+shape = SubResource("BoxShape3D_vaxsn")
+
+[node name="Jib" type="StaticBody3D" parent="StaticMap/Crane/Top Section" unique_id=264409805]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 30, 0)
+metadata/_edit_group_ = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticMap/Crane/Top Section/Jib" unique_id=733481983]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.002006)
+mesh = SubResource("BoxMesh_6ioai")
+
+[node name="Head" type="MeshInstance3D" parent="StaticMap/Crane/Top Section" unique_id=908189939]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 34.963028, 0)
+mesh = SubResource("PrismMesh_1wqjs")
+
+[node name="Jib Support" type="MeshInstance3D" parent="StaticMap/Crane/Top Section" unique_id=1220305340]
+transform = Transform3D(1, 0, 0, 0, 0.23297557, -0.9724827, 0, 0.9724827, 0.23297557, 0, 34.91896, -16.0563)
+mesh = SubResource("CylinderMesh_qxckc")
+
+[node name="Counter Jib Support" type="MeshInstance3D" parent="StaticMap/Crane/Top Section" unique_id=769661748]
+transform = Transform3D(1, 0, 0, 0, -0.4823455, -0.87598133, 0, 0.87598133, -0.4823455, -3.8146973e-06, 34.71048, 7.7511044)
+mesh = SubResource("CylinderMesh_b5wbc")
+
+[node name="Head Catwalk" type="MeshInstance3D" parent="StaticMap/Crane/Top Section" unique_id=1102843195]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 38.802933, 0)
+mesh = SubResource("CylinderMesh_m87vb")
+
+[node name="Counterweights" type="MeshInstance3D" parent="StaticMap/Crane/Top Section" unique_id=1011572041]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.9073486e-06, 29.041714, 12.638802)
+mesh = SubResource("BoxMesh_bjst1")
+
+[node name="Trolley" type="MeshInstance3D" parent="StaticMap/Crane/Top Section" unique_id=2145928046]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 28.1334, -18.829176)
+mesh = SubResource("BoxMesh_sxdwf")
+
+[node name="Wheels front" type="MeshInstance3D" parent="StaticMap/Crane/Top Section/Trolley" unique_id=2082202896]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0.6517639, -0.63368225)
+mesh = SubResource("CylinderMesh_1wqjs")
+
+[node name="Wheels back" type="MeshInstance3D" parent="StaticMap/Crane/Top Section/Trolley" unique_id=1978196193]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0.6517639, 0.73177433)
+mesh = SubResource("CylinderMesh_1wqjs")
+
+[node name="Hook line" type="MeshInstance3D" parent="StaticMap/Crane/Top Section/Trolley" unique_id=711546208]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.5261307, 0)
+mesh = SubResource("CylinderMesh_6ioai")
+
+[node name="Hook" type="MeshInstance3D" parent="StaticMap/Crane/Top Section/Trolley" unique_id=720532613]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.795311, 0)
+mesh = SubResource("BoxMesh_fxeok")
+
+[connection signal="tree_entered" from="." to="LobbyConnecter" method="_try_set_multiplayer"]
