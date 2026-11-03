@@ -9,8 +9,34 @@
 [ext_resource type="Script" uid="uid://cvg3k76h8j7xo" path="res://addons/multiplayerspawnmanagers/resource/spawn_list.gd" id="7_q1v7m"]
 [ext_resource type="Script" uid="uid://38sojrpq56xh" path="res://addons/multiplayerspawnmanagers/spawn_managers/local_spawn_manager.gd" id="8_vaxsn"]
 
+[sub_resource type="Gradient" id="Gradient_kxq31"]
+interpolation_color_space = 2
+offsets = PackedFloat32Array(0, 0.12573099, 0.35380116, 0.5, 0.66374266, 0.9093567, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.0029387553, 0.026420265, 0.047321714, 1, 0.20998922, 0.23058498, 0.2425276, 1, 0.38746473, 0.38746485, 0.38746482, 1, 0.5776521, 0.57765204, 0.577652, 1, 0.9719712, 0.85606396, 0.7272944, 1, 1, 1, 1, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_oilgl"]
+gradient = SubResource("Gradient_kxq31")
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_1wqjs"]
+sky_top_color = Color(0.5334201, 0.50006264, 0.47165358, 1)
+sky_horizon_color = Color(0.7523438, 0.80157536, 0.8002848, 1)
+ground_bottom_color = Color(0.7586966, 0.638143, 0.5024544, 1)
+ground_horizon_color = Color(0.7345332, 0.69609684, 0.6645556, 1)
+
+[sub_resource type="Sky" id="Sky_1wqjs"]
+sky_material = SubResource("ProceduralSkyMaterial_1wqjs")
+
 [sub_resource type="Environment" id="Environment_1wqjs"]
+background_mode = 2
+background_color = Color(0.6536422, 0.58493847, 0.7568848, 1)
+sky = SubResource("Sky_1wqjs")
+ambient_light_source = 3
+ambient_light_color = Color(0.096204735, 0.09620475, 0.096204735, 1)
+ambient_light_sky_contribution = 0.48
 tonemap_mode = 4
+adjustment_enabled = true
+adjustment_brightness = 1.16
+adjustment_color_correction = SubResource("GradientTexture1D_oilgl")
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_6ioai"]
 
@@ -26,7 +52,11 @@ metadata/_custom_type_script = "uid://cvg3k76h8j7xo"
 [sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_kxq31"]
 data = PackedVector3Array(100, 0, 100, -100, 0, 100, 100, 0, -100, -100, 0, 100, -100, 0, -100, 100, 0, -100)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kxq31"]
+albedo_color = Color(0.52906674, 0.5290667, 0.5290667, 1)
+
 [sub_resource type="PlaneMesh" id="PlaneMesh_1wqjs"]
+material = SubResource("StandardMaterial3D_kxq31")
 size = Vector2(200, 200)
 
 [sub_resource type="BoxMesh" id="BoxMesh_1wqjs"]
@@ -105,6 +135,23 @@ size = Vector3(1, 0.3696289, 1)
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=19273825]
 environment = SubResource("Environment_1wqjs")
 camera_attributes = SubResource("CameraAttributesPractical_6ioai")
+
+[node name="Sunlight" type="DirectionalLight3D" parent="." unique_id=1923948324]
+transform = Transform3D(0.9669339, -0.16590221, 0.19368868, -0.25502712, -0.629017, 0.7343696, 0, -0.7594827, -0.6505274, 0, 3.2608585, 0)
+light_color = Color(0.95358187, 0.9272508, 0.9105024, 1)
+light_energy = 1.32
+shadow_enabled = true
+directional_shadow_max_distance = 469.1
+directional_shadow_pancake_size = 50.7
+
+[node name="Opposite Sun" type="DirectionalLight3D" parent="Sunlight" unique_id=323914672]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -0.99999994, 0, 1, -4.3711385e-08, 0, 0, 0)
+light_color = Color(0.4909761, 0.5391937, 0.63020813, 1)
+light_energy = 0.0
+light_indirect_energy = 0.682
+sky_mode = 1
+
+[node name="LightmapGI" type="LightmapGI" parent="Sunlight" unique_id=384935688]
 
 [node name="UI" type="CanvasLayer" parent="." unique_id=2136630871]
 

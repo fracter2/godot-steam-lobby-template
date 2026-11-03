@@ -1,0 +1,174 @@
+[gd_scene format=3 uid="uid://dckv8lttlr58x"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_qxckc"]
+size = Vector3(4, 60, 4)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_q1v7m"]
+size = Vector3(4, 60, 4)
+
+[sub_resource type="BoxMesh" id="BoxMesh_chpbv"]
+size = Vector3(8, 1, 8)
+
+[sub_resource type="BoxMesh" id="BoxMesh_m87vb"]
+size = Vector3(3, 3, 4.5)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_vaxsn"]
+size = Vector3(3, 3, 4.5)
+
+[sub_resource type="BoxMesh" id="BoxMesh_6ioai"]
+size = Vector3(2.5, 2.5, 60)
+
+[sub_resource type="BoxMesh" id="BoxMesh_bjst1"]
+size = Vector3(3, 2, 4)
+
+[sub_resource type="PrismMesh" id="PrismMesh_1wqjs"]
+size = Vector3(2.5, 7.5, 2.285)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_m87vb"]
+top_radius = 1.1669922
+bottom_radius = 1.1669922
+height = 0.2636528
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_b5wbc"]
+top_radius = 0.18652344
+bottom_radius = 0.18652344
+height = 17.042145
+radial_segments = 6
+rings = 2
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_qxckc"]
+top_radius = 0.18652344
+bottom_radius = 0.18652344
+height = 32.48755
+radial_segments = 6
+rings = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_sxdwf"]
+size = Vector3(1.54, 1, 1.986)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_1wqjs"]
+top_radius = 0.36132813
+bottom_radius = 0.36132813
+radial_segments = 6
+rings = 2
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_6ioai"]
+top_radius = 0.20654297
+bottom_radius = 0.20654297
+height = 4.2382813
+radial_segments = 6
+
+[sub_resource type="BoxMesh" id="BoxMesh_fxeok"]
+size = Vector3(1, 0.3696289, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_1wqjs"]
+size = Vector3(0.35, 0.35, 0.86)
+
+[sub_resource type="Curve3D" id="Curve3D_vufsw"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -38.395),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[node name="Crane" type="Node3D" unique_id=1268038398]
+
+[node name="Mast" type="StaticBody3D" parent="." unique_id=10193243]
+metadata/_edit_group_ = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Mast" unique_id=248065120]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 30.359, 0)
+mesh = SubResource("BoxMesh_qxckc")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Mast" unique_id=1335563639]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 30.359, 0)
+shape = SubResource("BoxShape3D_q1v7m")
+
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Mast" unique_id=1054575418]
+mesh = SubResource("BoxMesh_chpbv")
+
+[node name="Top Section" type="Node3D" parent="." unique_id=1173103440]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 60, 0)
+
+[node name="Cabin" type="StaticBody3D" parent="Top Section" unique_id=273280590]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.769, 2.187, 0)
+metadata/_edit_group_ = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Top Section/Cabin" unique_id=686218617]
+mesh = SubResource("BoxMesh_m87vb")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Top Section/Cabin" unique_id=859618930]
+shape = SubResource("BoxShape3D_vaxsn")
+
+[node name="Jib" type="StaticBody3D" parent="Top Section" unique_id=766804838]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
+metadata/_edit_group_ = true
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Top Section/Jib" unique_id=2132834441]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.002006)
+mesh = SubResource("BoxMesh_6ioai")
+
+[node name="Counterweights" type="MeshInstance3D" parent="Top Section/Jib" unique_id=634022630]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9580002, 12.639)
+mesh = SubResource("BoxMesh_bjst1")
+
+[node name="Head" type="MeshInstance3D" parent="Top Section" unique_id=1026028904]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.963, 0)
+mesh = SubResource("PrismMesh_1wqjs")
+
+[node name="Head Catwalk" type="MeshInstance3D" parent="Top Section/Head" unique_id=1331782987]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.840004, 0)
+mesh = SubResource("CylinderMesh_m87vb")
+
+[node name="Counter Jib Support" type="MeshInstance3D" parent="Top Section/Head" unique_id=974185256]
+transform = Transform3D(1, 0, 0, 0, -0.4823455, -0.87598133, 0, 0.87598133, -0.4823455, 0, -0.25299835, 7.751)
+mesh = SubResource("CylinderMesh_b5wbc")
+
+[node name="Jib Support" type="MeshInstance3D" parent="Top Section/Head" unique_id=959175743]
+transform = Transform3D(1, 0, 0, 0, 0.23297557, -0.9724827, 0, 0.9724827, 0.23297557, 0, -0.04399872, -16.056)
+mesh = SubResource("CylinderMesh_qxckc")
+
+[node name="Trolley" type="MeshInstance3D" parent="Top Section" unique_id=1152496297]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.133, -18.829)
+mesh = SubResource("BoxMesh_sxdwf")
+
+[node name="Wheels front" type="MeshInstance3D" parent="Top Section/Trolley" unique_id=1252683864]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0.6517639, -0.63368225)
+cast_shadow = 0
+visibility_range_end = 400.0
+mesh = SubResource("CylinderMesh_1wqjs")
+
+[node name="Wheels back" type="MeshInstance3D" parent="Top Section/Trolley" unique_id=616360061]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0.6517639, 0.73177433)
+cast_shadow = 0
+visibility_range_end = 400.0
+mesh = SubResource("CylinderMesh_1wqjs")
+
+[node name="Hook line" type="MeshInstance3D" parent="Top Section/Trolley" unique_id=1692270322]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.5261307, 0)
+mesh = SubResource("CylinderMesh_6ioai")
+
+[node name="Hook" type="MeshInstance3D" parent="Top Section/Trolley" unique_id=1792355746]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.795311, 0)
+mesh = SubResource("BoxMesh_fxeok")
+
+[node name="Cable Base" type="MeshInstance3D" parent="Top Section/Trolley" unique_id=428806099]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.55298233, 0)
+visibility_range_end = 200.0
+mesh = SubResource("BoxMesh_1wqjs")
+
+[node name="TODO PathFollowerController" type="Node3D" parent="Top Section/Trolley" unique_id=1300284198]
+editor_description = "TODO
+Make able to be controlled...
+Support snapping to existing path3D, motor force / torque / at different speeds, + friction, + brake force...
+LATER should be disconnectable + drag-n-droppable..."
+
+[node name="Path3D" type="Path3D" parent="Top Section" unique_id=1736375466]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.7835197, -2.9065995)
+curve = SubResource("Curve3D_vufsw")
+
+[node name="PathFollow3D" type="PathFollow3D" parent="Top Section" unique_id=998399903]
+
+[node name="Node" type="Node" parent="." unique_id=1930573463]
+
+[node name="RigidBody3D" type="RigidBody3D" parent="." unique_id=395944383]
