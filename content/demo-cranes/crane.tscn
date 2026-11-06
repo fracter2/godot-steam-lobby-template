@@ -1,5 +1,7 @@
 [gd_scene format=3 uid="uid://dckv8lttlr58x"]
 
+[ext_resource type="Script" uid="uid://duxtdpodghxsj" path="res://content/demo-cranes/logic/path_follower_component.gd" id="1_0clit"]
+
 [sub_resource type="BoxMesh" id="BoxMesh_qxckc"]
 size = Vector3(4, 60, 4)
 
@@ -162,6 +164,7 @@ editor_description = "TODO
 Make able to be controlled...
 Support snapping to existing path3D, motor force / torque / at different speeds, + friction, + brake force...
 LATER should be disconnectable + drag-n-droppable..."
+script = ExtResource("1_0clit")
 
 [node name="Path3D" type="Path3D" parent="Top Section" unique_id=1736375466]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.7835197, -2.9065995)
