@@ -4,4 +4,5 @@
 
 [resource]
 script = ExtResource("1_ls74p")
+SCENE_PATHS = PackedStringArray()
 metadata/_custom_type_script = "uid://cvg3k76h8j7xo"

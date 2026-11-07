@@ -1,9 +1,11 @@
-extends Node3D
+class_name KinematicPathFollower
+extends PathFollow3D
 
 # TODO MOVE TO RESOURCE
 # TODO CONSIDER MERGING FORCES AND THEIR CURVES
 
 @export_range(0, 100, 0.5, "or_greater", "exp") var mass: float = 1
+@export var gravity_multiplier: float = 0 						## How much the environments gravity is applied to accel and deaccel
 
 @export_group("Motor", "motor")
 @export_custom(PROPERTY_HINT_GROUP_ENABLE, "") var motor_enabled: bool = false
@@ -22,7 +24,7 @@ extends Node3D
 @export var drag_constant: float = 0.001						## Velocity lost
 @export var stationary_speed_threshold: float = 0.2				## Minimum speed to be considered stationary, applying [stationary_drag_const] to simulate standing friction
 @export var stationary_drag_const: float = 0.1					## Flat drag applied to speed when below [member stationary_speed_threshold]. Overrides [member drag_constant] when applied.
-@export var gravity_multiplier: float = 0 						## How much the environments gravity is applied to accel and deaccel
+
 
 # TODO decide controller model...
 # Export a PAWN or INPUT or similar resource, with list of action-name + callable + range-of-values

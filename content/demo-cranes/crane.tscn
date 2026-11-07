@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dckv8lttlr58x"]
 
-[ext_resource type="Script" uid="uid://duxtdpodghxsj" path="res://content/demo-cranes/logic/path_follower_component.gd" id="1_0clit"]
+[ext_resource type="Script" uid="uid://duxtdpodghxsj" path="res://content/demo-cranes/logic/kinematic_path_follower.gd" id="1_0clit"]
+[ext_resource type="Script" uid="uid://svip3d5rfdof" path="res://content/demo-cranes/logic/snap_hinge_joint.gd" id="1_cywq6"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_qxckc"]
 size = Vector3(4, 60, 4)
@@ -11,17 +12,46 @@ size = Vector3(4, 60, 4)
 [sub_resource type="BoxMesh" id="BoxMesh_chpbv"]
 size = Vector3(8, 1, 8)
 
+[sub_resource type="BoxShape3D" id="BoxShape3D_vaxsn"]
+size = Vector3(3, 3, 4.5)
+
 [sub_resource type="BoxMesh" id="BoxMesh_m87vb"]
 size = Vector3(3, 3, 4.5)
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_vaxsn"]
-size = Vector3(3, 3, 4.5)
+[sub_resource type="BoxShape3D" id="BoxShape3D_0clit"]
+size = Vector3(2.5, 2.5, 60)
 
 [sub_resource type="BoxMesh" id="BoxMesh_6ioai"]
 size = Vector3(2.5, 2.5, 60)
 
-[sub_resource type="BoxMesh" id="BoxMesh_bjst1"]
-size = Vector3(3, 2, 4)
+[sub_resource type="Curve3D" id="Curve3D_vufsw"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -38),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="BoxMesh" id="BoxMesh_sxdwf"]
+size = Vector3(1.2451172, 0.5332031, 1.8632813)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_1wqjs"]
+top_radius = 0.3
+bottom_radius = 0.3
+height = 1.6025391
+radial_segments = 6
+rings = 2
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_6ioai"]
+top_radius = 0.20654297
+bottom_radius = 0.20654297
+height = 4.2382813
+radial_segments = 6
+
+[sub_resource type="BoxMesh" id="BoxMesh_fxeok"]
+size = Vector3(1, 0.3696289, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_1wqjs"]
+size = Vector3(0.35, 0.19064942, 0.86)
 
 [sub_resource type="PrismMesh" id="PrismMesh_1wqjs"]
 size = Vector3(2.5, 7.5, 2.285)
@@ -45,33 +75,11 @@ height = 32.48755
 radial_segments = 6
 rings = 2
 
-[sub_resource type="BoxMesh" id="BoxMesh_sxdwf"]
-size = Vector3(1.54, 1, 1.986)
+[sub_resource type="BoxMesh" id="BoxMesh_8hdq4"]
+size = Vector3(4.060791, 3.1213531, 4.0214844)
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_1wqjs"]
-top_radius = 0.36132813
-bottom_radius = 0.36132813
-radial_segments = 6
-rings = 2
-
-[sub_resource type="CylinderMesh" id="CylinderMesh_6ioai"]
-top_radius = 0.20654297
-bottom_radius = 0.20654297
-height = 4.2382813
-radial_segments = 6
-
-[sub_resource type="BoxMesh" id="BoxMesh_fxeok"]
-size = Vector3(1, 0.3696289, 1)
-
-[sub_resource type="BoxMesh" id="BoxMesh_1wqjs"]
-size = Vector3(0.35, 0.35, 0.86)
-
-[sub_resource type="Curve3D" id="Curve3D_vufsw"]
-_data = {
-"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -38.395),
-"tilts": PackedFloat32Array(0, 0)
-}
-point_count = 2
+[sub_resource type="BoxMesh" id="BoxMesh_d8bms"]
+size = Vector3(4.2177734, 0.59625244, 4.9316406)
 
 [node name="Crane" type="Node3D" unique_id=1268038398]
 
@@ -89,33 +97,83 @@ shape = SubResource("BoxShape3D_q1v7m")
 [node name="MeshInstance3D2" type="MeshInstance3D" parent="Mast" unique_id=1054575418]
 mesh = SubResource("BoxMesh_chpbv")
 
-[node name="Top Section" type="Node3D" parent="." unique_id=1173103440]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 60, 0)
+[node name="Top Base Joint" type="Generic6DOFJoint3D" parent="Mast" unique_id=1616949236]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 59.944405, 0)
+node_a = NodePath("../../Top Section")
 
-[node name="Cabin" type="StaticBody3D" parent="Top Section" unique_id=273280590]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.769, 2.187, 0)
-metadata/_edit_group_ = true
+[node name="TODO Snapable HingeJoint" type="Node3D" parent="Mast" unique_id=109272926]
+editor_description = "TODO Snapable joint that otherwise behaves like a hinge joint without any wiggle waggle allowed.
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Top Section/Cabin" unique_id=686218617]
-mesh = SubResource("BoxMesh_m87vb")
+"
+script = ExtResource("1_cywq6")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Top Section/Cabin" unique_id=859618930]
+[node name="Top Section" type="RigidBody3D" parent="." unique_id=1808173442]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 65, 0)
+axis_lock_angular_x = true
+axis_lock_angular_z = true
+mass = 25000.0
+
+[node name="TODO controlable rotation joint" type="Node" parent="Top Section" unique_id=1496187044]
+
+[node name="Cabin" type="CollisionShape3D" parent="Top Section" unique_id=859618930]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.483, -2.813, 0)
 shape = SubResource("BoxShape3D_vaxsn")
 
-[node name="Jib" type="StaticBody3D" parent="Top Section" unique_id=766804838]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
-metadata/_edit_group_ = true
+[node name="Mesh" type="MeshInstance3D" parent="Top Section/Cabin" unique_id=686218617]
+mesh = SubResource("BoxMesh_m87vb")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Top Section/Jib" unique_id=2132834441]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.002006)
+[node name="Jib" type="CollisionShape3D" parent="Top Section" unique_id=356168467]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.002)
+shape = SubResource("BoxShape3D_0clit")
+
+[node name="Mesh" type="MeshInstance3D" parent="Top Section/Jib" unique_id=2132834441]
 mesh = SubResource("BoxMesh_6ioai")
 
-[node name="Counterweights" type="MeshInstance3D" parent="Top Section/Jib" unique_id=634022630]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.9580002, 12.639)
-mesh = SubResource("BoxMesh_bjst1")
+[node name="Trolley Path" type="Path3D" parent="Top Section/Jib/Mesh" unique_id=1736375466]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.2159996, 9.502006)
+curve = SubResource("Curve3D_vufsw")
+
+[node name="KinematicPathFollower" type="PathFollow3D" parent="Top Section/Jib/Mesh/Trolley Path" unique_id=998399903]
+transform = Transform3D(-0.99999976, 0, 0, 0, 0.99999976, 0, 0, 0, -1, 0, 0, -15.621787)
+progress = 15.6218
+use_model_front = true
+loop = false
+script = ExtResource("1_0clit")
+
+[node name="Trolley" type="MeshInstance3D" parent="Top Section/Jib/Mesh/Trolley Path/KinematicPathFollower" unique_id=1152496297]
+transform = Transform3D(1.0000002, 0, 0, 0, 1.0000002, 0, 0, 0, 1, 0, -0.5, 0)
+mesh = SubResource("BoxMesh_sxdwf")
+
+[node name="Wheels front" type="MeshInstance3D" parent="Top Section/Jib/Mesh/Trolley Path/KinematicPathFollower/Trolley" unique_id=1252683864]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0.25, -0.7)
+cast_shadow = 0
+visibility_range_end = 400.0
+mesh = SubResource("CylinderMesh_1wqjs")
+
+[node name="Wheels back" type="MeshInstance3D" parent="Top Section/Jib/Mesh/Trolley Path/KinematicPathFollower/Trolley" unique_id=616360061]
+transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0.25, 0.70000076)
+cast_shadow = 0
+visibility_range_end = 400.0
+mesh = SubResource("CylinderMesh_1wqjs")
+
+[node name="Hook line" type="MeshInstance3D" parent="Top Section/Jib/Mesh/Trolley Path/KinematicPathFollower/Trolley" unique_id=1692270322]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.5261307, 0)
+mesh = SubResource("CylinderMesh_6ioai")
+
+[node name="Hook" type="MeshInstance3D" parent="Top Section/Jib/Mesh/Trolley Path/KinematicPathFollower/Trolley" unique_id=1792355746]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.795311, 0)
+mesh = SubResource("BoxMesh_fxeok")
+
+[node name="Cable Base" type="MeshInstance3D" parent="Top Section/Jib/Mesh/Trolley Path/KinematicPathFollower/Trolley" unique_id=428806099]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2346077, 0)
+cast_shadow = 0
+visibility_range_end = 200.0
+mesh = SubResource("BoxMesh_1wqjs")
+
+[node name="Generic6DOFJoint3D" type="Generic6DOFJoint3D" parent="Top Section/Jib/Mesh/Trolley Path/KinematicPathFollower/Trolley/Cable Base" unique_id=1300064621]
 
 [node name="Head" type="MeshInstance3D" parent="Top Section" unique_id=1026028904]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9.963, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.963, 0)
 mesh = SubResource("PrismMesh_1wqjs")
 
 [node name="Head Catwalk" type="MeshInstance3D" parent="Top Section/Head" unique_id=1331782987]
@@ -130,48 +188,13 @@ mesh = SubResource("CylinderMesh_b5wbc")
 transform = Transform3D(1, 0, 0, 0, 0.23297557, -0.9724827, 0, 0.9724827, 0.23297557, 0, -0.04399872, -16.056)
 mesh = SubResource("CylinderMesh_qxckc")
 
-[node name="Trolley" type="MeshInstance3D" parent="Top Section" unique_id=1152496297]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.133, -18.829)
-mesh = SubResource("BoxMesh_sxdwf")
+[node name="MeshInstance3D2" type="MeshInstance3D" parent="Top Section" unique_id=254492337]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.8832016, 0)
+mesh = SubResource("BoxMesh_8hdq4")
 
-[node name="Wheels front" type="MeshInstance3D" parent="Top Section/Trolley" unique_id=1252683864]
-transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0.6517639, -0.63368225)
-cast_shadow = 0
-visibility_range_end = 400.0
-mesh = SubResource("CylinderMesh_1wqjs")
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Top Section/MeshInstance3D2" unique_id=1871686270]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.6012573, 0)
+mesh = SubResource("BoxMesh_d8bms")
 
-[node name="Wheels back" type="MeshInstance3D" parent="Top Section/Trolley" unique_id=616360061]
-transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0.6517639, 0.73177433)
-cast_shadow = 0
-visibility_range_end = 400.0
-mesh = SubResource("CylinderMesh_1wqjs")
-
-[node name="Hook line" type="MeshInstance3D" parent="Top Section/Trolley" unique_id=1692270322]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.5261307, 0)
-mesh = SubResource("CylinderMesh_6ioai")
-
-[node name="Hook" type="MeshInstance3D" parent="Top Section/Trolley" unique_id=1792355746]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.795311, 0)
-mesh = SubResource("BoxMesh_fxeok")
-
-[node name="Cable Base" type="MeshInstance3D" parent="Top Section/Trolley" unique_id=428806099]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.55298233, 0)
-visibility_range_end = 200.0
-mesh = SubResource("BoxMesh_1wqjs")
-
-[node name="TODO PathFollowerController" type="Node3D" parent="Top Section/Trolley" unique_id=1300284198]
-editor_description = "TODO
-Make able to be controlled...
-Support snapping to existing path3D, motor force / torque / at different speeds, + friction, + brake force...
-LATER should be disconnectable + drag-n-droppable..."
-script = ExtResource("1_0clit")
-
-[node name="Path3D" type="Path3D" parent="Top Section" unique_id=1736375466]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.7835197, -2.9065995)
-curve = SubResource("Curve3D_vufsw")
-
-[node name="PathFollow3D" type="PathFollow3D" parent="Top Section" unique_id=998399903]
-
-[node name="Node" type="Node" parent="." unique_id=1930573463]
-
-[node name="RigidBody3D" type="RigidBody3D" parent="." unique_id=395944383]
+[node name="Camera3D TODO DEBUG CAMERA PREFAB" type="Camera3D" parent="." unique_id=1489660303]
+transform = Transform3D(-0.57863724, 0.29288536, -0.7611814, 0, 0.933295, 0.35911074, 0.8155851, 0.20779485, -0.54003924, -44.78882, 66.32055, -42.55802)
