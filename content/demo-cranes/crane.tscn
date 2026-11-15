@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://duxtdpodghxsj" path="res://content/demo-cranes/logic/kinematic_path_follower.gd" id="1_0clit"]
 [ext_resource type="Script" uid="uid://svip3d5rfdof" path="res://content/demo-cranes/logic/snap_hinge_joint.gd" id="1_cywq6"]
+[ext_resource type="Script" uid="uid://wmxtlj8x33tf" path="res://content/demo-cranes/logic/crane_controller.gd" id="2_tppth"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_qxckc"]
 size = Vector3(4, 60, 4)
@@ -30,6 +31,11 @@ _data = {
 "tilts": PackedFloat32Array(0, 0)
 }
 point_count = 2
+
+[sub_resource type="Curve" id="Curve_tppth"]
+_limits = [0.0, 1.0, 0.0, 5.0]
+_data = [Vector2(3.1621006, 1), 0.0, -0.22182728, 0, 1, Vector2(4.372146, 0.7315789), -0.22182728, -1.1782455, 1, 1, Vector2(4.9885845, 0.00526309), -1.1782455, 0.0, 1, 0]
+point_count = 3
 
 [sub_resource type="BoxMesh" id="BoxMesh_sxdwf"]
 size = Vector3(1.2451172, 0.5332031, 1.8632813)
@@ -122,6 +128,18 @@ shape = SubResource("BoxShape3D_vaxsn")
 [node name="Mesh" type="MeshInstance3D" parent="Top Section/Cabin" unique_id=686218617]
 mesh = SubResource("BoxMesh_m87vb")
 
+[node name="Camera3D" type="Camera3D" parent="Top Section/Cabin" unique_id=943475152]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.9047973)
+current = true
+fov = 90.6
+
+[node name="CraneController" type="Node" parent="Top Section/Cabin" unique_id=213209146 node_paths=PackedStringArray("trolley")]
+script = ExtResource("2_tppth")
+input_positive = &"move_up"
+input_negative = &"move_down"
+auto_brake = true
+trolley = NodePath("../../Jib/Mesh/Trolley Path/Trolley")
+
 [node name="Jib" type="CollisionShape3D" parent="Top Section" unique_id=356168467]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.002)
 shape = SubResource("BoxShape3D_0clit")
@@ -133,44 +151,53 @@ mesh = SubResource("BoxMesh_6ioai")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.2159996, 9.502006)
 curve = SubResource("Curve3D_vufsw")
 
-[node name="KinematicPathFollower" type="PathFollow3D" parent="Top Section/Jib/Mesh/Trolley Path" unique_id=998399903]
-transform = Transform3D(-0.99999976, 0, 0, 0, 0.99999976, 0, 0, 0, -1, 0, 0, -15.621787)
-progress = 15.6218
+[node name="Trolley" type="PathFollow3D" parent="Top Section/Jib/Mesh/Trolley Path" unique_id=998399903]
+unique_name_in_owner = true
+transform = Transform3D(-0.99999976, 0, 0, 0, 0.99999976, 0, 0, 0, -1, 0, 0, -19.17)
+progress = 19.17
 use_model_front = true
 loop = false
 script = ExtResource("1_0clit")
+mass = 20.001
+motor_enabled = true
+motor_force = 4.0
+motor_force_at_speed_curve = SubResource("Curve_tppth")
+brake_enabled = true
+brake_force = 2.0
+drag_multiplier = 0.2
+drag_constant = 0.1
 
-[node name="Trolley" type="MeshInstance3D" parent="Top Section/Jib/Mesh/Trolley Path/KinematicPathFollower" unique_id=1152496297]
+[node name="TrolleyMesh" type="MeshInstance3D" parent="Top Section/Jib/Mesh/Trolley Path/Trolley" unique_id=1152496297]
 transform = Transform3D(1.0000002, 0, 0, 0, 1.0000002, 0, 0, 0, 1, 0, -0.5, 0)
 mesh = SubResource("BoxMesh_sxdwf")
 
-[node name="Wheels front" type="MeshInstance3D" parent="Top Section/Jib/Mesh/Trolley Path/KinematicPathFollower/Trolley" unique_id=1252683864]
+[node name="Wheels front" type="MeshInstance3D" parent="Top Section/Jib/Mesh/Trolley Path/Trolley/TrolleyMesh" unique_id=1252683864]
 transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0.25, -0.7)
 cast_shadow = 0
 visibility_range_end = 400.0
 mesh = SubResource("CylinderMesh_1wqjs")
 
-[node name="Wheels back" type="MeshInstance3D" parent="Top Section/Jib/Mesh/Trolley Path/KinematicPathFollower/Trolley" unique_id=616360061]
+[node name="Wheels back" type="MeshInstance3D" parent="Top Section/Jib/Mesh/Trolley Path/Trolley/TrolleyMesh" unique_id=616360061]
 transform = Transform3D(-4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0, 0, 1, 0, 0.25, 0.70000076)
 cast_shadow = 0
 visibility_range_end = 400.0
 mesh = SubResource("CylinderMesh_1wqjs")
 
-[node name="Hook line" type="MeshInstance3D" parent="Top Section/Jib/Mesh/Trolley Path/KinematicPathFollower/Trolley" unique_id=1692270322]
+[node name="Hook line" type="MeshInstance3D" parent="Top Section/Jib/Mesh/Trolley Path/Trolley/TrolleyMesh" unique_id=1692270322]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.5261307, 0)
 mesh = SubResource("CylinderMesh_6ioai")
 
-[node name="Hook" type="MeshInstance3D" parent="Top Section/Jib/Mesh/Trolley Path/KinematicPathFollower/Trolley" unique_id=1792355746]
+[node name="Hook" type="MeshInstance3D" parent="Top Section/Jib/Mesh/Trolley Path/Trolley/TrolleyMesh" unique_id=1792355746]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4.795311, 0)
 mesh = SubResource("BoxMesh_fxeok")
 
-[node name="Cable Base" type="MeshInstance3D" parent="Top Section/Jib/Mesh/Trolley Path/KinematicPathFollower/Trolley" unique_id=428806099]
+[node name="Cable Base" type="MeshInstance3D" parent="Top Section/Jib/Mesh/Trolley Path/Trolley/TrolleyMesh" unique_id=428806099]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.2346077, 0)
 cast_shadow = 0
 visibility_range_end = 200.0
 mesh = SubResource("BoxMesh_1wqjs")
 
-[node name="Generic6DOFJoint3D" type="Generic6DOFJoint3D" parent="Top Section/Jib/Mesh/Trolley Path/KinematicPathFollower/Trolley/Cable Base" unique_id=1300064621]
+[node name="Generic6DOFJoint3D" type="Generic6DOFJoint3D" parent="Top Section/Jib/Mesh/Trolley Path/Trolley/TrolleyMesh/Cable Base" unique_id=1300064621]
 
 [node name="Head" type="MeshInstance3D" parent="Top Section" unique_id=1026028904]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.963, 0)
@@ -198,3 +225,4 @@ mesh = SubResource("BoxMesh_d8bms")
 
 [node name="Camera3D TODO DEBUG CAMERA PREFAB" type="Camera3D" parent="." unique_id=1489660303]
 transform = Transform3D(-0.57863724, 0.29288536, -0.7611814, 0, 0.933295, 0.35911074, 0.8155851, 0.20779485, -0.54003924, -44.78882, 66.32055, -42.55802)
+current = true
