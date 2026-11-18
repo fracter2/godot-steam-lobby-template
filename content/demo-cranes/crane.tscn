@@ -133,12 +133,12 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.9047973)
 current = true
 fov = 90.6
 
-[node name="CraneController" type="Node" parent="Top Section/Cabin" unique_id=213209146 node_paths=PackedStringArray("trolley")]
+[node name="CraneController" type="Node" parent="Top Section/Cabin" unique_id=213209146 node_paths=PackedStringArray("trolley_node")]
 script = ExtResource("2_tppth")
-input_positive = &"move_up"
-input_negative = &"move_down"
-auto_brake = true
-trolley = NodePath("../../Jib/Mesh/Trolley Path/Trolley")
+trolley_input_positive = &"move_up"
+trolley_input_negative = &"move_down"
+trolley_auto_brake = true
+trolley_node = NodePath("../../Jib/Mesh/Trolley Path/Trolley")
 
 [node name="Jib" type="CollisionShape3D" parent="Top Section" unique_id=356168467]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -14.002)
