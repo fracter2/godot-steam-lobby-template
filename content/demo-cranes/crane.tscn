@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://duxtdpodghxsj" path="res://content/demo-cranes/logic/kinematic_path_follower.gd" id="1_0clit"]
 [ext_resource type="Script" uid="uid://svip3d5rfdof" path="res://content/demo-cranes/logic/snap_hinge_joint.gd" id="1_cywq6"]
 [ext_resource type="Script" uid="uid://wmxtlj8x33tf" path="res://content/demo-cranes/logic/crane_controller.gd" id="2_tppth"]
+[ext_resource type="Script" uid="uid://bh3gk87muy4t7" path="res://content/demo-cranes/logic/top_section_rigidbody.gd" id="2_tt6kt"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_qxckc"]
 size = Vector3(4, 60, 4)
@@ -106,6 +107,9 @@ mesh = SubResource("BoxMesh_chpbv")
 [node name="Top Base Joint" type="Generic6DOFJoint3D" parent="Mast" unique_id=1616949236]
 transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 59.944405, 0)
 node_a = NodePath("../../Top Section")
+angular_limit_x/enabled = false
+angular_limit_y/enabled = false
+angular_limit_z/enabled = false
 
 [node name="TODO Snapable HingeJoint" type="Node3D" parent="Mast" unique_id=109272926]
 editor_description = "TODO Snapable joint that otherwise behaves like a hinge joint without any wiggle waggle allowed.
@@ -118,6 +122,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 65, 0)
 axis_lock_angular_x = true
 axis_lock_angular_z = true
 mass = 25000.0
+gravity_scale = 0.0
+custom_integrator = true
+script = ExtResource("2_tt6kt")
 
 [node name="TODO controlable rotation joint" type="Node" parent="Top Section" unique_id=1496187044]
 

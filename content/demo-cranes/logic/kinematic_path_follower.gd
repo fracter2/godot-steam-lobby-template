@@ -2,11 +2,12 @@ class_name KinematicPathFollower
 extends PathFollow3D
 
 # TODO MOVE TO RESOURCE
-# TODO CONSIDER MERGING FORCES AND THEIR CURVES
 
 @export_range(0.001, 100, 0.5, "or_greater", "exp") var mass: float = 1
 @export var gravity_multiplier: float = 0 						## How much the environments gravity is applied to accel and deaccel
 @export var endpoints_colision_bounce: float = 0				## Multiplies [member velocity] by this amount when coliding with the start or end points of the track. Non-zero for bounce.
+
+@export var attribute: PhysicsAttribute
 
 @export_group("Motor", "motor")									## Allows applying force according to [member input_forward] and [member target_velocity].
 @export_custom(PROPERTY_HINT_GROUP_ENABLE, "") var motor_enabled: bool = false
