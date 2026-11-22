@@ -1,0 +1,12 @@
+[gd_resource type="Theme" format=3 uid="uid://dtrm3c3qvpckr"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_roff3"]
+content_margin_left = 4.0
+content_margin_top = 4.0
+content_margin_right = 4.0
+content_margin_bottom = 4.0
+bg_color = Color(0, 0, 0, 0.19607843)
+
+[resource]
+Button1/base_type = &"Button"
+Button1/styles/normal = SubResource("StyleBoxFlat_roff3")
