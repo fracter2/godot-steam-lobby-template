@@ -10,12 +10,12 @@
 [ext_resource type="Script" uid="uid://vv32jnu32d2q" path="res://src/ui/debug/steam_info_labels.gd" id="7_l2tv4"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r5i4l"]
-bg_color = Color(0.096811466, 0.09681145, 0.09681145, 0.3372549)
+bg_color = Color(0.096811466, 0.09681145, 0.09681145, 0)
 
 [sub_resource type="Theme" id="Theme_howgk"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_r8t3m"]
-font_size = 35
+font_size = 40
 
 [node name="Main" type="Node2D" unique_id=1188752306]
 script = ExtResource("1_csvuu")
@@ -43,21 +43,21 @@ text = "SteamStatus"
 metadata/_edit_use_anchors_ = true
 
 [node name="MainMenuButtons" type="PanelContainer" parent="UI" unique_id=838311461]
-anchors_preset = 8
-anchor_left = 0.5
+anchors_preset = 4
 anchor_top = 0.5
-anchor_right = 0.5
 anchor_bottom = 0.5
-grow_horizontal = 2
+offset_top = -120.0
+offset_right = 533.0
+offset_bottom = 120.0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_r5i4l")
 
 [node name="MarginContainer" type="MarginContainer" parent="UI/MainMenuButtons" unique_id=580661086]
 layout_mode = 2
-theme_override_constants/margin_left = 8
-theme_override_constants/margin_top = 8
-theme_override_constants/margin_right = 8
-theme_override_constants/margin_bottom = 8
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/MainMenuButtons/MarginContainer" unique_id=1455305946]
 layout_mode = 2
@@ -68,17 +68,43 @@ layout_mode = 2
 text = "Fracter's Multiplayer Template"
 label_settings = SubResource("LabelSettings_r8t3m")
 
-[node name="PlaySoloBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer" unique_id=1006097670]
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer" unique_id=339275042]
+layout_mode = 2
+size_flags_horizontal = 0
+
+[node name="PlayBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/VBoxContainer" unique_id=1004298036]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_l3u6v")
+theme_type_variation = &"MainMenuButton"
+text = "PLAY"
+alignment = 0
+
+[node name="MultiplayerBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/VBoxContainer" unique_id=1307855150]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme = ExtResource("2_l3u6v")
+theme_type_variation = &"MainMenuButton"
+text = "MULTIPLAYER"
+alignment = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/VBoxContainer" unique_id=1271569356]
+visible = false
+layout_mode = 2
+
+[node name="SingleplayerBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=1006097670]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
 theme = ExtResource("2_l3u6v")
 theme_type_variation = &"Button1"
-text = "PLAY SOLO"
+text = "Singleplayer"
 alignment = 0
 
-[node name="JoinSteamLobbyBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer" unique_id=924398472]
+[node name="JoinSteamLobbyBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=924398472]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_horizontal = 0
 theme = ExtResource("2_l3u6v")
@@ -86,7 +112,7 @@ theme_type_variation = &"Button1"
 text = "JOIN STEAM LOBBY"
 alignment = 0
 
-[node name="JoinEnetLobbyBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer" unique_id=945822440]
+[node name="JoinEnetLobbyBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=945822440]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
@@ -95,7 +121,7 @@ theme_type_variation = &"Button1"
 text = "JOIN ENET LOBBY"
 alignment = 0
 
-[node name="HostSteamLobbyBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer" unique_id=1767297362]
+[node name="HostSteamLobbyBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=1767297362]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
@@ -104,7 +130,7 @@ theme_type_variation = &"Button1"
 text = "HOST STEAM LOBBY"
 alignment = 0
 
-[node name="HostEnetLobbyBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer" unique_id=332829278]
+[node name="HostEnetLobbyBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=332829278]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 0
@@ -113,11 +139,46 @@ theme_type_variation = &"Button1"
 text = "HOST ENET LOBBY"
 alignment = 0
 
+[node name="ModsBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/VBoxContainer" unique_id=1445195778]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_l3u6v")
+theme_type_variation = &"MainMenuButton"
+text = "MODS"
+alignment = 0
+
+[node name="SettingsBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/VBoxContainer" unique_id=930302477]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_l3u6v")
+theme_type_variation = &"MainMenuButton"
+text = "SETTINGS"
+alignment = 0
+
+[node name="ExtrasBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/VBoxContainer" unique_id=280892744]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_l3u6v")
+theme_type_variation = &"MainMenuButton"
+text = "EXTRAS
+"
+alignment = 0
+
+[node name="ExitBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/VBoxContainer" unique_id=1733903997]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_l3u6v")
+theme_type_variation = &"MainMenuButton"
+text = "EXIT"
+alignment = 0
+
 [node name="ConnectMenu" type="Control" parent="UI" unique_id=537319989]
 layout_mode = 3
 anchors_preset = 0
-offset_top = 30.0
-offset_bottom = 30.0
+offset_left = 6.0
+offset_top = 813.0
+offset_right = 6.0
+offset_bottom = 813.0
 metadata/_edit_use_anchors_ = true
 
 [node name="BtnHostSteam" type="Button" parent="UI/ConnectMenu" unique_id=1551743476]
@@ -189,10 +250,10 @@ text = "Client"
 placeholder_text = "Enamuell"
 
 [node name="PlaySoloMenu" type="PanelContainer" parent="UI" unique_id=319351058]
-offset_left = 58.0
-offset_top = 293.0
-offset_right = 196.0
-offset_bottom = 343.0
+offset_left = 15.0
+offset_top = 674.0
+offset_right = 153.0
+offset_bottom = 724.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/PlaySoloMenu" unique_id=982481293]
 layout_mode = 2
@@ -206,10 +267,10 @@ layout_mode = 2
 text = "(Level Select)"
 
 [node name="JoinSteamLobbyMenu" type="PanelContainer" parent="UI" unique_id=2108753212]
-offset_left = 52.0
-offset_top = 355.0
-offset_right = 252.0
-offset_bottom = 486.0
+offset_left = 172.0
+offset_top = 681.0
+offset_right = 372.0
+offset_bottom = 812.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/JoinSteamLobbyMenu" unique_id=1436500972]
 layout_mode = 2
@@ -227,10 +288,10 @@ layout_mode = 2
 text = "(Steam Lobby Browser)"
 
 [node name="JoinEnetLobbyMenu" type="PanelContainer" parent="UI" unique_id=741574833]
-offset_left = 59.0
-offset_top = 498.0
-offset_right = 246.0
-offset_bottom = 629.0
+offset_left = 392.0
+offset_top = 682.0
+offset_right = 579.0
+offset_bottom = 813.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/JoinEnetLobbyMenu" unique_id=96239187]
 layout_mode = 2
@@ -256,10 +317,10 @@ layout_mode = 2
 text = "(Steam Lobby Browser)"
 
 [node name="HostSteamLobbyMenu" type="PanelContainer" parent="UI" unique_id=803108938]
-offset_left = 281.0
-offset_top = 476.0
-offset_right = 436.0
-offset_bottom = 526.0
+offset_left = 591.0
+offset_top = 688.0
+offset_right = 788.0
+offset_bottom = 792.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/HostSteamLobbyMenu" unique_id=3678208]
 layout_mode = 2
@@ -281,10 +342,10 @@ layout_mode = 2
 text = "(Password Select)"
 
 [node name="HostEnetLobbyMenu" type="PanelContainer" parent="UI" unique_id=777669437]
-offset_left = 617.0
-offset_top = 495.0
-offset_right = 766.0
-offset_bottom = 545.0
+offset_left = 816.0
+offset_top = 693.0
+offset_right = 1013.0
+offset_bottom = 770.0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/HostEnetLobbyMenu" unique_id=1857693805]
 layout_mode = 2
