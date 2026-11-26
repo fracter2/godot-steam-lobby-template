@@ -1,0 +1,28 @@
+[gd_scene format=3 uid="uid://cppjt0x2jr370"]
+
+[ext_resource type="Script" uid="uid://dsowh56ggsf0a" path="res://src/ui/join_host_buttons/user_name_panel.gd" id="1_r6h67"]
+
+[node name="UserNamePanel" type="HBoxContainer" unique_id=530688445]
+script = ExtResource("1_r6h67")
+
+[node name="Label" type="Label" parent="." unique_id=487543841]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Username:"
+
+[node name="LineEdit" type="LineEdit" parent="." unique_id=1844425713]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+max_length = 100
+
+[node name="RandomizeBtn TODO" type="Button" parent="." unique_id=1723018081]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "R"
+
+[node name="WarningIcon TODO" type="TextureRect" parent="." unique_id=253954347]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
