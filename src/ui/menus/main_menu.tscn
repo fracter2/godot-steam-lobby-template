@@ -54,25 +54,40 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_r5i4l")
 
 [node name="MarginContainer" type="MarginContainer" parent="UI/MainMenuButtons" unique_id=580661086]
 layout_mode = 2
-theme_override_constants/margin_left = 16
+theme_override_constants/margin_left = 32
 theme_override_constants/margin_top = 16
-theme_override_constants/margin_right = 16
+theme_override_constants/margin_right = 32
 theme_override_constants/margin_bottom = 16
 
 [node name="VBoxContainer" type="VBoxContainer" parent="UI/MainMenuButtons/MarginContainer" unique_id=1455305946]
 layout_mode = 2
 theme = SubResource("Theme_howgk")
+theme_override_constants/separation = 32
 
 [node name="Label" type="Label" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer" unique_id=266529473]
 layout_mode = 2
 text = "Fracter's Multiplayer Template"
 label_settings = SubResource("LabelSettings_r8t3m")
 
-[node name="VBoxContainer" type="VBoxContainer" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer" unique_id=339275042]
+[node name="HBoxContainer" type="HBoxContainer" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer" unique_id=1592220831]
+layout_mode = 2
+theme_override_constants/separation = 32
+
+[node name="VBoxContainer" type="VBoxContainer" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/HBoxContainer" unique_id=339275042]
 layout_mode = 2
 size_flags_horizontal = 0
+theme_override_constants/separation = 8
 
-[node name="PlayBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/VBoxContainer" unique_id=1004298036]
+[node name="ContinueBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1784854098]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme = ExtResource("2_l3u6v")
+theme_type_variation = &"MainMenuButton"
+text = "CONTINUE"
+alignment = 0
+
+[node name="PlayBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1004298036]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("2_l3u6v")
@@ -80,74 +95,16 @@ theme_type_variation = &"MainMenuButton"
 text = "PLAY"
 alignment = 0
 
-[node name="MultiplayerBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/VBoxContainer" unique_id=1307855150]
+[node name="ModsBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1445195778]
 unique_name_in_owner = true
 visible = false
-layout_mode = 2
-theme = ExtResource("2_l3u6v")
-theme_type_variation = &"MainMenuButton"
-text = "MULTIPLAYER"
-alignment = 0
-
-[node name="HBoxContainer" type="HBoxContainer" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/VBoxContainer" unique_id=1271569356]
-visible = false
-layout_mode = 2
-
-[node name="SingleplayerBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=1006097670]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 0
-theme = ExtResource("2_l3u6v")
-theme_type_variation = &"Button1"
-text = "Singleplayer"
-alignment = 0
-
-[node name="JoinSteamLobbyBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=924398472]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-size_flags_horizontal = 0
-theme = ExtResource("2_l3u6v")
-theme_type_variation = &"Button1"
-text = "JOIN STEAM LOBBY"
-alignment = 0
-
-[node name="JoinEnetLobbyBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=945822440]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 0
-theme = ExtResource("2_l3u6v")
-theme_type_variation = &"Button1"
-text = "JOIN ENET LOBBY"
-alignment = 0
-
-[node name="HostSteamLobbyBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=1767297362]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 0
-theme = ExtResource("2_l3u6v")
-theme_type_variation = &"Button1"
-text = "HOST STEAM LOBBY"
-alignment = 0
-
-[node name="HostEnetLobbyBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/VBoxContainer/HBoxContainer" unique_id=332829278]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 0
-theme = ExtResource("2_l3u6v")
-theme_type_variation = &"Button1"
-text = "HOST ENET LOBBY"
-alignment = 0
-
-[node name="ModsBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/VBoxContainer" unique_id=1445195778]
-unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("2_l3u6v")
 theme_type_variation = &"MainMenuButton"
 text = "MODS"
 alignment = 0
 
-[node name="SettingsBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/VBoxContainer" unique_id=930302477]
+[node name="SettingsBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=930302477]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("2_l3u6v")
@@ -155,7 +112,7 @@ theme_type_variation = &"MainMenuButton"
 text = "SETTINGS"
 alignment = 0
 
-[node name="ExtrasBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/VBoxContainer" unique_id=280892744]
+[node name="ExtrasBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=280892744]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("2_l3u6v")
@@ -164,12 +121,41 @@ text = "EXTRAS
 "
 alignment = 0
 
-[node name="ExitBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/VBoxContainer" unique_id=1733903997]
+[node name="ExitBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1733903997]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("2_l3u6v")
 theme_type_variation = &"MainMenuButton"
 text = "EXIT"
+alignment = 0
+
+[node name="PlayMenu" type="VBoxContainer" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/HBoxContainer" unique_id=918456710]
+layout_mode = 2
+theme_override_constants/separation = 4
+
+[node name="NewGameBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/HBoxContainer/PlayMenu" unique_id=593722772]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_l3u6v")
+theme_type_variation = &"MainMenuButton"
+text = "New Game"
+alignment = 0
+
+[node name="LoadSaveBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/HBoxContainer/PlayMenu" unique_id=176550720]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+theme = ExtResource("2_l3u6v")
+theme_type_variation = &"MainMenuButton"
+text = "Load Save"
+alignment = 0
+
+[node name="JoinOnlineBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/HBoxContainer/PlayMenu" unique_id=2106214306]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("2_l3u6v")
+theme_type_variation = &"MainMenuButton"
+text = "Join Online"
 alignment = 0
 
 [node name="ConnectMenu" type="Control" parent="UI" unique_id=537319989]
