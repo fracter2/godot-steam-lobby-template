@@ -5,9 +5,11 @@
 [ext_resource type="Script" uid="uid://bqr5r210mrghq" path="res://src/ui/join_host_buttons/host_steam_btn.gd" id="2_ltlti"]
 [ext_resource type="Script" uid="uid://cribs4tpca7u7" path="res://src/ui/join_host_buttons/btn_join_steam.gd" id="3_l3u6v"]
 [ext_resource type="Script" uid="uid://betn2wl3eiyv" path="res://src/ui/join_host_buttons/btn_host_enet.gd" id="4_hcfgv"]
+[ext_resource type="Script" uid="uid://c5ikr5j4311h5" path="res://src/ui/common/toggle_visibility_btn.gd" id="4_rs8ex"]
 [ext_resource type="Script" uid="uid://dvlkl8l8c5dsp" path="res://src/ui/join_host_buttons/btn_join_enet.gd" id="5_rs8ex"]
 [ext_resource type="PackedScene" uid="uid://dgjg26vena25e" path="res://src/ui/join_host_buttons/ip_input_panel.tscn" id="6_yycut"]
 [ext_resource type="Script" uid="uid://vv32jnu32d2q" path="res://src/ui/debug/steam_info_labels.gd" id="7_l2tv4"]
+[ext_resource type="PackedScene" uid="uid://cdiyi5xiwls43" path="res://src/ui/menus/join_online_menu.tscn" id="9_l3u6v"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_r5i4l"]
 bg_color = Color(0.096811466, 0.09681145, 0.09681145, 0)
@@ -87,13 +89,15 @@ theme_type_variation = &"MainMenuButton"
 text = "CONTINUE"
 alignment = 0
 
-[node name="PlayBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1004298036]
+[node name="PlayBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1004298036 node_paths=PackedStringArray("target")]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("2_l3u6v")
 theme_type_variation = &"MainMenuButton"
 text = "PLAY"
 alignment = 0
+script = ExtResource("4_rs8ex")
+target = NodePath("../../PlayMenu")
 
 [node name="ModsBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/HBoxContainer/VBoxContainer" unique_id=1445195778]
 unique_name_in_owner = true
@@ -130,6 +134,7 @@ text = "EXIT"
 alignment = 0
 
 [node name="PlayMenu" type="VBoxContainer" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/HBoxContainer" unique_id=918456710]
+visible = false
 layout_mode = 2
 theme_override_constants/separation = 4
 
@@ -150,13 +155,15 @@ theme_type_variation = &"MainMenuButton"
 text = "Load Save"
 alignment = 0
 
-[node name="JoinOnlineBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/HBoxContainer/PlayMenu" unique_id=2106214306]
+[node name="JoinOnlineBtn" type="Button" parent="UI/MainMenuButtons/MarginContainer/VBoxContainer/HBoxContainer/PlayMenu" unique_id=2106214306 node_paths=PackedStringArray("target")]
 unique_name_in_owner = true
 layout_mode = 2
 theme = ExtResource("2_l3u6v")
 theme_type_variation = &"MainMenuButton"
 text = "Join Online"
 alignment = 0
+script = ExtResource("4_rs8ex")
+target = NodePath("../../../../../../JoinOnlineMenu")
 
 [node name="ConnectMenu" type="Control" parent="UI" unique_id=537319989]
 layout_mode = 3
@@ -347,5 +354,8 @@ text = "(Max Player Count Select)"
 [node name="Placeholder Enet Username" type="Label" parent="UI/HostEnetLobbyMenu/VBoxContainer" unique_id=708365634]
 layout_mode = 2
 text = "(Enet Username)"
+
+[node name="JoinOnlineMenu" parent="UI" unique_id=462532513 instance=ExtResource("9_l3u6v")]
+visible = false
 
 [editable path="UI/ConnectMenu/IPPanel"]
