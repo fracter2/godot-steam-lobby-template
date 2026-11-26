@@ -1,0 +1,99 @@
+[gd_scene format=3 uid="uid://cdiyi5xiwls43"]
+
+[ext_resource type="PackedScene" uid="uid://dgjg26vena25e" path="res://src/ui/join_host_buttons/ip_input_panel.tscn" id="1_filv0"]
+[ext_resource type="PackedScene" uid="uid://cppjt0x2jr370" path="res://src/ui/menus/user_name_panel.tscn" id="1_py07v"]
+[ext_resource type="Script" uid="uid://dvlkl8l8c5dsp" path="res://src/ui/join_host_buttons/btn_join_enet.gd" id="3_782d4"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_rs8ex"]
+bg_color = Color(0.20871013, 0.20871016, 0.20871004, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[node name="JoinOnlineMenu" type="PanelContainer" unique_id=462532513]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_rs8ex")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1124969592]
+layout_mode = 2
+theme_override_constants/margin_left = 16
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 16
+theme_override_constants/margin_bottom = 16
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="MarginContainer" unique_id=1015377473]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="ConnectByIp" type="VBoxContainer" parent="MarginContainer/HBoxContainer2" unique_id=71043147]
+layout_mode = 2
+
+[node name="ConnectByIp" type="Label" parent="MarginContainer/HBoxContainer2/ConnectByIp" unique_id=22710637]
+layout_mode = 2
+text = "Connect via IP / LAN"
+horizontal_alignment = 1
+
+[node name="UserNamePanel" parent="MarginContainer/HBoxContainer2/ConnectByIp" unique_id=530688445 instance=ExtResource("1_py07v")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="IPPanel" parent="MarginContainer/HBoxContainer2/ConnectByIp" unique_id=194192369 instance=ExtResource("1_filv0")]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="JoinGameBtn" type="Button" parent="MarginContainer/HBoxContainer2/ConnectByIp" unique_id=482944981 node_paths=PackedStringArray("ip_textbox", "port_textbox", "name_textbox")]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "Join Game"
+script = ExtResource("3_782d4")
+ip_textbox = NodePath("../IPPanel/MarginContainer/VBoxContainer/IPBox/IPInput")
+port_textbox = NodePath("../IPPanel/MarginContainer/VBoxContainer/PortBox/PortInput")
+name_textbox = NodePath("../UserNamePanel/LineEdit")
+
+[node name="Steam Lobbies" type="VBoxContainer" parent="MarginContainer/HBoxContainer2" unique_id=621088416]
+layout_mode = 2
+
+[node name="SteamLobbies" type="Label" parent="MarginContainer/HBoxContainer2/Steam Lobbies" unique_id=2139858521]
+layout_mode = 2
+text = "Steam Lobbies"
+horizontal_alignment = 1
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer2/Steam Lobbies" unique_id=524718488]
+layout_mode = 2
+text = "(TODO typical lobby browser)"
+
+[node name="FriendsPlaying" type="Label" parent="MarginContainer/HBoxContainer2/Steam Lobbies" unique_id=635781645]
+layout_mode = 2
+text = "Friends Playing"
+horizontal_alignment = 1
+
+[node name="Label2" type="Label" parent="MarginContainer/HBoxContainer2/Steam Lobbies" unique_id=1494759931]
+layout_mode = 2
+text = "(TODO online friends Icons)"
+
+[node name="LAN" type="Label" parent="MarginContainer/HBoxContainer2/Steam Lobbies" unique_id=1240300611]
+layout_mode = 2
+text = "LAN (TODO)"
+
+[node name="Saved IPs" type="Label" parent="MarginContainer/HBoxContainer2/Steam Lobbies" unique_id=1421886967]
+layout_mode = 2
+text = "Saved IPs (TODO)"
+
+[node name="Label3" type="Label" parent="MarginContainer/HBoxContainer2/Steam Lobbies" unique_id=733036544]
+visible = false
+layout_mode = 2
+
+[editable path="MarginContainer/HBoxContainer2/ConnectByIp/UserNamePanel"]
+[editable path="MarginContainer/HBoxContainer2/ConnectByIp/IPPanel"]
