@@ -34,6 +34,11 @@ gdscript/warnings/unsafe_cast=1
 gdscript/warnings/unsafe_call_argument=1
 gdscript/warnings/missing_await=1
 
+[display]
+
+window/stretch/mode="canvas_items"
+window/stretch/aspect="expand"
+
 [dotnet]
 
 project/assembly_name="Steam Lobby Wrapper"
