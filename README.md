@@ -6,6 +6,11 @@ It is primarily intended as a project for me to learn networking with Steam inte
 
 TODO ADD LICENSE
 
+TODO SEPARATE GOALS LIST FROM README
+
+TODO CLARIFY PROJECT STRUCTURE
+- src/ folder is redundant? Move to addons or content, or another clarified folder.
+
 ### Multiplayer Lobby Goals
 
 ##### Steam Lobby
@@ -50,7 +55,7 @@ TODO ADD LICENSE
 
 ### Convenience Goals
 
-##### Pause Menu
+##### Menus
 - [ ] Add a simple escape-menu implementation
 
 ##### Lauch Command Parser
@@ -58,6 +63,7 @@ TODO ADD LICENSE
 - [X] Add ability to differentiate commands from values
 - [X] Allow parsing both spaces and '=' as value sepparators
 - [ ] Allow providing a launch_preset.txt file via launch_preset={filepath OR ID} command.
+- [ ] Test implementation for exported project
 
 ##### Settings Autoload
 - [ ] Make a dedicated autoload
@@ -79,6 +85,7 @@ TODO ADD LICENSE
 - [X] Add editor script to validate PATHS constants
 - [ ] Add SINGLETONS class + editor script to fill fron Engine.list_singletons()
 - [ ] Add RPC_CHANNEL class + editor script to validate that no channels overlap
+- [ ] MOVE TO ADDON + auto-made project folder (like /.autoconst/)
 
 ##### Log Autoload
 - [X] Add Log autoload to provide an easy print() using with color coding for running multiple window tests
@@ -102,6 +109,11 @@ TODO ADD LICENSE
 	- [ ] Colors should be inserted as BB.
 	- [ ] Rember to strip user input BB.
 
+##### Standardized Level Loading
+- [ ] Add networked func, to load levels
+- [ ] Add sending save files of levels? world state? (Only level / non-replicated spawns and vars)
+
+### Multiplayer Tools
 ##### Smarter MultiplayerSpawner
 To make it file-path renaming resistant, it should validate existing scene-paths on build, or add dynamically in runtime.
 - [X] Add way of adding from list (like from a level config, or on-load node, or from level node, or world method)
@@ -122,10 +134,6 @@ To make it file-path renaming resistant, it should validate existing scene-paths
 - [X] Make managers accesable as static singleton
 	- [ ] Check for duplicate managers too
 - [ ] Make SpawnManagers validate existing spawned nodes when Spawnlist is changed
-
-##### Standardized Level Loading
-- [ ] Add networked func, to load levels
-- [ ] Add sending save files of levels? world state? (Only level / non-replicated spawns and vars)
 
 ### Docs
 Ideally, lot's of demonstration scenes and test-tools should exists to provide examples of common use cases and pitfalls.
@@ -160,7 +168,18 @@ Cases that should be tested and covered:
 - [ ] Party and Beacon functionality
 - [ ] Hosting without lobby?
 
-##### Steam Integration
-- [ ] Find fun stuff, like:
-	- Interacting with steam music player
-	- steam player-to-player messaging
+### Other Goals
+##### Tests
+For my tools and existing godot functionality, both as a part of documentations and to clarify function.
+##### UI completeness
+- [ ] Add common menu UI tools (like buttons that toggle visibility)
+- [ ] Add theme-file integration
+
+##### Mod System
+Should be able to identify, browse, and enabling on/off. Eventually should clearly define safe non-code mods, such as content addition mods (levels, entities, texture visuals overhaul, etc).
+- [ ] Must dissallow built-in scripts
+- [ ] Possible LUA scripting with specifically-select interface API for what they should be able to do.
+- [ ] Clear override-existing-file boundry, only overriding at runtime.
+- [ ] Mod load order and dependency list (should be able to interface other mods)
+- [ ] Sepparate local mods from workshop mods and built-in mods?
+- [ ] IDEALLY all content would be in the same content format.
